@@ -65,8 +65,7 @@ Texture pisoTexture;
 //---------------------------------------------------------------------------------------------
 
 //+++++++++++++++++++++++++++++++	variables para modelos	+++++++++++++++++++++++++++++++
-
-
+Model flipper1, flipper2, flipper3;
 
 //---------------------------------------------------------------------------------------------
 Skybox skybox;
@@ -242,7 +241,6 @@ int main()
 	plainTexture.LoadTextureA();
 	pisoTexture = Texture("Textures/piso.tga");
 	pisoTexture.LoadTextureA();
-
 	std::vector<std::string> skyboxFaces;
 	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_rt.tga");
 	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_lf.tga");
@@ -294,7 +292,8 @@ int main()
 	GLuint uniformColor = 0;
 	glm::mat4 projection = glm::perspective(45.0f, (GLfloat)mainWindow.getBufferWidth() / mainWindow.getBufferHeight(), 0.1f, 1000.0f);
 	//+++++++++++++++++++++++++++++++	variables para inicializar	+++++++++++++++++++++++++++++++
-
+	flipper1 = Model();
+	flipper1.LoadModel("Models/flipper0.obj");
 
 
 	//---------------------------------------------------------------------------------------------
@@ -360,7 +359,15 @@ int main()
 		meshList[2]->RenderMesh();
 
 		//+++++++++++++++++++++++++++++++	PROYECTO	+++++++++++++++++++++++++++++++
-
+		/*Flipper 01*/
+		//Instancia del dado
+		model = glm::mat4(1.0);
+		//model = glm::translate(model, glm::vec3(0.0f, 0.5f, -3.0f));
+		modelaux = model;
+		model = glm::scale(model, glm::vec3(0.1f, 0.1f, 0.1f));
+		//model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		flipper1.RenderModel();
 
 
 		//-----------------------------------------------------------------------------
