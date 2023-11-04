@@ -54,8 +54,6 @@ std::vector<Shader> shaderList;
 
 Camera camera;
 
-Texture brickTexture;
-Texture dirtTexture;
 Texture plainTexture;
 Texture pisoTexture;
 //+++++++++++++++++++++++++++++++	variables para texturas	+++++++++++++++++++++++++++++++
@@ -234,10 +232,6 @@ int main()
 
 	camera = Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), -60.0f, 0.0f, 0.5f, 0.5f);
 
-	brickTexture = Texture("Textures/brick.png");
-	brickTexture.LoadTextureA();
-	dirtTexture = Texture("Textures/dirt.png");
-	dirtTexture.LoadTextureA();
 	plainTexture = Texture("Textures/plain.png");
 	plainTexture.LoadTextureA();
 	pisoTexture = Texture("Textures/piso.tga");
