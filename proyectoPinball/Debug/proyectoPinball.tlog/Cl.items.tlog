@@ -1,14 +1,14 @@
-F:\Users\Carlos Odettte DLCL\Desktop\proyectoPinball\proyectoPinball\Camera.cpp;F:\Users\Carlos Odettte DLCL\Desktop\proyectoPinball\proyectoPinball\Debug\Camera.obj
-F:\Users\Carlos Odettte DLCL\Desktop\proyectoPinball\proyectoPinball\DirectionalLight.cpp;F:\Users\Carlos Odettte DLCL\Desktop\proyectoPinball\proyectoPinball\Debug\DirectionalLight.obj
-F:\Users\Carlos Odettte DLCL\Desktop\proyectoPinball\proyectoPinball\Light.cpp;F:\Users\Carlos Odettte DLCL\Desktop\proyectoPinball\proyectoPinball\Debug\Light.obj
-F:\Users\Carlos Odettte DLCL\Desktop\proyectoPinball\proyectoPinball\Material.cpp;F:\Users\Carlos Odettte DLCL\Desktop\proyectoPinball\proyectoPinball\Debug\Material.obj
-F:\Users\Carlos Odettte DLCL\Desktop\proyectoPinball\proyectoPinball\Mesh_tn.cpp;F:\Users\Carlos Odettte DLCL\Desktop\proyectoPinball\proyectoPinball\Debug\Mesh_tn.obj
-F:\Users\Carlos Odettte DLCL\Desktop\proyectoPinball\proyectoPinball\Model.cpp;F:\Users\Carlos Odettte DLCL\Desktop\proyectoPinball\proyectoPinball\Debug\Model.obj
-F:\Users\Carlos Odettte DLCL\Desktop\proyectoPinball\proyectoPinball\PointLight.cpp;F:\Users\Carlos Odettte DLCL\Desktop\proyectoPinball\proyectoPinball\Debug\PointLight.obj
-F:\Users\Carlos Odettte DLCL\Desktop\proyectoPinball\proyectoPinball\proyectoPinball.cpp;F:\Users\Carlos Odettte DLCL\Desktop\proyectoPinball\proyectoPinball\Debug\proyectoPinball.obj
-F:\Users\Carlos Odettte DLCL\Desktop\proyectoPinball\proyectoPinball\Shader_light.cpp;F:\Users\Carlos Odettte DLCL\Desktop\proyectoPinball\proyectoPinball\Debug\Shader_light.obj
-F:\Users\Carlos Odettte DLCL\Desktop\proyectoPinball\proyectoPinball\Skybox.cpp;F:\Users\Carlos Odettte DLCL\Desktop\proyectoPinball\proyectoPinball\Debug\Skybox.obj
-F:\Users\Carlos Odettte DLCL\Desktop\proyectoPinball\proyectoPinball\Sphere.cpp;F:\Users\Carlos Odettte DLCL\Desktop\proyectoPinball\proyectoPinball\Debug\Sphere.obj
-F:\Users\Carlos Odettte DLCL\Desktop\proyectoPinball\proyectoPinball\SpotLight.cpp;F:\Users\Carlos Odettte DLCL\Desktop\proyectoPinball\proyectoPinball\Debug\SpotLight.obj
-F:\Users\Carlos Odettte DLCL\Desktop\proyectoPinball\proyectoPinball\Texture.cpp;F:\Users\Carlos Odettte DLCL\Desktop\proyectoPinball\proyectoPinball\Debug\Texture.obj
-F:\Users\Carlos Odettte DLCL\Desktop\proyectoPinball\proyectoPinball\Window.cpp;F:\Users\Carlos Odettte DLCL\Desktop\proyectoPinball\proyectoPinball\Debug\Window.obj
+C:\Users\Odette\Documents\LabCGeIHC_10\proyectoFinal_Pinball_CGeIHC\proyectoPinball\Camera.cpp;C:\Users\Odette\Documents\LabCGeIHC_10\proyectoFinal_Pinball_CGeIHC\proyectoPinball\Debug\Camera.obj
+C:\Users\Odette\Documents\LabCGeIHC_10\proyectoFinal_Pinball_CGeIHC\proyectoPinball\DirectionalLight.cpp;C:\Users\Odette\Documents\LabCGeIHC_10\proyectoFinal_Pinball_CGeIHC\proyectoPinball\Debug\DirectionalLight.obj
+C:\Users\Odette\Documents\LabCGeIHC_10\proyectoFinal_Pinball_CGeIHC\proyectoPinball\Light.cpp;C:\Users\Odette\Documents\LabCGeIHC_10\proyectoFinal_Pinball_CGeIHC\proyectoPinball\Debug\Light.obj
+C:\Users\Odette\Documents\LabCGeIHC_10\proyectoFinal_Pinball_CGeIHC\proyectoPinball\Material.cpp;C:\Users\Odette\Documents\LabCGeIHC_10\proyectoFinal_Pinball_CGeIHC\proyectoPinball\Debug\Material.obj
+C:\Users\Odette\Documents\LabCGeIHC_10\proyectoFinal_Pinball_CGeIHC\proyectoPinball\Mesh_tn.cpp;C:\Users\Odette\Documents\LabCGeIHC_10\proyectoFinal_Pinball_CGeIHC\proyectoPinball\Debug\Mesh_tn.obj
+C:\Users\Odette\Documents\LabCGeIHC_10\proyectoFinal_Pinball_CGeIHC\proyectoPinball\Model.cpp;C:\Users\Odette\Documents\LabCGeIHC_10\proyectoFinal_Pinball_CGeIHC\proyectoPinball\Debug\Model.obj
+C:\Users\Odette\Documents\LabCGeIHC_10\proyectoFinal_Pinball_CGeIHC\proyectoPinball\PointLight.cpp;C:\Users\Odette\Documents\LabCGeIHC_10\proyectoFinal_Pinball_CGeIHC\proyectoPinball\Debug\PointLight.obj
+C:\Users\Odette\Documents\LabCGeIHC_10\proyectoFinal_Pinball_CGeIHC\proyectoPinball\proyectoPinball.cpp;C:\Users\Odette\Documents\LabCGeIHC_10\proyectoFinal_Pinball_CGeIHC\proyectoPinball\Debug\proyectoPinball.obj
+C:\Users\Odette\Documents\LabCGeIHC_10\proyectoFinal_Pinball_CGeIHC\proyectoPinball\Shader_light.cpp;C:\Users\Odette\Documents\LabCGeIHC_10\proyectoFinal_Pinball_CGeIHC\proyectoPinball\Debug\Shader_light.obj
+C:\Users\Odette\Documents\LabCGeIHC_10\proyectoFinal_Pinball_CGeIHC\proyectoPinball\Skybox.cpp;C:\Users\Odette\Documents\LabCGeIHC_10\proyectoFinal_Pinball_CGeIHC\proyectoPinball\Debug\Skybox.obj
+C:\Users\Odette\Documents\LabCGeIHC_10\proyectoFinal_Pinball_CGeIHC\proyectoPinball\Sphere.cpp;C:\Users\Odette\Documents\LabCGeIHC_10\proyectoFinal_Pinball_CGeIHC\proyectoPinball\Debug\Sphere.obj
+C:\Users\Odette\Documents\LabCGeIHC_10\proyectoFinal_Pinball_CGeIHC\proyectoPinball\SpotLight.cpp;C:\Users\Odette\Documents\LabCGeIHC_10\proyectoFinal_Pinball_CGeIHC\proyectoPinball\Debug\SpotLight.obj
+C:\Users\Odette\Documents\LabCGeIHC_10\proyectoFinal_Pinball_CGeIHC\proyectoPinball\Texture.cpp;C:\Users\Odette\Documents\LabCGeIHC_10\proyectoFinal_Pinball_CGeIHC\proyectoPinball\Debug\Texture.obj
+C:\Users\Odette\Documents\LabCGeIHC_10\proyectoFinal_Pinball_CGeIHC\proyectoPinball\Window.cpp;C:\Users\Odette\Documents\LabCGeIHC_10\proyectoFinal_Pinball_CGeIHC\proyectoPinball\Debug\Window.obj

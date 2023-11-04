@@ -2,10 +2,10 @@
 Semestre 2024-1
 Animación:
 Sesión 1:
-Simple o básica:Por banderas y condicionales (más de 1 transforomación geométrica se ve modificada
+Simple o básica:Por banderas y condicionales (más de 1 transformación geométrica se ve modificada
 Sesión 2
 Compleja: Por medio de funciones y algoritmos.
-Adicional.- ,Textura Animada
+Adicional.- Textura Animada
 */
 //para cargar imagen
 #define STB_IMAGE_IMPLEMENTATION
@@ -42,27 +42,39 @@ Adicional.- ,Textura Animada
 #include "Material.h"
 const float toRadians = 3.14159265f / 180.0f;
 
-//++++++++++++++++++++++++++++++++++++	variables para animación	+++++++++++++++++++++++++++
+//+++++++++++++++++++++++++++++++	variables para animación	+++++++++++++++++++++++++++++++
 
 	
 
 //---------------------------------------------------------------------------------------------
+
 Window mainWindow;
 std::vector<Mesh*> meshList;
 std::vector<Shader> shaderList;
 
 Camera camera;
-//++++++++++++++++++++++++++++++++++++ Texturas +++++++++++++++++++++++++++++++++++++++++++++++
+
 Texture brickTexture;
 Texture dirtTexture;
 Texture plainTexture;
 Texture pisoTexture;
-Skybox skybox;
+//+++++++++++++++++++++++++++++++	variables para texturas	+++++++++++++++++++++++++++++++
+
+
 
 //---------------------------------------------------------------------------------------------
+
+//+++++++++++++++++++++++++++++++	variables para modelos	+++++++++++++++++++++++++++++++
+
+
+
+//---------------------------------------------------------------------------------------------
+Skybox skybox;
+
 //materiales
 Material Material_brillante;
 Material Material_opaco;
+
 
 //Sphere cabeza = Sphere(0.5, 20, 20);
 GLfloat deltaTime = 0.0f;
@@ -109,26 +121,108 @@ void CreateObjects()
 		-10.0f, 0.0f, 10.0f,	0.0f, 10.0f,	0.0f, -1.0f, 0.0f,
 		10.0f, 0.0f, 10.0f,		10.0f, 10.0f,	0.0f, -1.0f, 0.0f
 	};
-	
-	Mesh *obj1 = new Mesh();
+	unsigned int vegetacionIndices[] = {
+	   0, 1, 2,
+	   0, 2, 3,
+	   4,5,6,
+	   4,6,7
+	};
+
+	GLfloat vegetacionVertices[] = {
+		-0.5f, -0.5f, 0.0f,		0.0f, 0.0f,		0.0f, 0.0f, 0.0f,
+		0.5f, -0.5f, 0.0f,		1.0f, 0.0f,		0.0f, 0.0f, 0.0f,
+		0.5f, 0.5f, 0.0f,		1.0f, 1.0f,		0.0f, 0.0f, 0.0f,
+		-0.5f, 0.5f, 0.0f,		0.0f, 1.0f,		0.0f, 0.0f, 0.0f,
+
+		0.0f, -0.5f, -0.5f,		0.0f, 0.0f,		0.0f, 0.0f, 0.0f,
+		0.0f, -0.5f, 0.5f,		1.0f, 0.0f,		0.0f, 0.0f, 0.0f,
+		0.0f, 0.5f, 0.5f,		1.0f, 1.0f,		0.0f, 0.0f, 0.0f,
+		0.0f, 0.5f, -0.5f,		0.0f, 1.0f,		0.0f, 0.0f, 0.0f,
+
+
+	};
+
+
+	unsigned int flechaIndices[] = {
+	   0, 1, 2,
+	   0, 2, 3,
+	};
+
+	GLfloat flechaVertices[] = {
+		-0.5f, 0.0f, 0.5f,		0.0f, 0.0f,		0.0f, -1.0f, 0.0f,
+		0.5f, 0.0f, 0.5f,		1.0f, 0.0f,		0.0f, -1.0f, 0.0f,
+		0.5f, 0.0f, -0.5f,		1.0f, 1.0f,		0.0f, -1.0f, 0.0f,
+		-0.5f, 0.0f, -0.5f,		0.0f, 1.0f,		0.0f, -1.0f, 0.0f,
+
+	};
+
+	unsigned int scoreIndices[] = {
+	   0, 1, 2,
+	   0, 2, 3,
+	};
+
+	GLfloat scoreVertices[] = {
+		-0.5f, 0.0f, 0.5f,		0.0f, 0.0f,		0.0f, -1.0f, 0.0f,
+		0.5f, 0.0f, 0.5f,		1.0f, 0.0f,		0.0f, -1.0f, 0.0f,
+		0.5f, 0.0f, -0.5f,		1.0f, 1.0f,		0.0f, -1.0f, 0.0f,
+		-0.5f, 0.0f, -0.5f,		0.0f, 1.0f,		0.0f, -1.0f, 0.0f,
+
+	};
+
+	unsigned int numeroIndices[] = {
+	   0, 1, 2,
+	   0, 2, 3,
+	};
+
+	GLfloat numeroVertices[] = {
+		-0.5f, 0.0f, 0.5f,		0.0f, 0.67f,		0.0f, -1.0f, 0.0f,
+		0.5f, 0.0f, 0.5f,		0.25f, 0.67f,		0.0f, -1.0f, 0.0f,
+		0.5f, 0.0f, -0.5f,		0.25f, 1.0f,		0.0f, -1.0f, 0.0f,
+		-0.5f, 0.0f, -0.5f,		0.0f, 1.0f,		0.0f, -1.0f, 0.0f,
+
+	};
+
+	Mesh* obj1 = new Mesh();
 	obj1->CreateMesh(vertices, indices, 32, 12);
 	meshList.push_back(obj1);
 
-	Mesh *obj2 = new Mesh();
+	Mesh* obj2 = new Mesh();
 	obj2->CreateMesh(vertices, indices, 32, 12);
 	meshList.push_back(obj2);
 
-	Mesh *obj3 = new Mesh();
+	Mesh* obj3 = new Mesh();
 	obj3->CreateMesh(floorVertices, floorIndices, 32, 6);
 	meshList.push_back(obj3);
+
+
+	Mesh* obj4 = new Mesh();
+	obj4->CreateMesh(vegetacionVertices, vegetacionIndices, 64, 12);
+	meshList.push_back(obj4);
+
+	Mesh* obj5 = new Mesh();
+	obj5->CreateMesh(flechaVertices, flechaIndices, 32, 6);
+	meshList.push_back(obj5);
+
+	Mesh* obj6 = new Mesh();
+	obj6->CreateMesh(scoreVertices, scoreIndices, 32, 6);
+	meshList.push_back(obj6);
+
+	Mesh* obj7 = new Mesh();
+	obj7->CreateMesh(numeroVertices, numeroIndices, 32, 6);
+	meshList.push_back(obj7);
+
 }
+
 
 void CreateShaders()
 {
-	Shader *shader1 = new Shader();
+	Shader* shader1 = new Shader();
 	shader1->CreateFromFiles(vShader, fShader);
 	shaderList.push_back(*shader1);
 }
+
+
+
 
 int main()
 {
@@ -138,7 +232,7 @@ int main()
 	CreateObjects();
 	CreateShaders();
 
-	camera = Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), -60.0f, 0.0f, 0.3f, 0.5f);
+	camera = Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), -60.0f, 0.0f, 0.5f, 0.5f);
 
 	brickTexture = Texture("Textures/brick.png");
 	brickTexture.LoadTextureA();
@@ -162,16 +256,17 @@ int main()
 	Material_brillante = Material(4.0f, 256);
 	Material_opaco = Material(0.3f, 4);
 
+
 	//luz direccional, sólo 1 y siempre debe de existir
 	mainLight = DirectionalLight(1.0f, 1.0f, 1.0f,
-		0.3f, 0.3f,
+		0.5f, 0.5f,
 		0.0f, 0.0f, -1.0f);
 	//contador de luces puntuales
 	unsigned int pointLightCount = 0;
 	//Declaración de primer luz puntual
 	pointLights[0] = PointLight(1.0f, 0.0f, 0.0f,
 		0.0f, 1.0f,
-		-6.0f, 1.5f, 1.5f,
+		0.0f, 2.5f, 1.5f,
 		0.3f, 0.2f, 0.1f);
 	pointLightCount++;
 
@@ -186,19 +281,23 @@ int main()
 	spotLightCount++;
 
 	//luz fija
-	spotLights[1] = SpotLight(0.0f, 1.0f, 0.0f,
+	spotLights[1] = SpotLight(0.0f, 0.0f, 1.0f,
 		1.0f, 2.0f,
 		5.0f, 10.0f, 0.0f,
 		0.0f, -5.0f, 0.0f,
 		1.0f, 0.0f, 0.0f,
 		15.0f);
 	spotLightCount++;
-	
-	//se crean mas luces puntuales y spotlight 
 
-	GLuint uniformProjection = 0, uniformModel = 0, uniformView = 0, uniformEyePosition = 0, uniformSpecularIntensity = 0, uniformShininess = 0;
+	GLuint uniformProjection = 0, uniformModel = 0, uniformView = 0, uniformEyePosition = 0,
+		uniformSpecularIntensity = 0, uniformShininess = 0, uniformTextureOffset = 0;
 	GLuint uniformColor = 0;
 	glm::mat4 projection = glm::perspective(45.0f, (GLfloat)mainWindow.getBufferWidth() / mainWindow.getBufferHeight(), 0.1f, 1000.0f);
+	//+++++++++++++++++++++++++++++++	variables para inicializar	+++++++++++++++++++++++++++++++
+
+
+
+	//---------------------------------------------------------------------------------------------
 	////Loop mientras no se cierra la ventana
 	while (!mainWindow.getShouldClose())
 	{
@@ -222,7 +321,8 @@ int main()
 		uniformView = shaderList[0].GetViewLocation();
 		uniformEyePosition = shaderList[0].GetEyePositionLocation();
 		uniformColor = shaderList[0].getColorLocation();
-		
+		uniformTextureOffset = shaderList[0].getOffsetLocation();
+
 		//información en el shader de intensidad especular y brillo
 		uniformSpecularIntensity = shaderList[0].GetSpecularIntensityLocation();
 		uniformShininess = shaderList[0].GetShininessLocation();
@@ -232,7 +332,6 @@ int main()
 		glUniform3f(uniformEyePosition, camera.getCameraPosition().x, camera.getCameraPosition().y, camera.getCameraPosition().z);
 
 		// luz ligada a la cámara de tipo flash
-		//sirve para que en tiempo de ejecución (dentro del while) se cambien propiedades de la luz
 		glm::vec3 lowerLight = camera.getCameraPosition();
 		lowerLight.y -= 0.3f;
 		spotLights[0].SetFlash(lowerLight, camera.getCameraDirection());
@@ -242,28 +341,31 @@ int main()
 		shaderList[0].SetPointLights(pointLights, pointLightCount);
 		shaderList[0].SetSpotLights(spotLights, spotLightCount);
 
+
+
 		glm::mat4 model(1.0);
 		glm::mat4 modelaux(1.0);
 		glm::vec3 color = glm::vec3(1.0f, 1.0f, 1.0f);
+		glm::vec2 toffset = glm::vec2(0.0f, 0.0f);
 
+		glUniform2fv(uniformTextureOffset, 1, glm::value_ptr(toffset));
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(0.0f, -1.0f, 0.0f));
+		model = glm::translate(model, glm::vec3(0.0f, -2.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(30.0f, 1.0f, 30.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
-
+		glUniform2fv(uniformTextureOffset, 1, glm::value_ptr(toffset));
 		pisoTexture.UseTexture();
 		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
-
 		meshList[2]->RenderMesh();
 
-		////blending: transparencia o traslucidez
-		//glEnable(GL_BLEND);
-		//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		//AgaveTexture.UseTexture();
-		//Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
-		//meshList[3]->RenderMesh();
-		//glDisable(GL_BLEND);
+		//+++++++++++++++++++++++++++++++	PROYECTO	+++++++++++++++++++++++++++++++
+
+
+
+		//-----------------------------------------------------------------------------
+
+		glDisable(GL_BLEND);
 
 		glUseProgram(0);
 
