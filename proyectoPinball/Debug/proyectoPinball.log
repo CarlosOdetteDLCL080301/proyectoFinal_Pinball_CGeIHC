@@ -1,6 +1,61 @@
-﻿  proyectoPinball.cpp
-C:\Users\Odette\Documents\LabCGeIHC_10\proyectoFinal_Pinball_CGeIHC\proyectoPinball\Window.h(12,36): warning C4244: 'return': conversión de 'GLint' a 'GLfloat'; posible pérdida de datos
-C:\Users\Odette\Documents\LabCGeIHC_10\proyectoFinal_Pinball_CGeIHC\proyectoPinball\Window.h(13,37): warning C4244: 'return': conversión de 'GLint' a 'GLfloat'; posible pérdida de datos
-C:\Users\Odette\Documents\LabCGeIHC_10\proyectoFinal_Pinball_CGeIHC\proyectoPinball\proyectoPinball.cpp(303,15): warning C4244: 'inicializando': conversión de 'double' a 'GLfloat'; posible pérdida de datos
-C:\Users\Odette\Documents\LabCGeIHC_10\proyectoFinal_Pinball_CGeIHC\proyectoPinball\proyectoPinball.cpp(305,33): warning C4244: '+=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
-  proyectoPinball.vcxproj -> C:\Users\Odette\Documents\LabCGeIHC_10\proyectoFinal_Pinball_CGeIHC\Debug\proyectoPinball.exe
+﻿  Camera.cpp
+  DirectionalLight.cpp
+F:\Users\Carlos Odettte DLCL\Desktop\proyectoFinal_Pinball_CGeIHC\proyectoPinball\DirectionalLight.cpp(18,14): warning C4244: 'argumento': conversión de 'GLfloat' a 'GLint'; posible pérdida de datos
+F:\Users\Carlos Odettte DLCL\Desktop\proyectoFinal_Pinball_CGeIHC\proyectoPinball\DirectionalLight.cpp(19,14): warning C4244: 'argumento': conversión de 'GLfloat' a 'GLint'; posible pérdida de datos
+F:\Users\Carlos Odettte DLCL\Desktop\proyectoFinal_Pinball_CGeIHC\proyectoPinball\DirectionalLight.cpp(21,14): warning C4244: 'argumento': conversión de 'GLfloat' a 'GLint'; posible pérdida de datos
+F:\Users\Carlos Odettte DLCL\Desktop\proyectoFinal_Pinball_CGeIHC\proyectoPinball\DirectionalLight.cpp(22,14): warning C4244: 'argumento': conversión de 'GLfloat' a 'GLint'; posible pérdida de datos
+  Light.cpp
+  Material.cpp
+  Mesh_tn.cpp
+  Model.cpp
+F:\Users\Carlos Odettte DLCL\Desktop\proyectoFinal_Pinball_CGeIHC\proyectoPinball\Model.cpp(16,10): warning C4477: 'printf' : la cadena de formato '%s' requiere un argumento de tipo 'char *', pero el argumento variádico 1 tiene el tipo 'const std::string'
+F:\Users\Carlos Odettte DLCL\Desktop\proyectoFinal_Pinball_CGeIHC\proyectoPinball\Model.cpp(16,80): warning C4474: "printf": se pasaron demasiados argumentos para la cadena de formato
+F:\Users\Carlos Odettte DLCL\Desktop\proyectoFinal_Pinball_CGeIHC\proyectoPinball\Model.cpp(16,80): message : los marcadores de posición y sus parámetros esperan 1 argumentos variádicos, pero se proporcionaron 2
+F:\Users\Carlos Odettte DLCL\Desktop\proyectoFinal_Pinball_CGeIHC\proyectoPinball\Model.cpp(51,7): warning C4804: '<': uso no seguro del tipo 'bool' en la operación
+F:\Users\Carlos Odettte DLCL\Desktop\proyectoFinal_Pinball_CGeIHC\proyectoPinball\Model.cpp(51,21): warning C4018: '<': no coinciden signed/unsigned
+F:\Users\Carlos Odettte DLCL\Desktop\proyectoFinal_Pinball_CGeIHC\proyectoPinball\Model.cpp(138,14): warning C4477: 'printf' : la cadena de formato '%s' requiere un argumento de tipo 'char *', pero el argumento variádico 1 tiene el tipo 'std::string'
+F:\Users\Carlos Odettte DLCL\Desktop\proyectoFinal_Pinball_CGeIHC\proyectoPinball\Model.cpp(147,14): warning C4477: 'printf' : la cadena de formato '%s' requiere un argumento de tipo 'char *', pero el argumento variádico 1 tiene el tipo 'std::string'
+  PointLight.cpp
+F:\Users\Carlos Odettte DLCL\Desktop\proyectoFinal_Pinball_CGeIHC\proyectoPinball\PointLight.cpp(28,14): warning C4244: 'argumento': conversión de 'GLfloat' a 'GLint'; posible pérdida de datos
+F:\Users\Carlos Odettte DLCL\Desktop\proyectoFinal_Pinball_CGeIHC\proyectoPinball\PointLight.cpp(29,14): warning C4244: 'argumento': conversión de 'GLfloat' a 'GLint'; posible pérdida de datos
+F:\Users\Carlos Odettte DLCL\Desktop\proyectoFinal_Pinball_CGeIHC\proyectoPinball\PointLight.cpp(30,14): warning C4244: 'argumento': conversión de 'GLfloat' a 'GLint'; posible pérdida de datos
+F:\Users\Carlos Odettte DLCL\Desktop\proyectoFinal_Pinball_CGeIHC\proyectoPinball\PointLight.cpp(32,14): warning C4244: 'argumento': conversión de 'GLfloat' a 'GLint'; posible pérdida de datos
+F:\Users\Carlos Odettte DLCL\Desktop\proyectoFinal_Pinball_CGeIHC\proyectoPinball\PointLight.cpp(33,14): warning C4244: 'argumento': conversión de 'GLfloat' a 'GLint'; posible pérdida de datos
+F:\Users\Carlos Odettte DLCL\Desktop\proyectoFinal_Pinball_CGeIHC\proyectoPinball\PointLight.cpp(34,14): warning C4244: 'argumento': conversión de 'GLfloat' a 'GLint'; posible pérdida de datos
+F:\Users\Carlos Odettte DLCL\Desktop\proyectoFinal_Pinball_CGeIHC\proyectoPinball\PointLight.cpp(35,14): warning C4244: 'argumento': conversión de 'GLfloat' a 'GLint'; posible pérdida de datos
+  proyectoPinball.cpp
+F:\Users\Carlos Odettte DLCL\Desktop\proyectoFinal_Pinball_CGeIHC\proyectoPinball\Window.h(12,36): warning C4244: 'return': conversión de 'GLint' a 'GLfloat'; posible pérdida de datos
+F:\Users\Carlos Odettte DLCL\Desktop\proyectoFinal_Pinball_CGeIHC\proyectoPinball\Window.h(13,37): warning C4244: 'return': conversión de 'GLint' a 'GLfloat'; posible pérdida de datos
+F:\Users\Carlos Odettte DLCL\Desktop\proyectoFinal_Pinball_CGeIHC\proyectoPinball\proyectoPinball.cpp(303,15): warning C4244: 'inicializando': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+F:\Users\Carlos Odettte DLCL\Desktop\proyectoFinal_Pinball_CGeIHC\proyectoPinball\proyectoPinball.cpp(305,33): warning C4244: '+=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+  Shader_light.cpp
+F:\Users\Carlos Odettte DLCL\Desktop\proyectoFinal_Pinball_CGeIHC\proyectoPinball\Shader_light.cpp(215,75): warning C4244: 'argumento': conversión de 'GLuint' a 'GLfloat'; posible pérdida de datos
+F:\Users\Carlos Odettte DLCL\Desktop\proyectoFinal_Pinball_CGeIHC\proyectoPinball\Shader_light.cpp(215,26): warning C4244: 'argumento': conversión de 'GLuint' a 'GLfloat'; posible pérdida de datos
+F:\Users\Carlos Odettte DLCL\Desktop\proyectoFinal_Pinball_CGeIHC\proyectoPinball\Shader_light.cpp(214,91): warning C4244: 'argumento': conversión de 'GLuint' a 'GLfloat'; posible pérdida de datos
+F:\Users\Carlos Odettte DLCL\Desktop\proyectoFinal_Pinball_CGeIHC\proyectoPinball\Shader_light.cpp(214,42): warning C4244: 'argumento': conversión de 'GLuint' a 'GLfloat'; posible pérdida de datos
+F:\Users\Carlos Odettte DLCL\Desktop\proyectoFinal_Pinball_CGeIHC\proyectoPinball\Shader_light.cpp(228,98): warning C4244: 'argumento': conversión de 'GLuint' a 'GLfloat'; posible pérdida de datos
+F:\Users\Carlos Odettte DLCL\Desktop\proyectoFinal_Pinball_CGeIHC\proyectoPinball\Shader_light.cpp(228,62): warning C4244: 'argumento': conversión de 'GLuint' a 'GLfloat'; posible pérdida de datos
+F:\Users\Carlos Odettte DLCL\Desktop\proyectoFinal_Pinball_CGeIHC\proyectoPinball\Shader_light.cpp(228,24): warning C4244: 'argumento': conversión de 'GLuint' a 'GLfloat'; posible pérdida de datos
+F:\Users\Carlos Odettte DLCL\Desktop\proyectoFinal_Pinball_CGeIHC\proyectoPinball\Shader_light.cpp(227,70): warning C4244: 'argumento': conversión de 'GLuint' a 'GLfloat'; posible pérdida de datos
+F:\Users\Carlos Odettte DLCL\Desktop\proyectoFinal_Pinball_CGeIHC\proyectoPinball\Shader_light.cpp(227,24): warning C4244: 'argumento': conversión de 'GLuint' a 'GLfloat'; posible pérdida de datos
+F:\Users\Carlos Odettte DLCL\Desktop\proyectoFinal_Pinball_CGeIHC\proyectoPinball\Shader_light.cpp(226,88): warning C4244: 'argumento': conversión de 'GLuint' a 'GLfloat'; posible pérdida de datos
+F:\Users\Carlos Odettte DLCL\Desktop\proyectoFinal_Pinball_CGeIHC\proyectoPinball\Shader_light.cpp(226,42): warning C4244: 'argumento': conversión de 'GLuint' a 'GLfloat'; posible pérdida de datos
+  Skybox.cpp
+  Sphere.cpp
+F:\Users\Carlos Odettte DLCL\Desktop\proyectoFinal_Pinball_CGeIHC\proyectoPinball\Sphere.cpp(39,13): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
+F:\Users\Carlos Odettte DLCL\Desktop\proyectoFinal_Pinball_CGeIHC\proyectoPinball\Sphere.cpp(43,16): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
+  SpotLight.cpp
+  Texture.cpp
+  Window.cpp
+F:\Users\Carlos Odettte DLCL\Desktop\proyectoFinal_Pinball_CGeIHC\proyectoPinball\Window.h(12,36): warning C4244: 'return': conversión de 'GLint' a 'GLfloat'; posible pérdida de datos
+F:\Users\Carlos Odettte DLCL\Desktop\proyectoFinal_Pinball_CGeIHC\proyectoPinball\Window.h(13,37): warning C4244: 'return': conversión de 'GLint' a 'GLfloat'; posible pérdida de datos
+F:\Users\Carlos Odettte DLCL\Desktop\proyectoFinal_Pinball_CGeIHC\proyectoPinball\Window.cpp(139,22): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+F:\Users\Carlos Odettte DLCL\Desktop\proyectoFinal_Pinball_CGeIHC\proyectoPinball\Window.cpp(140,22): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+F:\Users\Carlos Odettte DLCL\Desktop\proyectoFinal_Pinball_CGeIHC\proyectoPinball\Window.cpp(144,28): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+F:\Users\Carlos Odettte DLCL\Desktop\proyectoFinal_Pinball_CGeIHC\proyectoPinball\Window.cpp(145,40): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+F:\Users\Carlos Odettte DLCL\Desktop\proyectoFinal_Pinball_CGeIHC\proyectoPinball\Window.cpp(147,21): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+F:\Users\Carlos Odettte DLCL\Desktop\proyectoFinal_Pinball_CGeIHC\proyectoPinball\Window.cpp(148,21): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+  Generando código...
+F:\Users\Carlos Odettte DLCL\Desktop\proyectoFinal_Pinball_CGeIHC\proyectoPinball\Window.cpp(75): warning C4715: 'Window::Initialise': no todas las rutas de acceso de control devuelven un valor
+LINK : warning LNK4098: la biblioteca predeterminada'MSVCRT' entra en conflicto con otras bibliotecas; use la biblioteca /NODEFAULTLIB:biblioteca
+  proyectoPinball.vcxproj -> F:\Users\Carlos Odettte DLCL\Desktop\proyectoFinal_Pinball_CGeIHC\Debug\proyectoPinball.exe
