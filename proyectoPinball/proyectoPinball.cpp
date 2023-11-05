@@ -212,16 +212,12 @@ void CreateObjects()
 
 }
 
-
 void CreateShaders()
 {
 	Shader* shader1 = new Shader();
 	shader1->CreateFromFiles(vShader, fShader);
 	shaderList.push_back(*shader1);
 }
-
-
-
 
 int main()
 {
@@ -294,7 +290,15 @@ int main()
 	//+++++++++++++++++++++++++++++++	variables para inicializar	+++++++++++++++++++++++++++++++
 	flipper1 = Model();
 	flipper1.LoadModel("Models/flipper0.obj");
-
+	flipper2 = Model();
+	flipper2.LoadModel("Models/flipper0.obj");
+	flipper3 = Model();
+	flipper3.LoadModel("Models/flipper0.obj");
+	
+	float rotacionFlipper1 = 0.0f;
+	float rotacionFlipper2 = 0.0f;
+	float rotacionFlipper3 = 0.0f;
+	float velocidadRotacionFlipper = 3.0f;
 
 	//---------------------------------------------------------------------------------------------
 	////Loop mientras no se cierra la ventana
@@ -360,15 +364,58 @@ int main()
 
 		//+++++++++++++++++++++++++++++++	PROYECTO	+++++++++++++++++++++++++++++++
 		/*Flipper 01*/
+		//Animación
+		if (mainWindow.getRotacionFlipper1()) {
+			rotacionFlipper1 += (rotacionFlipper1 < 90.0f) ? velocidadRotacionFlipper * deltaTime : 0.0f;
+		}
+		else {
+			rotacionFlipper1 -= (rotacionFlipper1 > 0.0f) ? velocidadRotacionFlipper * deltaTime : 0.0f;
+		}
 		//Instancia del dado
 		model = glm::mat4(1.0);
-		//model = glm::translate(model, glm::vec3(0.0f, 0.5f, -3.0f));
+		model = glm::translate(model, glm::vec3(1.0f, 0.5f, 0.0f));
 		modelaux = model;
 		model = glm::scale(model, glm::vec3(0.1f, 0.1f, 0.1f));
-		//model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, -rotacionFlipper1 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		flipper1.RenderModel();
 
+
+		/*Flipper 02*/
+		//Animación
+		if (mainWindow.getRotacionFlipper2()) {
+			rotacionFlipper2 += (rotacionFlipper2 < 90.0f) ? velocidadRotacionFlipper * deltaTime : 0.0f;
+		}
+		else {
+			rotacionFlipper2 -= (rotacionFlipper2 > 0.0f) ? velocidadRotacionFlipper * deltaTime : 0.0f;
+		}
+		//Instancia del dado
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-1.0f, 0.5f, 0.0f));
+		modelaux = model;
+		model = glm::scale(model, glm::vec3(0.1f, 0.1f, 0.1f));
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
+		model = glm::rotate(model, -rotacionFlipper2 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		flipper1.RenderModel();
+		
+
+		/*Flipper 03*/
+		//Animación
+		if (mainWindow.getRotacionFlipper3()) {
+			rotacionFlipper3 += (rotacionFlipper3 < 90.0f) ? velocidadRotacionFlipper * deltaTime : 0.0f;
+		}
+		else {
+			rotacionFlipper3 -= (rotacionFlipper3 > 0.0f) ? velocidadRotacionFlipper * deltaTime : 0.0f;
+		}
+		//Instancia del dado
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(1.0f, 0.5f, -2.0f));
+		modelaux = model;
+		model = glm::scale(model, glm::vec3(0.1f, 0.1f, 0.1f));
+		model = glm::rotate(model, -rotacionFlipper3 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		flipper1.RenderModel();
 
 		//-----------------------------------------------------------------------------
 

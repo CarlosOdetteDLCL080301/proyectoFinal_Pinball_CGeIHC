@@ -104,7 +104,7 @@ void Window::ManejaTeclado(GLFWwindow* window, int key, int code, int action, in
 	{
 		glfwSetWindowShouldClose(window, GL_TRUE);
 	}
-	if (key == GLFW_KEY_Y)
+	if (key == GLFW_KEY_Y and action == GLFW_PRESS)
 	{
 		theWindow-> muevex += 1.0;
 	}
@@ -112,7 +112,12 @@ void Window::ManejaTeclado(GLFWwindow* window, int key, int code, int action, in
 	{
 		theWindow-> muevex -= 1.0;
 	}
-
+	//Este boton es asignado para el Flipper 1
+	if (key == GLFW_KEY_V and action == GLFW_PRESS) { theWindow->rotacionFlipper1 = true; } else { theWindow->rotacionFlipper1 = false; }
+	//Este boton es asignado para el Flipper 2
+	if (key == GLFW_KEY_C and action == GLFW_PRESS) { theWindow->rotacionFlipper2 = true; } else { theWindow->rotacionFlipper2 = false; }
+	//Este boton es asignado para el Flipper 3
+	if (key == GLFW_KEY_X and action == GLFW_PRESS) { theWindow->rotacionFlipper3 = true; } else { theWindow->rotacionFlipper3 = false; }
 
 
 	if (key >= 0 && key < 1024)
