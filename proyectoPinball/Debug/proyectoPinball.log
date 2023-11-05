@@ -1,6 +1,0 @@
-﻿  proyectoPinball.cpp
-C:\Users\cesfe\Documents\CG\ProyPB\proyectoFinal_Pinball_CGeIHC\proyectoPinball\Window.h(12,36): warning C4244: 'return': conversión de 'GLint' a 'GLfloat'; posible pérdida de datos
-C:\Users\cesfe\Documents\CG\ProyPB\proyectoFinal_Pinball_CGeIHC\proyectoPinball\Window.h(13,37): warning C4244: 'return': conversión de 'GLint' a 'GLfloat'; posible pérdida de datos
-C:\Users\cesfe\Documents\CG\ProyPB\proyectoFinal_Pinball_CGeIHC\proyectoPinball\proyectoPinball.cpp(298,15): warning C4244: 'inicializando': conversión de 'double' a 'GLfloat'; posible pérdida de datos
-C:\Users\cesfe\Documents\CG\ProyPB\proyectoFinal_Pinball_CGeIHC\proyectoPinball\proyectoPinball.cpp(300,33): warning C4244: '+=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
-  proyectoPinball.vcxproj -> C:\Users\cesfe\Documents\CG\ProyPB\proyectoFinal_Pinball_CGeIHC\Debug\proyectoPinball.exe
