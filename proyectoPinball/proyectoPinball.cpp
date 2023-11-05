@@ -43,7 +43,7 @@ Adicional.- Textura Animada
 const float toRadians = 3.14159265f / 180.0f;
 
 //+++++++++++++++++++++++++++++++	variables para animación	+++++++++++++++++++++++++++++++
-
+Model BeppiClown;
 	
 
 //---------------------------------------------------------------------------------------------
@@ -288,7 +288,8 @@ int main()
 	GLuint uniformColor = 0;
 	glm::mat4 projection = glm::perspective(45.0f, (GLfloat)mainWindow.getBufferWidth() / mainWindow.getBufferHeight(), 0.1f, 1000.0f);
 	//+++++++++++++++++++++++++++++++	variables para inicializar	+++++++++++++++++++++++++++++++
-
+	BeppiClown = Model();
+	BeppiClown.LoadModel("Models/BC.obj");
 
 
 	//---------------------------------------------------------------------------------------------
@@ -354,8 +355,15 @@ int main()
 		meshList[2]->RenderMesh();
 
 		//+++++++++++++++++++++++++++++++	PROYECTO	+++++++++++++++++++++++++++++++
-
-
+		//Instancia Beppi
+		//Instancia del coche 
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(0.0f, 0.5f, 0.0f));
+		modelaux = model;
+		model = glm::scale(model, glm::vec3(0.1f, 0.1f, 0.1f));
+		model = glm::rotate(model, 1 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		BeppiClown.RenderModel();
 
 		//-----------------------------------------------------------------------------
 
