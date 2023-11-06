@@ -388,7 +388,7 @@ int main()
 		meshList[2]->RenderMesh();
 
 		//+++++++++++++++++++++++++++++++	PROYECTO	+++++++++++++++++++++++++++++++
-		//Animación de Beppi - Torso
+		//Animación de Beppi
 		// Incrementa los ángulos de Beppi
 		angTorsoBeppi	+= incrementoAngTorsoBeppi;
 		angBrazoBeppi	+= incrementoAngBrazoBeppi;
@@ -432,14 +432,12 @@ int main()
 		model = modelaux3;
 		model = glm::translate(model, glm::vec3(-43.026f, 34.532f, 18.631f));
 		model = glm::rotate(model, toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		//modelaux3 = model;
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		ManoIzqBeppi.RenderModel();
 
 		//Instancia del brazo derecha de Beppi
 		model = modelaux2;
 		model = glm::translate(model, glm::vec3(15.899f, 43.462f,-3.537f));
-		//model = glm::scale(model, glm::vec3(0.05f, 0.05f, 0.05f));
 		model = glm::rotate(model, -angBrazoBeppi * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		modelaux3 = model;
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
@@ -448,16 +446,13 @@ int main()
 		//Instancia de la mano derecha de Beppi
 		model = modelaux3;
 		model = glm::translate(model, glm::vec3(43.675f, 31.866f, 23.264f));
-		//model = glm::scale(model, glm::vec3(0.05f, 0.05f, 0.05f));
 		model = glm::rotate(model, toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		//modelaux3 = model;
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		ManoDerBeppi.RenderModel();
 
 		//Instancia del cuello de Beppi
 		model = modelaux2;
 		model = glm::translate(model, glm::vec3(-0.919f, 128.161f, 3.717f));
-		//model = glm::scale(model, glm::vec3(0.05f, 0.05f, 0.05f));
 		model = glm::rotate(model, toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		modelaux3 = model;
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
@@ -466,7 +461,6 @@ int main()
 		//Instancia de la cabeza
 		model = modelaux3;
 		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
-		//model = glm::scale(model, glm::vec3(0.05f, 0.05f, 0.05f));
 		model = glm::rotate(model, angCabezaBeppi * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		modelaux4 = model;
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
@@ -475,18 +469,14 @@ int main()
 		//Instancia de la ojo derecho
 		model = modelaux4;
 		model = glm::translate(model, glm::vec3(-25.003f, 62.131f, 58.961f));
-		//model = glm::scale(model, glm::vec3(0.05f, 0.05f, 0.05f));
 		model = glm::rotate(model, (-45 + angOjosBeppi) * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
-		//modelaux3 = model;
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Ojo1Beppi.RenderModel();
 
 		//Instancia de la ojo izquierdo
 		model = modelaux4;
 		model = glm::translate(model, glm::vec3(21.934f, 62.643f, 59.157f));
-		//model = glm::scale(model, glm::vec3(0.05f, 0.05f, 0.05f));
 		model = glm::rotate(model, (-45 + angOjosBeppi) * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
-		//modelaux3 = model;
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Ojo2Beppi.RenderModel();
 		//-----------------------------------------------------------------------------
