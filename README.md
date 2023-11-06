@@ -1,1 +1,6 @@
 # proyectoFinal_Pinball_CGeIHC
+
+# Recurso de internet
+- [Paul Briot]. (2019, 14 Febrero). Beppi The Clown. Sketch. https://skfb.ly/6UYML
+
+<div class="sketchfab-embed-wrapper"> <iframe title="Beppi The Clown" frameborder="0" allowfullscreen mozallowfullscreen="true" webkitallowfullscreen="true" allow="autoplay; fullscreen; xr-spatial-tracking" xr-spatial-tracking execution-while-out-of-viewport execution-while-not-rendered web-share src="https://sketchfab.com/models/614dfc63e5624a2583ed2522b615375f/embed"> </iframe> <p style="font-size: 13px; font-weight: normal; margin: 5px; color: #4A4A4A;"> <a href="https://sketchfab.com/3d-models/beppi-the-clown-614dfc63e5624a2583ed2522b615375f?utm_medium=embed&utm_campaign=share-popup&utm_content=614dfc63e5624a2583ed2522b615375f" target="_blank" rel="nofollow" style="font-weight: bold; color: #1CAAD9;"> Beppi The Clown </a> by <a href="https://sketchfab.com/Paul.Briot?utm_medium=embed&utm_campaign=share-popup&utm_content=614dfc63e5624a2583ed2522b615375f" target="_blank" rel="nofollow" style="font-weight: bold; color: #1CAAD9;"> Paul Briot </a> on <a href="https://sketchfab.com?utm_medium=embed&utm_campaign=share-popup&utm_content=614dfc63e5624a2583ed2522b615375f" target="_blank" rel="nofollow" style="font-weight: bold; color: #1CAAD9;">Sketchfab</a></p></div>
