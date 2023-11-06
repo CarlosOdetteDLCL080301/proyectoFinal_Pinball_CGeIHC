@@ -396,7 +396,7 @@ int main()
 		angCabezaBeppi	+= incrementoAngCabezaBeppi;
 		angOjosBeppi	+= incrementoAngOjosBeppi;
 		
-		// Si llegamos a 45 o -45, cambiamos la dirección del incremento
+		// Esto altera el incremento y decremento para que los angulos operen en un intervalo definido, para cada modelo.
 		incrementoAngTorsoBeppi	= (angTorsoBeppi	>= 45.0f	|| angTorsoBeppi <= -45.0f)	? -incrementoAngTorsoBeppi	: incrementoAngTorsoBeppi;
 		incrementoAngBrazoBeppi	= (angBrazoBeppi	>= 75.0f	|| angBrazoBeppi <= -45.0f)	? -incrementoAngBrazoBeppi	: incrementoAngBrazoBeppi;
 		incrementoAngCabezaBeppi= (angCabezaBeppi	>= 75.0f	|| angBrazoBeppi <= -45.0f)	? -incrementoAngCabezaBeppi : incrementoAngCabezaBeppi;
