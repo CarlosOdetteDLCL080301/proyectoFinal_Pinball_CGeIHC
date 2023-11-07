@@ -373,7 +373,9 @@ int main()
 		//Vista Isometrica
 		/*
 		¿Que es una vista isometrica?
-
+		La proyección isométrica es una forma de representación visual de un objeto tridimensional en un plano bidimensional. 
+		En esta, los tres ejes ortogonales principales forman ángulos de 120 grados, y las dimensiones paralelas a esos 
+		ejes se miden en una misma escala.
 		*/
 		if(mainWindow.getEncenderIsometrica()){
 			//Movemos a nuestra POV hasta la posición destino (Manipulamos el manejo del tecladdo)
