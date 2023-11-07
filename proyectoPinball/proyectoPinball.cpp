@@ -403,7 +403,7 @@ int main()
 			camera.setVistaX(auxiliar);
 			auxiliar = (posicionY_vista > destinoY_vista) ? posicionY_vista - incremento_vista : posicionY_vista + incremento_vista;
 			camera.setVistaY(auxiliar);
-			std::cout << "Eje X: " << posicionX_vista << "\tEje Y: " << posicionY_vista << "\n";
+			//std::cout << "Eje X: " << posicionX_vista << "\tEje Y: " << posicionY_vista << "\n";
 
 		}
 		//-----------------------------------------------------------------------------
