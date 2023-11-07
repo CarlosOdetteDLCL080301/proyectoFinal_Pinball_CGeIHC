@@ -24,16 +24,16 @@ public:
 	float getPosicionY() { return position.y; }
 	float getPosicionZ() { return position.z; }
 	//Setter de mi ubicación
-	float getVistaX() { /*Se debe obtener la posición de la camara en X*/ }
-	float getVistaY() { /*Se debe obtener la posición de la camara en Y*/ }
+	float getVistaX() { return yaw; }
+	float getVistaY() { return pitch; }
 	float getVistaZ() { /*Se debe obtener la posición de la camara en Z*/ }
 	//Setter para modificar la posición periodicamente desde Main
 	void setPosicionX(float posicionX) { position.x = posicionX; }
 	void setPosicionY(float posicionY) { position.y = posicionY; }
 	void setPosicionZ(float posicionZ) { position.z = posicionZ; }
 	//Setter para modificar la vista periodicamente desde Main
-	void setVistaX() { /*Se debe asignar la posición de la camara en X*/ }
-	void setVistaY() { /*Se debe asignar la posición de la camara en Y*/ }
+	void setVistaX(GLfloat vistaX) { yaw = vistaX; }
+	void setVistaY(GLfloat vistaY) { pitch = vistaY; }
 	void setVistaZ() { /*Se debe asignar la posición de la camara en Z*/ }
 	~Camera();
 

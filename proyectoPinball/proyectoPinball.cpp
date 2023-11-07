@@ -289,15 +289,23 @@ int main()
 	glm::mat4 projection = glm::perspective(45.0f, (GLfloat)mainWindow.getBufferWidth() / mainWindow.getBufferHeight(), 0.1f, 1000.0f);
 	//+++++++++++++++++++++++++++++++	variables para inicializar	+++++++++++++++++++++++++++++++
 	//valores para la camara isometrica
-	float destinoX = 22.0f;
-	float destinoY = 22.0f;
-	float destinoZ = 22.0f;
+	float destinoX = 30.0f;
+	float destinoY = 30.0f;
+	float destinoZ = 30.0f;
+
+	float destinoX_vista = -135.0f;
+	float destinoY_vista = -35.0f;
 
 	float posicionX; // Puedes cambiar este valor a cualquier número
 	float posicionY; // Puedes cambiar este valor a cualquier número
 	float posicionZ;  // Puedes cambiar este valor a cualquier número
+	
+	float posicionX_vista; // Puedes cambiar este valor a cualquier número
+	float posicionY_vista; // Puedes cambiar este valor a cualquier número
+	float posicionZ_vista;  // Puedes cambiar este valor a cualquier número
 
-	float incremento = 0.01f;
+	float incremento = 0.1f;
+	float incremento_vista = 0.1f;
 	float auxiliar;
 	//---------------------------------------------------------------------------------------------
 	////Loop mientras no se cierra la ventana
@@ -363,7 +371,12 @@ int main()
 
 		//+++++++++++++++++++++++++++++++	PROYECTO	+++++++++++++++++++++++++++++++
 		//Vista Isometrica
+		/*
+		¿Que es una vista isometrica?
+
+		*/
 		if(mainWindow.getEncenderIsometrica()){
+			//Movemos a nuestra POV hasta la posición destino (Manipulamos el manejo del tecladdo)
 			//Asignamos en variables para sustituir por las de mi formula
 			posicionX = camera.getPosicionX(); // Puedes cambiar este valor a cualquier número
 			posicionY = camera.getPosicionY(); // Puedes cambiar este valor a cualquier número
@@ -379,6 +392,17 @@ int main()
 			//Asignamos la nueva posición de Z, obtenida por nuestro auxiliar
 			auxiliar = (posicionZ > destinoZ) ? posicionZ - incremento : posicionZ + incremento;
 			camera.setPosicionZ(auxiliar);
+
+			////Movemos a nuestra POV hasta la vista destino (Manipulamos el manejo del mouse)
+			posicionX_vista = camera.getVistaX();
+			posicionY_vista = camera.getVistaY();
+
+			auxiliar = (posicionX_vista > destinoX_vista) ? posicionX_vista - incremento_vista : posicionX_vista + incremento_vista;
+			camera.setVistaX(auxiliar);
+			auxiliar = (posicionY_vista > destinoY_vista) ? posicionY_vista - incremento_vista : posicionY_vista + incremento_vista;
+			camera.setVistaY(auxiliar);
+			std::cout << "Eje X: " << posicionX_vista << "\tEje Y: " << posicionY_vista << "\n";
+
 		}
 		//-----------------------------------------------------------------------------
 
