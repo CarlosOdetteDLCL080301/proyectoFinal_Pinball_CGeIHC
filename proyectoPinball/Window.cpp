@@ -112,7 +112,8 @@ void Window::ManejaTeclado(GLFWwindow* window, int key, int code, int action, in
 	{
 		theWindow-> muevex -= 1.0;
 	}
-
+	//Te movera a al posición destino, hasta que se desea
+	theWindow->encenderIsometrica = (key == GLFW_KEY_I) ? true : false;
 
 
 	if (key >= 0 && key < 1024)

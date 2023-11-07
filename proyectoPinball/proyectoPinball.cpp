@@ -288,9 +288,17 @@ int main()
 	GLuint uniformColor = 0;
 	glm::mat4 projection = glm::perspective(45.0f, (GLfloat)mainWindow.getBufferWidth() / mainWindow.getBufferHeight(), 0.1f, 1000.0f);
 	//+++++++++++++++++++++++++++++++	variables para inicializar	+++++++++++++++++++++++++++++++
+	//valores para la camara isometrica
+	float destinoX = 22.0f;
+	float destinoY = 22.0f;
+	float destinoZ = 22.0f;
 
+	float posicionX; // Puedes cambiar este valor a cualquier número
+	float posicionY; // Puedes cambiar este valor a cualquier número
+	float posicionZ;  // Puedes cambiar este valor a cualquier número
 
-
+	float incremento = 0.01f;
+	float auxiliar;
 	//---------------------------------------------------------------------------------------------
 	////Loop mientras no se cierra la ventana
 	while (!mainWindow.getShouldClose())
@@ -354,9 +362,24 @@ int main()
 		meshList[2]->RenderMesh();
 
 		//+++++++++++++++++++++++++++++++	PROYECTO	+++++++++++++++++++++++++++++++
-
-
-
+		//Vista Isometrica
+		if(mainWindow.getEncenderIsometrica()){
+			//Asignamos en variables para sustituir por las de mi formula
+			posicionX = camera.getPosicionX(); // Puedes cambiar este valor a cualquier número
+			posicionY = camera.getPosicionY(); // Puedes cambiar este valor a cualquier número
+			posicionZ = camera.getPosicionZ(); // Puedes cambiar este valor a cualquier número
+			/*Lo que se hace basicamente en las variables auxiliar, es obtener el incremento( o decremento, segun el caso)
+			para alcanzar los valores destinos que fueron planteados*/
+			auxiliar = (posicionX > destinoX) ? posicionX - incremento : posicionX + incremento;
+			//Asignamos la nueva posición de X, obtenida por nuestro auxiliar
+			camera.setPosicionX(auxiliar);
+			auxiliar = (posicionY > destinoY) ? posicionY - incremento : posicionY + incremento;
+			//Asignamos la nueva posición de Y, obtenida por nuestro auxiliar
+			camera.setPosicionY(auxiliar);
+			//Asignamos la nueva posición de Z, obtenida por nuestro auxiliar
+			auxiliar = (posicionZ > destinoZ) ? posicionZ - incremento : posicionZ + incremento;
+			camera.setPosicionZ(auxiliar);
+		}
 		//-----------------------------------------------------------------------------
 
 		glDisable(GL_BLEND);
