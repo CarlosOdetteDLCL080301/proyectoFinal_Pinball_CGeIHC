@@ -63,9 +63,7 @@ Texture pisoTexture;
 //---------------------------------------------------------------------------------------------
 
 //+++++++++++++++++++++++++++++++	variables para modelos	+++++++++++++++++++++++++++++++
-Model flag;
-Model caliz;
-Model bumper;
+Model canica2;
 
 //---------------------------------------------------------------------------------------------
 Skybox skybox;
@@ -238,13 +236,8 @@ int main()
 	pisoTexture = Texture("Textures/piso.tga");
 	pisoTexture.LoadTextureA();
 
-	//Modelos a usar
-	flag = Model();
-	flag.LoadModel("Models/flag.obj");
-	caliz = Model();
-	caliz.LoadModel("Models/CalizTexturizado.obj");
-	bumper = Model();
-	bumper.LoadModel("Models/tambor.obj");
+	canica2 = Model();
+	canica2.LoadModel("Models/canica2.obj");
 
 	std::vector<std::string> skyboxFaces;
 	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_rt.tga");
@@ -363,43 +356,12 @@ int main()
 		meshList[2]->RenderMesh();
 
 		//+++++++++++++++++++++++++++++++	PROYECTO	+++++++++++++++++++++++++++++++
-		//Obstaculo centro - "original"
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(0.0f, -2.0f, 40.0));
-		modelaux = model;
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		bumper.RenderModel();
-
-		//Obstaculo Arriba centro
-		model = modelaux;
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -100.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		bumper.RenderModel();
-
-		//Obstaculo lado derecho (de la camara)
-		model = modelaux;
-		model = glm::translate(model, glm::vec3(20.0f, 0.0f, -80.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		bumper.RenderModel();
-
-		//Obstaculo lado izquierdo (de la camara)
-		model = modelaux;
-		model = glm::translate(model, glm::vec3(-20.0f, 0.0f, -80.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		bumper.RenderModel();
-
-		//Flag of CupHead
+		//Canica
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(0.0f, -2.0f, 0.0));
+		modelaux = model;
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		flag.RenderModel();
-
-		//Caliz of CupHead
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(30.0f, -2.0f, 80.0));
-		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		caliz.RenderModel();
+		canica2.RenderModel();
 
 		//-----------------------------------------------------------------------------
 
