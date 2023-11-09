@@ -377,7 +377,7 @@ int main()
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Pinballmesa.RenderModel();
 
-		//Palanca
+		//Palanca Pinball
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(8.5f, 100.0f, 100.0f));
 		model = glm::scale(model, glm::vec3(3.0f, 3.0f, 3.0f));
