@@ -65,7 +65,7 @@ Texture pisoTexture;
 //+++++++++++++++++++++++++++++++	variables para modelos	+++++++++++++++++++++++++++++++
 Model flag;
 Model caliz;
-Model tambor;
+Model bumper;
 
 //---------------------------------------------------------------------------------------------
 Skybox skybox;
@@ -243,8 +243,8 @@ int main()
 	flag.LoadModel("Models/flag.obj");
 	caliz = Model();
 	caliz.LoadModel("Models/CalizTexturizado.obj");
-	tambor = Model();
-	tambor.LoadModel("Models/tambor.obj");
+	bumper = Model();
+	bumper.LoadModel("Models/tambor.obj");
 
 	std::vector<std::string> skyboxFaces;
 	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_rt.tga");
@@ -368,25 +368,25 @@ int main()
 		model = glm::translate(model, glm::vec3(0.0f, -2.0f, 40.0));
 		modelaux = model;
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		tambor.RenderModel();
+		bumper.RenderModel();
 
 		//Obstaculo Arriba centro
 		model = modelaux;
 		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -100.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		tambor.RenderModel();
+		bumper.RenderModel();
 
 		//Obstaculo lado derecho (de la camara)
 		model = modelaux;
 		model = glm::translate(model, glm::vec3(20.0f, 0.0f, -80.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		tambor.RenderModel();
+		bumper.RenderModel();
 
 		//Obstaculo lado izquierdo (de la camara)
 		model = modelaux;
 		model = glm::translate(model, glm::vec3(-20.0f, 0.0f, -80.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		tambor.RenderModel();
+		bumper.RenderModel();
 
 		//Flag of CupHead
 		model = glm::mat4(1.0);
