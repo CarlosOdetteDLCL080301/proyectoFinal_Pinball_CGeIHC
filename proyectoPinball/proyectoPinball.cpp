@@ -64,7 +64,9 @@ Texture pisoTexture;
 
 //+++++++++++++++++++++++++++++++	variables para modelos	+++++++++++++++++++++++++++++++
 
-
+Model Pinball;
+Model Pinballmesa;
+Model Palanca;
 
 //---------------------------------------------------------------------------------------------
 Skybox skybox;
@@ -245,6 +247,13 @@ int main()
 	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_bk.tga");
 	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_ft.tga");
 
+	Pinball = Model();
+	Pinball.LoadModel("Models/tableroPinball.obj");
+	Pinballmesa = Model();
+	Pinballmesa.LoadModel("Models/maquinaPinball.obj");
+	Palanca = Model();
+	Palanca.LoadModel("Models/palanca.obj");
+
 	skybox = Skybox(skyboxFaces);
 
 	Material_brillante = Material(4.0f, 256);
@@ -352,6 +361,28 @@ int main()
 		pisoTexture.UseTexture();
 		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		meshList[2]->RenderMesh();
+
+		//Tablero de pinball
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-10.0f, 14.0f, -9.7f));
+		model = glm::scale(model, glm::vec3(3.0f, 3.0f, 3.0f));
+		model = glm::rotate(model,4 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Pinball.RenderModel();
+
+		//mesa de pinball
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-10.0f, 0.0f, -4.0f));
+		model = glm::scale(model, glm::vec3(3.0f, 3.0f, 3.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Pinballmesa.RenderModel();
+
+		//Palanca
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(8.5f, 100.0f, 100.0f));
+		model = glm::scale(model, glm::vec3(3.0f, 3.0f, 3.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Palanca.RenderModel();
 
 		//+++++++++++++++++++++++++++++++	PROYECTO	+++++++++++++++++++++++++++++++
 
