@@ -262,15 +262,16 @@ int main()
 
 	//luz direccional, sólo 1 y siempre debe de existir
 	mainLight = DirectionalLight(1.0f, 1.0f, 1.0f,
-		0.5f, 0.5f,
-		0.0f, 0.0f, -1.0f);
+		0.4f, 0.4f,
+		-1.0f, 0.0f, -1.0f);
 	//contador de luces puntuales
 	unsigned int pointLightCount = 0;
-	//Declaración de primer luz puntual
-	pointLights[0] = PointLight(1.0f, 0.0f, 0.0f,
-		0.0f, 1.0f,
-		0.0f, 2.5f, 1.5f,
-		0.3f, 0.2f, 0.1f);
+	
+	//Luz de avatar
+	pointLights[0] = PointLight(1.0f, 1.0f, 0.0f,
+		0.8f, 1.0f,
+		-30.0f, 98.0f, 40.0f,
+		0.1f, 0.2f, 0.1f);
 	pointLightCount++;
 
 	unsigned int spotLightCount = 0;
@@ -283,13 +284,24 @@ int main()
 		5.0f);
 	spotLightCount++;
 
-	//luz fija
-	spotLights[1] = SpotLight(0.0f, 0.0f, 1.0f,
-		1.0f, 2.0f,
-		5.0f, 10.0f, 0.0f,
-		0.0f, -5.0f, 0.0f,
-		1.0f, 0.0f, 0.0f,
-		15.0f);
+
+	// Luz que ilumina todo el tablero
+	spotLights[1] = SpotLight(0.0f, 1.0f, 1.0f,
+		0.8f, 1.0f,
+		10.0f, 115.0f, -55.0f,
+		-2.5f, -1.0f, 4.0f,
+		0.8f, 0.001f, 0.00009f,
+		38.0f);
+	spotLightCount++;
+
+
+	//Luz flippers
+	spotLights[2] = SpotLight(1.0f, 0.0f, 0.0f,
+		0.9f, 4.0f,
+		-26.0f, 100.0f, 96.0f,
+		0.0f, 0.0f, -3.0f,
+		0.8f, 0.2f, 0.0f,
+		40.0f);
 	spotLightCount++;
 
 	GLuint uniformProjection = 0, uniformModel = 0, uniformView = 0, uniformEyePosition = 0,
