@@ -305,7 +305,6 @@ int main()
 		40.0f);
 	spotLightCount++;
 
-
 	//Hacemos el segundo arreglo de luces spotlight para poder apagar la luz del tablero
 	spotLights2[0] = spotLights[0];		//la luz de la linterna se qudea igual
 	spotLights2[1] = spotLights[2];		//la luz de flippers ahora se encuentra en la penultima posicion
@@ -358,7 +357,9 @@ int main()
 		// luz ligada a la cámara de tipo flash
 		glm::vec3 lowerLight = camera.getCameraPosition();
 		lowerLight.y -= 0.3f;
-		//spotLights[0].SetFlash(lowerLight, camera.getCameraDirection());
+		spotLights[0].SetFlash(lowerLight, camera.getCameraDirection());
+		spotLights2[0].SetFlash(lowerLight, camera.getCameraDirection());
+
 
 		//información al shader de fuentes de iluminación
 		shaderList[0].SetDirectionalLight(&mainLight);
@@ -409,35 +410,34 @@ int main()
 		//Funcion para pagar las spotlight (luz de tablero y luz de flippers) de forma independente
 		if (mainWindow.getLuz2() == true)
 		{
-			//Mandamos al shader el primer arreglo completo, la luz del los flippers esta encendida
-			shaderList[0].SetSpotLights(spotLights2, spotLightCount);			
+			//Mandamos al shader el primer arreglo completo, la luz del los flippers esta encendida		
 			
 			//los siguientes if nos ayudan a apagar y prender la luz del tablero cuando la luz de los flippers esta prendida
-			//if (mainWindow.getLuz1() == true)
-			//{
-			//	shaderList[0].SetSpotLights(spotLights2, spotLightCount2);			//Prendemos la luz del tablero
-			//}
-			//else
-			//{
-			//	shaderList[0].SetSpotLights(spotLights2, spotLightCount2 - 1);		//Restamos el contador y asi no mandamos la luz del tablero
-			//}
+			if (mainWindow.getLuz1() == true)
+			{
+				shaderList[0].SetSpotLights(spotLights2, spotLightCount2);			//Prendemos la luz del tablero
+			}
+			else
+			{
+				shaderList[0].SetSpotLights(spotLights2, spotLightCount2 - 1);		//Restamos el contador y asi no mandamos la luz del tablero
+			}
 		}
-		//else
-		//{
-		//	// Si el valor de getluz2(), que es la luz de los flippers es falso, apagamos la luz
-		//	shaderList[0].SetSpotLights(spotLights, spotLightCount - 1);
+		else
+		{
+			// Si el valor de getluz2(), que es la luz de los flippers es falso, apagamos la luz
+			shaderList[0].SetSpotLights(spotLights, spotLightCount - 1);
 
-		//	//Si queremos prender la luz del tablero cuando la luz de los flippers esta apagada, no hacemos nada
-		//	//porque el primer arreglo spotlights, solo apago la luz de los flippers, las demas si se mandaron al shader y siguen encedidadas
-		//	if (mainWindow.getLuz1() == true)
-		//	{
-		//	}
-		//	else
-		//	{
-		//		//Restamos el contador y asi ya no mandamos al shader la ultimas 2 luces, apagamos ambas luces
-		//		shaderList[0].SetSpotLights(spotLights, spotLightCount - 2);		
-		//	}
-		//}
+			//Si queremos prender la luz del tablero cuando la luz de los flippers esta apagada, no hacemos nada
+			//porque el primer arreglo spotlights, solo apago la luz de los flippers, las demas si se mandaron al shader y siguen encedidadas
+			if (mainWindow.getLuz1() == true)
+			{
+			}
+			else
+			{
+				//Restamos el contador y asi ya no mandamos al shader la ultimas 2 luces, apagamos ambas luces
+				shaderList[0].SetSpotLights(spotLights, spotLightCount - 2);		
+			}
+		}
 		
 		//Funcion para apagar la luz del avatar
 
