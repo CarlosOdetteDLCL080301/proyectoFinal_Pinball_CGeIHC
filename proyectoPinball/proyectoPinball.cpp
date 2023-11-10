@@ -86,6 +86,7 @@ DirectionalLight mainLight;
 //para declarar varias luces de tipo pointlight
 PointLight pointLights[MAX_POINT_LIGHTS];
 SpotLight spotLights[MAX_SPOT_LIGHTS];
+SpotLight spotLights2[MAX_SPOT_LIGHTS];
 
 // Vertex Shader
 static const char* vShader = "shaders/shader_light.vert";
@@ -304,6 +305,14 @@ int main()
 		40.0f);
 	spotLightCount++;
 
+
+	//Hacemos el segundo arreglo de luces spotlight para poder apagar la luz del tablero
+	spotLights2[0] = spotLights[0];		//la luz de la linterna se qudea igual
+	spotLights2[1] = spotLights[2];		//la luz de flippers ahora se encuentra en la penultima posicion
+	spotLights2[2] = spotLights[1];		//la luz del tablero se encuentra en el ultimo lugar del arreglo
+
+	unsigned int spotLightCount2 = spotLightCount;	//contador para el segundo arreglo
+
 	GLuint uniformProjection = 0, uniformModel = 0, uniformView = 0, uniformEyePosition = 0,
 		uniformSpecularIntensity = 0, uniformShininess = 0, uniformTextureOffset = 0;
 	GLuint uniformColor = 0;
@@ -349,12 +358,10 @@ int main()
 		// luz ligada a la cámara de tipo flash
 		glm::vec3 lowerLight = camera.getCameraPosition();
 		lowerLight.y -= 0.3f;
-		spotLights[0].SetFlash(lowerLight, camera.getCameraDirection());
+		//spotLights[0].SetFlash(lowerLight, camera.getCameraDirection());
 
 		//información al shader de fuentes de iluminación
 		shaderList[0].SetDirectionalLight(&mainLight);
-		shaderList[0].SetPointLights(pointLights, pointLightCount);
-		shaderList[0].SetSpotLights(spotLights, spotLightCount);
 
 
 
@@ -373,6 +380,9 @@ int main()
 		pisoTexture.UseTexture();
 		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		meshList[2]->RenderMesh();
+
+
+		//+++++++++++++++++++++++++++++++	PROYECTO	+++++++++++++++++++++++++++++++
 
 		//Tablero de pinball
 		model = glm::mat4(1.0);
@@ -396,10 +406,49 @@ int main()
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Palanca.RenderModel();
 
-		//+++++++++++++++++++++++++++++++	PROYECTO	+++++++++++++++++++++++++++++++
+		//Funcion para pagar las spotlight (luz de tablero y luz de flippers) de forma independente
+		if (mainWindow.getLuz2() == true)
+		{
+			//Mandamos al shader el primer arreglo completo, la luz del los flippers esta encendida
+			shaderList[0].SetSpotLights(spotLights2, spotLightCount);			
+			
+			//los siguientes if nos ayudan a apagar y prender la luz del tablero cuando la luz de los flippers esta prendida
+			//if (mainWindow.getLuz1() == true)
+			//{
+			//	shaderList[0].SetSpotLights(spotLights2, spotLightCount2);			//Prendemos la luz del tablero
+			//}
+			//else
+			//{
+			//	shaderList[0].SetSpotLights(spotLights2, spotLightCount2 - 1);		//Restamos el contador y asi no mandamos la luz del tablero
+			//}
+		}
+		//else
+		//{
+		//	// Si el valor de getluz2(), que es la luz de los flippers es falso, apagamos la luz
+		//	shaderList[0].SetSpotLights(spotLights, spotLightCount - 1);
 
+		//	//Si queremos prender la luz del tablero cuando la luz de los flippers esta apagada, no hacemos nada
+		//	//porque el primer arreglo spotlights, solo apago la luz de los flippers, las demas si se mandaron al shader y siguen encedidadas
+		//	if (mainWindow.getLuz1() == true)
+		//	{
+		//	}
+		//	else
+		//	{
+		//		//Restamos el contador y asi ya no mandamos al shader la ultimas 2 luces, apagamos ambas luces
+		//		shaderList[0].SetSpotLights(spotLights, spotLightCount - 2);		
+		//	}
+		//}
+		
+		//Funcion para apagar la luz del avatar
 
-
+		if(mainWindow.getLuz3() == true)
+		{
+			shaderList[0].SetPointLights(pointLights, pointLightCount);			//Mandamos al shader toda la lista del pointlight
+		}
+		else
+		{
+			shaderList[0].SetPointLights(pointLights, pointLightCount - 1);		//Restamos el contador y asi ya no mandamos al shader la ultima luz
+		}
 		//-----------------------------------------------------------------------------
 
 		glDisable(GL_BLEND);

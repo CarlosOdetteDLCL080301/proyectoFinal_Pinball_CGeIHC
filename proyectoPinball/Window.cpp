@@ -14,6 +14,9 @@ Window::Window(GLint windowWidth, GLint windowHeight)
 	width = windowWidth;
 	height = windowHeight;
 	muevex = 2.0f;
+	luz1 = false;
+	luz2 = false;
+	luz3 = false;
 	for (size_t i = 0; i < 1024; i++)
 	{
 		keys[i] = 0;
@@ -113,6 +116,37 @@ void Window::ManejaTeclado(GLFWwindow* window, int key, int code, int action, in
 		theWindow-> muevex -= 1.0;
 	}
 
+	// Detecatamos si se esta presionando la tecla y cambiamos el valor booleano 
+	
+	//Para apagar luz del tablero
+	if (key == GLFW_KEY_1)
+	{
+		theWindow->luz1 = true;
+	}
+	if (key == GLFW_KEY_2)
+	{
+		theWindow->luz1 = false;
+	}
+
+	//Para apagar la luz de los flippers
+	if (key == GLFW_KEY_3)
+	{
+		theWindow->luz2 = true;
+	}
+	if (key == GLFW_KEY_4)
+	{
+		theWindow->luz2 = false;
+	}
+	
+	//Para apagar la luz del avatar
+	if (key == GLFW_KEY_5)
+	{
+		theWindow->luz3 = true;
+	}
+	if (key == GLFW_KEY_6)
+	{
+		theWindow->luz3 = false;
+	}
 
 
 	if (key >= 0 && key < 1024)
