@@ -67,6 +67,9 @@ Model Pinball;
 Model Pinballmesa;
 Model Palanca;
 Model canica2;
+Model flag;
+Model tambor;
+Model caliz;
 
 //---------------------------------------------------------------------------------------------
 Skybox skybox;
@@ -266,7 +269,7 @@ float giroAvion = 0;
 
 #define MAX_FRAMES 100
 int i_max_steps = 90;
-int i_curr_steps = 12;
+int i_curr_steps = 21;
 typedef struct _frame {
 	float mov_x;
 	float mov_z;
@@ -275,7 +278,7 @@ typedef struct _frame {
 }FRAME;
 
 FRAME KeyFrame[MAX_FRAMES]; //Arreglo de frames
-int FrameIndex = 12;
+int FrameIndex = 21;
 bool play = false;
 int playIndex = 0;
 
@@ -311,7 +314,7 @@ void animate(void){
 		{
 			mov_x += KeyFrame[playIndex].mov_xInc;
 			mov_z += KeyFrame[playIndex].mov_zInc;
-			giroC += 50; //Giro de la canica
+			giroC -= 10; //Giro de la canica
 			i_curr_steps++;
 		}
 	}
@@ -341,6 +344,12 @@ int main()
 	Palanca.LoadModel("Models/palanca.obj");
 	canica2 = Model();
 	canica2.LoadModel("Models/canica2.obj");
+	/*flag = Model();
+	flag.LoadModel("Models/flag.obj");
+	caliz = Model();
+	caliz.LoadModel("Models/CalizTexturizado.obj");
+	tambor = Model();
+	tambor.LoadModel("Models/tambor.obj");*/
 
 	std::vector<std::string> skyboxFaces;
 	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_rt.tga");
@@ -395,13 +404,13 @@ int main()
 	//+++++++++++++++++++++++++++++++	variables para inicializar	+++++++++++++++++++++++++++++++
 
 	//---------PARA TENER KEYFRAMES GUARDADOS NO VOLATILES QUE SIEMPRE SE UTILIZARAN SE DECLARAN AQUÍ
-	KeyFrame[0].mov_z = -5.0f;	//1
+	KeyFrame[0].mov_z = -5.0f;	//1 - Movimiento por el canal principal
 	KeyFrame[1].mov_z = -20.0f;	//2
 	KeyFrame[2].mov_z = -40.0f;	//3
 	KeyFrame[3].mov_z = -60.0f;	//4
 	KeyFrame[4].mov_z = -80.0f;	//5
 	KeyFrame[5].mov_z = -100.0f;//6
-	KeyFrame[6].mov_x = -2.0f;	//7
+	KeyFrame[6].mov_x = -2.0f;	//7 - Curva
 	KeyFrame[6].mov_z = -110.0f;
 	KeyFrame[7].mov_x = -8.0f;	//8
 	KeyFrame[7].mov_z = -118.0f;
@@ -409,15 +418,28 @@ int main()
 	KeyFrame[8].mov_z = -125.0f;
 	KeyFrame[9].mov_x = -25.0f;	//10
 	KeyFrame[9].mov_z = -125.0f;
-	KeyFrame[10].mov_x = -30.0f;//11
-	KeyFrame[10].mov_z = -120.0f;
-	KeyFrame[11].mov_x = -35.0f;//12
-	KeyFrame[11].mov_z = -115.0f;
-	/*KeyFrame[12].mov_x = -25.0f;//13
-	KeyFrame[12].mov_z = -100.0f;
-	KeyFrame[13].mov_x = -35.0f;//14
-	KeyFrame[13].mov_z = -85.0f;*/
-
+	KeyFrame[10].mov_x = -35.0f;//11 - Rebote con pared
+	KeyFrame[10].mov_z = -115.0f;
+	KeyFrame[11].mov_x = -30.0f;//12 - Rebote con bumper
+	KeyFrame[11].mov_z = -108.0f;
+	KeyFrame[12].mov_x = -40.0f;//13 - Rebote con pared
+	KeyFrame[12].mov_z = -90.0f;
+	KeyFrame[13].mov_x = -31.0f;//14 - Rebote con bumper
+	KeyFrame[13].mov_z = -70.0f;
+	KeyFrame[14].mov_x = -35.0f;//15 - Rebote con posible flipper
+	KeyFrame[14].mov_z = -25.0f;
+	KeyFrame[15].mov_x = -13.0f;//16 - Rebote Caliz CupHead
+	KeyFrame[15].mov_z = -58.0f;
+	KeyFrame[16].mov_x = -47.0f;//17 - Rebote con pared
+	KeyFrame[16].mov_z = -42.0f;
+	KeyFrame[17].mov_x = -48.0f;//18 - Caida a carril
+	KeyFrame[17].mov_z = -16.0f;
+	KeyFrame[18].mov_x = -44.0f;//19
+	KeyFrame[18].mov_z = -16.0f;
+	KeyFrame[19].mov_x = -40.0f;//20 - Movimiento por el canal de regreso
+	KeyFrame[19].mov_z = -5.0f;
+	KeyFrame[20].mov_x = 0.0f;	//21 - Posición inicial 
+	KeyFrame[20].mov_z = 0.0f;
 	//Se agregan nuevos frames 
 	printf("\nTeclas para uso de Keyframes:\n1.-Presionar M para reproducir animacion por KeyFrame\n2.-Presionar N para volver a habilitar la reproduccion de la animacion por KeyFrame\n");
 
@@ -513,9 +535,47 @@ int main()
 		//Canica
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(posX + mov_x, posY, posZ + mov_z));
-		model = glm::rotate(model, giroC * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::rotate(model, giroC * toRadians, glm::vec3(1.0f, 1.0f, 1.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		canica2.RenderModel();
+
+		/*//Obstaculo centro - "original"
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-20.0f, 106.0f, 15.0));
+		modelaux = model;
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		tambor.RenderModel();
+
+		//Obstaculo Arriba centro
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -35.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		tambor.RenderModel();
+
+		//Obstaculo lado derecho (de la camara)
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(6.0f, 0.0f, -25.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		tambor.RenderModel();
+
+		//Obstaculo lado izquierdo (de la camara)
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(-6.0f, 0.0f, -25.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		tambor.RenderModel();
+
+		//Flag of CupHead
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-20.0f, 106.0f, 0.0));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		flag.RenderModel();
+
+		//Caliz of CupHead
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-1.0f, 106.0f, 26.0));
+		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		caliz.RenderModel();*/
 
 		//-----------------------------------------------------------------------------
 
