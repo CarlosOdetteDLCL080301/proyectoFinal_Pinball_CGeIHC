@@ -43,9 +43,9 @@ Adicional.- Textura Animada
 const float toRadians = 3.14159265f / 180.0f;
 
 //+++++++++++++++++++++++++++++++	variables para animación	+++++++++++++++++++++++++++++++
-
-	
-
+//variables para keyframes
+float reproAni, habiAni, guardoFrame, reiniFrame, ciclo, ciclo2, contador = 0;	
+GLfloat giroC;
 //---------------------------------------------------------------------------------------------
 
 Window mainWindow;
@@ -63,6 +63,9 @@ Texture pisoTexture;
 //---------------------------------------------------------------------------------------------
 
 //+++++++++++++++++++++++++++++++	variables para modelos	+++++++++++++++++++++++++++++++
+Model Pinball;
+Model Pinballmesa;
+Model Palanca;
 Model canica2;
 
 //---------------------------------------------------------------------------------------------
@@ -89,6 +92,41 @@ static const char* vShader = "shaders/shader_light.vert";
 
 // Fragment Shader
 static const char* fShader = "shaders/shader_light.frag";
+
+//+++++++++++++++++++++++++ Funciones para animacion +++++++++++++++++++++++++++
+
+//función para teclado de keyframes 
+void inputKeyframes(bool* keys);
+
+//cálculo del promedio de las normales para sombreado de Phong
+void calcAverageNormals(unsigned int* indices, unsigned int indiceCount, GLfloat* vertices, unsigned int verticeCount, unsigned int vLength, unsigned int normalOffset)
+{
+	for (size_t i = 0; i < indiceCount; i += 3)
+	{
+		unsigned int in0 = indices[i] * vLength;
+		unsigned int in1 = indices[i + 1] * vLength;
+		unsigned int in2 = indices[i + 2] * vLength;
+		glm::vec3 v1(vertices[in1] - vertices[in0], vertices[in1 + 1] - vertices[in0 + 1], vertices[in1 + 2] - vertices[in0 + 2]);
+		glm::vec3 v2(vertices[in2] - vertices[in0], vertices[in2 + 1] - vertices[in0 + 1], vertices[in2 + 2] - vertices[in0 + 2]);
+		glm::vec3 normal = glm::cross(v1, v2);
+		normal = glm::normalize(normal);
+
+		in0 += normalOffset; in1 += normalOffset; in2 += normalOffset;
+		vertices[in0] += normal.x; vertices[in0 + 1] += normal.y; vertices[in0 + 2] += normal.z;
+		vertices[in1] += normal.x; vertices[in1 + 1] += normal.y; vertices[in1 + 2] += normal.z;
+		vertices[in2] += normal.x; vertices[in2 + 1] += normal.y; vertices[in2 + 2] += normal.z;
+	}
+
+	for (size_t i = 0; i < verticeCount / vLength; i++)
+	{
+		unsigned int nOffset = i * vLength + normalOffset;
+		glm::vec3 vec(vertices[nOffset], vertices[nOffset + 1], vertices[nOffset + 2]);
+		vec = glm::normalize(vec);
+		vertices[nOffset] = vec.x; vertices[nOffset + 1] = vec.y; vertices[nOffset + 2] = vec.z;
+	}
+}
+
+//------------------------------------------------------------------------------
 
 void CreateObjects()
 {
@@ -218,8 +256,67 @@ void CreateShaders()
 	shaderList.push_back(*shader1);
 }
 
+//++++++++++++++++++++++++++++++ Animacion Keyframes ++++++++++++++++++++++++++++++++++
+bool animacion = false;
 
+//NEW// Keyframes
+float posX = 8.0, posY = 108.0, posZ = 85.0;
+float	mov_x = 0.0f, mov_z = 0.0f;
+float giroAvion = 0;
 
+#define MAX_FRAMES 100
+int i_max_steps = 90;
+int i_curr_steps = 12;
+typedef struct _frame {
+	float mov_x;
+	float mov_z;
+	float mov_xInc;
+	float mov_zInc;
+}FRAME;
+
+FRAME KeyFrame[MAX_FRAMES]; //Arreglo de frames
+int FrameIndex = 12;
+bool play = false;
+int playIndex = 0;
+
+void resetElements(void){
+	mov_x = KeyFrame[0].mov_x;
+	mov_z = KeyFrame[0].mov_z;
+}
+void interpolation(void){
+	//Reset con letra N
+	KeyFrame[playIndex].mov_xInc = (KeyFrame[playIndex + 1].mov_x - KeyFrame[playIndex].mov_x) / i_max_steps;
+	KeyFrame[playIndex].mov_zInc = (KeyFrame[playIndex + 1].mov_z - KeyFrame[playIndex].mov_z) / i_max_steps;
+}
+void animate(void){
+	//Movimiento del objeto con M
+	if (play){
+		if (i_curr_steps >= i_max_steps) //Calcular un frame siguiente
+		{
+			playIndex++;
+			printf("playindex : %d\n", playIndex);
+			if (playIndex > FrameIndex - 2){
+				printf("Frame index= %d\n", FrameIndex);
+				printf("termino la animacion\n");
+				playIndex = 0;
+				play = false;
+			}
+			else //Interpolación del próximo cuadro
+			{
+				i_curr_steps = 0; //Resetea contador
+				interpolation();
+			}
+		}
+		else
+		{
+			mov_x += KeyFrame[playIndex].mov_xInc;
+			mov_z += KeyFrame[playIndex].mov_zInc;
+			giroC += 50; //Giro de la canica
+			i_curr_steps++;
+		}
+	}
+}
+//-------------------------------------------------------------------------------------
 
 int main()
 {
@@ -236,6 +333,12 @@ int main()
 	pisoTexture = Texture("Textures/piso.tga");
 	pisoTexture.LoadTextureA();
 
+	Pinball = Model();
+	Pinball.LoadModel("Models/tableroPinball.obj");
+	Pinballmesa = Model();
+	Pinballmesa.LoadModel("Models/maquinaPinball.obj");
+	Palanca = Model();
+	Palanca.LoadModel("Models/palanca.obj");
 	canica2 = Model();
 	canica2.LoadModel("Models/canica2.obj");
 
@@ -291,7 +394,32 @@ int main()
 	glm::mat4 projection = glm::perspective(45.0f, (GLfloat)mainWindow.getBufferWidth() / mainWindow.getBufferHeight(), 0.1f, 1000.0f);
 	//+++++++++++++++++++++++++++++++	variables para inicializar	+++++++++++++++++++++++++++++++
 
+	//---------PARA TENER KEYFRAMES GUARDADOS NO VOLATILES QUE SIEMPRE SE UTILIZARAN SE DECLARAN AQUÍ
+	KeyFrame[0].mov_z = -5.0f;	//1
+	KeyFrame[1].mov_z = -20.0f;	//2
+	KeyFrame[2].mov_z = -40.0f;	//3
+	KeyFrame[3].mov_z = -60.0f;	//4
+	KeyFrame[4].mov_z = -80.0f;	//5
+	KeyFrame[5].mov_z = -100.0f;//6
+	KeyFrame[6].mov_x = -2.0f;	//7
+	KeyFrame[6].mov_z = -110.0f;
+	KeyFrame[7].mov_x = -8.0f;	//8
+	KeyFrame[7].mov_z = -118.0f;
+	KeyFrame[8].mov_x = -20.0f;	//9
+	KeyFrame[8].mov_z = -125.0f;
+	KeyFrame[9].mov_x = -25.0f;	//10
+	KeyFrame[9].mov_z = -125.0f;
+	KeyFrame[10].mov_x = -30.0f;//11
+	KeyFrame[10].mov_z = -120.0f;
+	KeyFrame[11].mov_x = -35.0f;//12
+	KeyFrame[11].mov_z = -115.0f;
+	/*KeyFrame[12].mov_x = -25.0f;//13
+	KeyFrame[12].mov_z = -100.0f;
+	KeyFrame[13].mov_x = -35.0f;//14
+	KeyFrame[13].mov_z = -85.0f;*/
 
+	//Se agregan nuevos frames 
+	printf("\nTeclas para uso de Keyframes:\n1.-Presionar M para reproducir animacion por KeyFrame\n2.-Presionar N para volver a habilitar la reproduccion de la animacion por KeyFrame\n");
 
 	//---------------------------------------------------------------------------------------------
 	////Loop mientras no se cierra la ventana
@@ -306,6 +434,10 @@ int main()
 		glfwPollEvents();
 		camera.keyControl(mainWindow.getsKeys(), deltaTime);
 		camera.mouseControl(mainWindow.getXChange(), mainWindow.getYChange());
+
+		//+++++++++++++ Para Keyframes +++++++++++++++++++++++
+		inputKeyframes(mainWindow.getsKeys());
+		animate();
 
 		// Clear the window
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -356,10 +488,32 @@ int main()
 		meshList[2]->RenderMesh();
 
 		//+++++++++++++++++++++++++++++++	PROYECTO	+++++++++++++++++++++++++++++++
+		//Tablero de pinball
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-10.0f, 14.0f, -9.7f));
+		model = glm::scale(model, glm::vec3(3.0f, 3.0f, 3.0f));
+		//model = glm::rotate(model, 4 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Pinball.RenderModel();
+
+		//mesa de pinball
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-10.0f, 0.0f, -4.0f));
+		model = glm::scale(model, glm::vec3(3.0f, 3.0f, 3.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Pinballmesa.RenderModel();
+
+		//Palanca Pinball
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(8.5f, 100.0f, 100.0f));
+		model = glm::scale(model, glm::vec3(3.0f, 3.0f, 3.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Palanca.RenderModel();
+
 		//Canica
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(0.0f, -2.0f, 0.0));
-		modelaux = model;
+		model = glm::translate(model, glm::vec3(posX + mov_x, posY, posZ + mov_z));
+		model = glm::rotate(model, giroC * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		canica2.RenderModel();
 
@@ -373,4 +527,64 @@ int main()
 	}
 
 	return 0;
+}
+
+void inputKeyframes(bool* keys) {
+	if (keys[GLFW_KEY_M]) {
+		if (reproAni < 1) {
+			if (play == false && (FrameIndex > 1)) {
+				resetElements();
+				interpolation();
+				play = true;
+				playIndex = 0;
+				i_curr_steps = 0;
+				reproAni++;
+				printf("\n presiona 0 para habilitar reproducir de nuevo la animación'\n");
+				habiAni = 0;
+			}
+			else {
+				play = false;
+
+			}
+		}
+	}
+	if (keys[GLFW_KEY_N]) {
+		if (habiAni < 1 && reproAni>0) {
+			printf("Ya puedes reproducir de nuevo la animación con la tecla de barra espaciadora'\n");
+			reproAni = 0;
+		}
+	}
+/*
+	if (keys[GLFW_KEY_L]) {
+		if (guardoFrame < 1) {
+			saveFrame();
+			printf("movAvion_x es: %f\n", movAvion_x);
+			printf("movAvion_y es: %f\n", movAvion_y);
+			printf("presiona P para habilitar guardar otro frame'\n");
+			guardoFrame++;
+			reiniFrame = 0;
+		}
+	}
+	if (keys[GLFW_KEY_P]) {
+		if (reiniFrame < 1 && guardoFrame>0) {
+			guardoFrame = 0;
+			printf("Ya puedes guardar otro frame presionando la tecla L'\n");
+		}
+	}
+	if (keys[GLFW_KEY_1]) {
+		if (ciclo < 1) {
+			movAvion_x += 1.0f;
+			printf("\n mov_x es: %f\n", movAvion_x);
+			ciclo++;
+			ciclo2 = 0;
+			printf("\n Presiona la tecla 2 para poder habilitar la variable\n");
+		}
+	}
+	if (keys[GLFW_KEY_2]) {
+		if (ciclo2 < 1 && ciclo>0) {
+			ciclo = 0;
+			printf("\n Ya puedes modificar tu variable presionando la tecla 1\n");
+		}
+	}
+*/
 }
