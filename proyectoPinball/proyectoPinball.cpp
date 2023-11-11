@@ -614,37 +614,4 @@ void inputKeyframes(bool* keys) {
 			reproAni = 0;
 		}
 	}
-/*
-	if (keys[GLFW_KEY_L]) {
-		if (guardoFrame < 1) {
-			saveFrame();
-			printf("movAvion_x es: %f\n", movAvion_x);
-			printf("movAvion_y es: %f\n", movAvion_y);
-			printf("presiona P para habilitar guardar otro frame'\n");
-			guardoFrame++;
-			reiniFrame = 0;
-		}
-	}
-	if (keys[GLFW_KEY_P]) {
-		if (reiniFrame < 1 && guardoFrame>0) {
-			guardoFrame = 0;
-			printf("Ya puedes guardar otro frame presionando la tecla L'\n");
-		}
-	}
-	if (keys[GLFW_KEY_1]) {
-		if (ciclo < 1) {
-			movAvion_x += 1.0f;
-			printf("\n mov_x es: %f\n", movAvion_x);
-			ciclo++;
-			ciclo2 = 0;
-			printf("\n Presiona la tecla 2 para poder habilitar la variable\n");
-		}
-	}
-	if (keys[GLFW_KEY_2]) {
-		if (ciclo2 < 1 && ciclo>0) {
-			ciclo = 0;
-			printf("\n Ya puedes modificar tu variable presionando la tecla 1\n");
-		}
-	}
-*/
 }
