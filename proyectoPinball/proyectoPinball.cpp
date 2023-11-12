@@ -43,8 +43,9 @@ Adicional.- Textura Animada
 const float toRadians = 3.14159265f / 180.0f;
 
 //+++++++++++++++++++++++++++++++	variables para animaci�n	+++++++++++++++++++++++++++++++
-
-
+//variables para keyframes
+float reproAni, habiAni, guardoFrame, reiniFrame, ciclo, ciclo2, contador = 0;	
+GLfloat giroC;
 //---------------------------------------------------------------------------------------------
 
 Window mainWindow;
@@ -69,6 +70,10 @@ Model Palanca;
 Model bananas;
 Model traga;
 Model bola;
+Model canica2;
+Model flag;
+Model tambor;
+Model caliz;
 
 //---------------------------------------------------------------------------------------------
 Skybox skybox;
@@ -97,6 +102,9 @@ static const char* vShader = "shaders/shader_light.vert";
 static const char* fShader = "shaders/shader_light.frag";
 
 //+++++++++++++++++++++++++ Funciones para animacion +++++++++++++++++++++++++++
+
+//funci�n para teclado de keyframes 
+void inputKeyframes(bool* keys);
 
 //c�lculo del promedio de las normales para sombreado de Phong
 void calcAverageNormals(unsigned int* indices, unsigned int indiceCount, GLfloat* vertices, unsigned int verticeCount, unsigned int vLength, unsigned int normalOffset)
@@ -256,6 +264,66 @@ void CreateShaders()
 	shaderList.push_back(*shader1);
 }
 
+//++++++++++++++++++++++++++++++ Animacion Keyframes ++++++++++++++++++++++++++++++++++
+bool animacion = false;
+
+//NEW// Keyframes
+float posX = 8.0, posY = 108.0, posZ = 85.0;
+float	mov_x = 0.0f, mov_z = 0.0f;
+float giroAvion = 0;
+
+#define MAX_FRAMES 100
+int i_max_steps = 90;
+int i_curr_steps = 21;
+typedef struct _frame {
+	float mov_x;
+	float mov_z;
+	float mov_xInc;
+	float mov_zInc;
+}FRAME;
+
+FRAME KeyFrame[MAX_FRAMES]; //Arreglo de frames
+int FrameIndex = 21;
+bool play = false;
+int playIndex = 0;
+
+void resetElements(void){
+	mov_x = KeyFrame[0].mov_x;
+	mov_z = KeyFrame[0].mov_z;
+}
+void interpolation(void){
+	//Reset con letra N
+	KeyFrame[playIndex].mov_xInc = (KeyFrame[playIndex + 1].mov_x - KeyFrame[playIndex].mov_x) / i_max_steps;
+	KeyFrame[playIndex].mov_zInc = (KeyFrame[playIndex + 1].mov_z - KeyFrame[playIndex].mov_z) / i_max_steps;
+}
+void animate(void){
+	//Movimiento del objeto con M
+	if (play){
+		if (i_curr_steps >= i_max_steps) //Calcular un frame siguiente
+		{
+			playIndex++;
+			printf("playindex : %d\n", playIndex);
+			if (playIndex > FrameIndex - 2){
+				printf("Frame index= %d\n", FrameIndex);
+				printf("termino la animacion\n");
+				playIndex = 0;
+				play = false;
+			}
+			else //Interpolaci�n del pr�ximo cuadro
+			{
+				i_curr_steps = 0; //Resetea contador
+				interpolation();
+			}
+		}
+		else
+		{
+			mov_x += KeyFrame[playIndex].mov_xInc;
+			mov_z += KeyFrame[playIndex].mov_zInc;
+			giroC -= 10; //Giro de la canica
+			i_curr_steps++;
+		}
+	}
+}
 //-------------------------------------------------------------------------------------
 
 int main()
@@ -279,6 +347,20 @@ int main()
 	traga.LoadModel("Models/tragamonedas.obj");
 	bola = Model();
 	bola.LoadModel("Models/bolaPac.obj");
+	Pinball = Model();
+	Pinball.LoadModel("Models/tableroPinball.obj");
+	Pinballmesa = Model();
+	Pinballmesa.LoadModel("Models/maquinaPinball.obj");
+	Palanca = Model();
+	Palanca.LoadModel("Models/palanca.obj");
+	canica2 = Model();
+	canica2.LoadModel("Models/canica2.obj");
+	flag = Model();
+	flag.LoadModel("Models/flag.obj");
+	caliz = Model();
+	caliz.LoadModel("Models/CalizTexturizado.obj");
+	tambor = Model();
+	tambor.LoadModel("Models/tambor.obj");
 
 	std::vector<std::string> skyboxFaces;
 	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_rt.tga");
@@ -358,6 +440,45 @@ int main()
 	glm::mat4 projection = glm::perspective(45.0f, (GLfloat)mainWindow.getBufferWidth() / mainWindow.getBufferHeight(), 0.1f, 1000.0f);
 	//+++++++++++++++++++++++++++++++	variables para inicializar	+++++++++++++++++++++++++++++++
 
+	//---------PARA TENER KEYFRAMES GUARDADOS NO VOLATILES QUE SIEMPRE SE UTILIZARAN SE DECLARAN AQU�
+	KeyFrame[0].mov_z = -5.0f;	//1 - Movimiento por el canal principal
+	KeyFrame[1].mov_z = -20.0f;	//2
+	KeyFrame[2].mov_z = -40.0f;	//3
+	KeyFrame[3].mov_z = -60.0f;	//4
+	KeyFrame[4].mov_z = -80.0f;	//5
+	KeyFrame[5].mov_z = -100.0f;//6
+	KeyFrame[6].mov_x = -2.0f;	//7 - Curva
+	KeyFrame[6].mov_z = -110.0f;
+	KeyFrame[7].mov_x = -8.0f;	//8
+	KeyFrame[7].mov_z = -118.0f;
+	KeyFrame[8].mov_x = -20.0f;	//9
+	KeyFrame[8].mov_z = -125.0f;
+	KeyFrame[9].mov_x = -25.0f;	//10
+	KeyFrame[9].mov_z = -125.0f;
+	KeyFrame[10].mov_x = -35.0f;//11 - Rebote con pared
+	KeyFrame[10].mov_z = -115.0f;
+	KeyFrame[11].mov_x = -30.0f;//12 - Rebote con bumper
+	KeyFrame[11].mov_z = -108.0f;
+	KeyFrame[12].mov_x = -40.0f;//13 - Rebote con pared
+	KeyFrame[12].mov_z = -90.0f;
+	KeyFrame[13].mov_x = -31.0f;//14 - Rebote con bumper
+	KeyFrame[13].mov_z = -70.0f;
+	KeyFrame[14].mov_x = -35.0f;//15 - Rebote con posible flipper
+	KeyFrame[14].mov_z = -25.0f;
+	KeyFrame[15].mov_x = -13.0f;//16 - Rebote Caliz CupHead
+	KeyFrame[15].mov_z = -58.0f;
+	KeyFrame[16].mov_x = -47.0f;//17 - Rebote con pared
+	KeyFrame[16].mov_z = -42.0f;
+	KeyFrame[17].mov_x = -48.0f;//18 - Caida a carril
+	KeyFrame[17].mov_z = -16.0f;
+	KeyFrame[18].mov_x = -44.0f;//19
+	KeyFrame[18].mov_z = -16.0f;
+	KeyFrame[19].mov_x = -40.0f;//20 - Movimiento por el canal de regreso
+	KeyFrame[19].mov_z = -5.0f;
+	KeyFrame[20].mov_x = 0.0f;	//21 - Posici�n inicial 
+	KeyFrame[20].mov_z = 0.0f;
+
+	printf("\nTeclas para uso de Keyframes:\n1.-Presionar M para reproducir animacion por KeyFrame\n2.-Presionar N para volver a habilitar la reproduccion de la animacion por KeyFrame\n");
 
 	//---------------------------------------------------------------------------------------------
 	////Loop mientras no se cierra la ventana
@@ -372,6 +493,10 @@ int main()
 		glfwPollEvents();
 		camera.keyControl(mainWindow.getsKeys(), deltaTime);
 		camera.mouseControl(mainWindow.getXChange(), mainWindow.getYChange());
+
+		//+++++++++++++ Para Keyframes +++++++++++++++++++++++
+		inputKeyframes(mainWindow.getsKeys());
+		animate();
 
 		// Clear the window
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -428,12 +553,12 @@ int main()
 		model = glm::translate(model, glm::vec3(-20.0f, 106.0f, -30.0));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		traga.RenderModel();
-
+		
 		//Tablero de pinball
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(-10.0f, 14.0f, -9.7f));
 		model = glm::scale(model, glm::vec3(3.0f, 3.0f, 3.0f));
-		//model = glm::rotate(model,4 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		//model = glm::rotate(model, 4 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Pinball.RenderModel();
 
@@ -444,12 +569,58 @@ int main()
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Pinballmesa.RenderModel();
 
-		//Palanca
+		//Palanca Pinball
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(8.5f, 100.0f, 100.0f));
 		model = glm::scale(model, glm::vec3(3.0f, 3.0f, 3.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Palanca.RenderModel();
+
+		//Canica
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(posX + mov_x, posY, posZ + mov_z));
+		model = glm::rotate(model, giroC * toRadians, glm::vec3(1.0f, 1.0f, 1.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		canica2.RenderModel();
+
+		//Obstaculo centro - "original"
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-20.0f, 106.0f, 15.0));
+		modelaux = model;
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		tambor.RenderModel();
+
+		//Obstaculo Arriba centro
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -35.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		tambor.RenderModel();
+
+		//Obstaculo lado derecho (de la camara)
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(6.0f, 0.0f, -25.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		tambor.RenderModel();
+
+		//Obstaculo lado izquierdo (de la camara)
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(-6.0f, 0.0f, -25.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		tambor.RenderModel();
+
+		//Flag of CupHead
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-20.0f, 106.0f, 0.0));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		flag.RenderModel();
+
+		//Caliz of CupHead
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-1.0f, 106.0f, 26.0));
+		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		caliz.RenderModel();
+		//-----------------------------------------------------------------------------
 
 		//Funcion para pagar las spotlight (luz de tablero y luz de flippers) de forma independente
 		if (mainWindow.getLuz2() == true)
@@ -569,4 +740,29 @@ int main()
 		return 0;
 	}
 
+void inputKeyframes(bool* keys) {
+	if (keys[GLFW_KEY_M]) {
+		if (reproAni < 1) {
+			if (play == false && (FrameIndex > 1)) {
+				resetElements();
+				interpolation();
+				play = true;
+				playIndex = 0;
+				i_curr_steps = 0;
+				reproAni++;
+				printf("\n presiona 0 para habilitar reproducir de nuevo la animaci�n'\n");
+				habiAni = 0;
+			}
+			else {
+				play = false;
 
+			}
+		}
+	}
+	if (keys[GLFW_KEY_N]) {
+		if (habiAni < 1 && reproAni>0) {
+			printf("Ya puedes reproducir de nuevo la animaci�n con la tecla de barra espaciadora'\n");
+			reproAni = 0;
+		}
+	}
+}
