@@ -455,11 +455,11 @@ int main()
 	//+++++++++++++++++++++++++++++++	variables para inicializar	+++++++++++++++++++++++++++++++
 	pacman = Model();
 	pacman.LoadModel("Models/can.obj");
-	
+	//(-18.476280,200.545273,158.405319) --- (-90.000000, -27.500000)
 	//valores para la camara isometrica
-	float destinoX = 30.0f;
-	float destinoY = 30.0f;
-	float destinoZ = 30.0f;
+	float destinoX = -20.0f;
+	float destinoY = 200.0f;
+	float destinoZ = 158.0f;
 
 	//---------PARA TENER KEYFRAMES GUARDADOS NO VOLATILES QUE SIEMPRE SE UTILIZARAN SE DECLARAN AQU�
 	KeyFrame[0].mov_z = -5.0f;	//1 - Movimiento por el canal principal
@@ -506,13 +506,13 @@ int main()
 	flipper2.LoadModel("Models/flipper0.obj");
 	flipper3 = Model();
 	flipper3.LoadModel("Models/flipper0.obj");
-	
+	//(-18.476280,200.545273,158.405319) --- (-90.000000, -27.500000)
 	float rotacionFlipper1 = 0.0f;
 	float rotacionFlipper2 = 0.0f;
 	float rotacionFlipper3 = 0.0f;
 	float velocidadRotacionFlipper = 3.0f;
-	float destinoX_vista = -135.0f;
-	float destinoY_vista = -35.0f;
+	float destinoX_vista = -90.0f;
+	float destinoY_vista = -27.5f;
 
 	float posicionX; // Puedes cambiar este valor a cualquier n�mero
 	float posicionY; // Puedes cambiar este valor a cualquier n�mero
@@ -522,8 +522,8 @@ int main()
 	float posicionY_vista; // Puedes cambiar este valor a cualquier n�mero
 	float posicionZ_vista;  // Puedes cambiar este valor a cualquier n�mero
 
-	float incremento = 0.007f;
-	float incremento_vista = 0.007f;
+	float incremento = 0.01f;
+	float incremento_vista = 0.01f;
 	float auxiliar;
 	float retardo = 0.0;
 	bool segundoSkybox = true, tercerSkybox = false, cuartoSkybox = false, primerSkybox = false;
@@ -1128,9 +1128,10 @@ int main()
 	}
 		return 0;
 	}
-
+	
 void inputKeyframes(bool* keys) {
 	if (keys[GLFW_KEY_M]) {
+		printf("(%f,%f,%f) --- (%f, %f)\n", camera.getPosicionX(), camera.getPosicionY(), camera.getPosicionZ(), camera.getVistaX(), camera.getVistaY());
 		if (reproAni < 1) {
 			if (play == false && (FrameIndex > 1)) {
 				resetElements();
