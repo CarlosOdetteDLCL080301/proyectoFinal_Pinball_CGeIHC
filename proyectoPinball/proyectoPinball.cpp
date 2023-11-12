@@ -74,6 +74,7 @@ Model canica2;
 Model flag;
 Model tambor;
 Model caliz;
+Model flipper1, flipper2, flipper3;
 
 //---------------------------------------------------------------------------------------------
 Skybox skybox;
@@ -255,7 +256,6 @@ void CreateObjects()
 	meshList.push_back(obj7);
 
 }
-
 
 void CreateShaders()
 {
@@ -479,6 +479,17 @@ int main()
 	KeyFrame[20].mov_z = 0.0f;
 
 	printf("\nTeclas para uso de Keyframes:\n1.-Presionar M para reproducir animacion por KeyFrame\n2.-Presionar N para volver a habilitar la reproduccion de la animacion por KeyFrame\n");
+	flipper1 = Model();
+	flipper1.LoadModel("Models/flipper0.obj");
+	flipper2 = Model();
+	flipper2.LoadModel("Models/flipper0.obj");
+	flipper3 = Model();
+	flipper3.LoadModel("Models/flipper0.obj");
+	
+	float rotacionFlipper1 = 0.0f;
+	float rotacionFlipper2 = 0.0f;
+	float rotacionFlipper3 = 0.0f;
+	float velocidadRotacionFlipper = 3.0f;
 
 	//---------------------------------------------------------------------------------------------
 	////Loop mientras no se cierra la ventana
@@ -561,6 +572,22 @@ int main()
 		//model = glm::rotate(model, 4 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Pinball.RenderModel();
+		/*Flipper 01*/
+		//Animaci�n
+		if (mainWindow.getRotacionFlipper1()) {
+			rotacionFlipper1 += (rotacionFlipper1 < 90.0f) ? velocidadRotacionFlipper * deltaTime : 0.0f;
+		}
+		else {
+			rotacionFlipper1 -= (rotacionFlipper1 > 0.0f) ? velocidadRotacionFlipper * deltaTime : 0.0f;
+		}
+		//Instancia del dado
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-10.0f, 106.0f, 20.0f));
+		modelaux = model;
+		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
+		model = glm::rotate(model, -rotacionFlipper1 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		flipper1.RenderModel();
 
 		//mesa de pinball
 		model = glm::mat4(1.0);
@@ -575,6 +602,41 @@ int main()
 		model = glm::scale(model, glm::vec3(3.0f, 3.0f, 3.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Palanca.RenderModel();
+		/*Flipper 02*/
+		//Animaci�n
+		if (mainWindow.getRotacionFlipper2()) {
+			rotacionFlipper2 += (rotacionFlipper2 < 90.0f) ? velocidadRotacionFlipper * deltaTime : 0.0f;
+		}
+		else {
+			rotacionFlipper2 -= (rotacionFlipper2 > 0.0f) ? velocidadRotacionFlipper * deltaTime : 0.0f;
+		}
+		//Instancia del dado
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-35.0f, 106.0f, 60.0f));
+		modelaux = model;
+		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
+		model = glm::rotate(model, -rotacionFlipper2 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		flipper1.RenderModel();
+		
+
+		/*Flipper 03*/
+		//Animaci�n
+		if (mainWindow.getRotacionFlipper3()) {
+			rotacionFlipper3 += (rotacionFlipper3 < 90.0f) ? velocidadRotacionFlipper * deltaTime : 0.0f;
+		}
+		else {
+			rotacionFlipper3 -= (rotacionFlipper3 > 0.0f) ? velocidadRotacionFlipper * deltaTime : 0.0f;
+		}
+		//Instancia del dado
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-5.0f, 106.0f, 60.0f));
+		modelaux = model;
+		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
+		model = glm::rotate(model, -rotacionFlipper3 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		flipper1.RenderModel();
 
 		//Canica
 		model = glm::mat4(1.0);
