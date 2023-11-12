@@ -58,6 +58,12 @@ Model CuelloBeppi;
 Model CabezaBeppi;
 Model Ojo1Beppi;
 Model Ojo2Beppi;
+float rot1;
+float rot2;
+float estado;
+float estado2;
+bool mov = false;
+	
 
 //---------------------------------------------------------------------------------------------
 
@@ -72,10 +78,10 @@ Texture pisoTexture;
 //+++++++++++++++++++++++++++++++	variables para texturas	+++++++++++++++++++++++++++++++
 
 
-
 //---------------------------------------------------------------------------------------------
 
 //+++++++++++++++++++++++++++++++	variables para modelos	+++++++++++++++++++++++++++++++
+
 
 Model Pinball;
 Model Pinballmesa;
@@ -89,6 +95,14 @@ Model tambor;
 Model caliz;
 Model flipper1, flipper2, flipper3;
 Model pacman;
+
+Model PacmanC;
+Model PacmanBrazoD;
+Model PacmanBrazoI;
+Model PacmanPiernaD;
+Model PacmanPiernaI;
+
+
 
 //---------------------------------------------------------------------------------------------
 Skybox skybox;
@@ -354,6 +368,16 @@ int main()
 	plainTexture.LoadTextureA();
 	pisoTexture = Texture("Textures/piso.tga");
 	pisoTexture.LoadTextureA();
+	PacmanC = Model();
+	PacmanC.LoadModel("Models/pacmanCuerpo.obj");
+	PacmanBrazoD = Model();
+	PacmanBrazoD.LoadModel("Models/pacmanBrazo.obj");
+	PacmanBrazoI = Model();
+	PacmanBrazoI.LoadModel("Models/pacmanBrazoI.obj");
+	PacmanPiernaD = Model();
+	PacmanPiernaD.LoadModel("Models/pacmanPiernaD.obj");
+	PacmanPiernaI = Model();
+	PacmanPiernaI.LoadModel("Models/pacmanPiernaI.obj");
 
 	bananas = Model();
 	bananas.LoadModel("Models/bananaTex.obj");
@@ -383,13 +407,6 @@ int main()
 	skyboxFaces.push_back("Textures/Skybox/3_5.png");
 	skyboxFaces.push_back("Textures/Skybox/3_1.png");
 	skyboxFaces.push_back("Textures/Skybox/3_3.png");
-
-	Pinball = Model();
-	Pinball.LoadModel("Models/tableroPinball.obj");
-	Pinballmesa = Model();
-	Pinballmesa.LoadModel("Models/maquinaPinball.obj");
-	Palanca = Model();
-	Palanca.LoadModel("Models/palanca.obj");
 
 	skybox = Skybox(skyboxFaces);
 
@@ -498,6 +515,11 @@ int main()
 	KeyFrame[19].mov_z = -5.0f;
 	KeyFrame[20].mov_x = 0.0f;	//21 - Posici�n inicial 
 	KeyFrame[20].mov_z = 0.0f;
+	rot1 = 0.0f;
+	rot2 = 0.0f;
+	mov = true;
+	estado = 0;
+	estado2 = 0;
 
 	printf("\nTeclas para uso de Keyframes:\n1.-Presionar M para reproducir animacion por KeyFrame\n2.-Presionar N para volver a habilitar la reproduccion de la animacion por KeyFrame\n");
 	flipper1 = Model();
@@ -607,6 +629,7 @@ int main()
 
 		glm::mat4 model(1.0);
 		glm::mat4 modelaux(1.0);
+		glm::mat4 modelauxPacman(1.0);
 		glm::mat4 modelaux2(1.0);
 		glm::mat4 modelaux3(1.0);
 		glm::mat4 modelaux4(1.0);
@@ -718,6 +741,103 @@ int main()
 		modelaux = model;
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		tambor.RenderModel();
+
+		//Cuerpo pacman
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(0.0f + mainWindow.getmuevex(), 106.0f, 0.0f + mainWindow.getmuevez()));
+		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+
+		//Casos para girar a pacman en alguna direccion
+		if (mainWindow.getpressU() == true)
+		{
+			model = glm::rotate(model, 1 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+			
+		}
+
+		if (mainWindow.getpressH() == true)
+		{
+			model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		}
+
+		if (mainWindow.getpressJ() == true)
+		{
+			model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		}
+
+		if (mainWindow.getpressK() == true)
+		{
+			model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		}
+		modelauxPacman = model;
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		PacmanC.RenderModel();
+
+		//Brazo Derecho
+		model = modelauxPacman;
+		model = glm::translate(model, glm::vec3(-1.5f, 0.5f, 0.0f));
+		model = glm::rotate (model, rot1 * toRadians,glm::vec3(1.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		PacmanBrazoD.RenderModel();
+
+		//Brazo Izquierdo
+		model = modelauxPacman;
+		model = glm::translate(model, glm::vec3(2.0f, 0.5f, 0.0f));
+		model = glm::rotate(model, rot2 * toRadians, glm::vec3(1.0f, 0.5f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		PacmanBrazoI.RenderModel();
+
+		//Pierna Izquierda
+		model = modelauxPacman;
+		model = glm::translate(model, glm::vec3(1.3f, -1.5f, 0.0f));
+		model = glm::rotate(model, rot1 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		PacmanPiernaI.RenderModel();
+
+		//Pierna Derecha
+		model = modelauxPacman;
+		model = glm::translate(model, glm::vec3(-0.7f, -1.5f, 0.0f));
+		model = glm::rotate(model, rot2 * toRadians, glm::vec3(1.0f, 0.5f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		PacmanPiernaD.RenderModel();
+
+		if (mainWindow.getpressU() == true || mainWindow.getpressH() == true || mainWindow.getpressJ() == true || mainWindow.getpressK() == true)
+		{
+			// Animacion de movimiento rotativo del brazo y pierna para simular caminata
+			if (rot1 < 45.0f && estado == 0)	
+			{
+				rot1 += 1.2 * deltaTime;		//Rota en positivo hasta 45 grados
+			}
+			else
+			{
+				estado = 1;						//Pasamos al movimiento en reversa
+			}
+			if (rot1 > -70.0f && estado == 1)
+			{
+				rot1 -= 1.2 * deltaTime;		//Rota en negativo
+			}
+			else
+			{
+				estado = 0;						//Volvemos al primer movimiento y con esto creamos un bucle
+			}
+
+			// Segundo moviento para otro par de pierna y brazo
+			if (rot2 > -70.0f && estado == 0)
+			{
+				rot2 -= 1.2 * deltaTime;		// Ahora empezamos rotando en negativo
+			}
+			else
+			{
+				estado2 = 1;						//Pasamos al movimiento inverso
+			}
+			if (rot2 < 45.0f && estado == 1)
+			{
+				rot2 += 1.2 * deltaTime;		// Rota en positivo
+			}
+			else
+			{
+				estado2 = 0;						// Volvemos al primer movimiento y creamos el bucle
+			}
+		}
 
 		//Obstaculo Arriba centro
 		model = modelaux;
@@ -869,14 +989,14 @@ int main()
 			//std::cout << "Eje X: " << posicionX_vista << "\tEje Y: " << posicionY_vista << "\n";
 		}
 
-		//Instancia del coche 
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(0.0f + mainWindow.getmuevex(), 1.0f, 0.0f + mainWindow.getmuevez()));
-		modelaux = model;
-		model = glm::scale(model, glm::vec3(0.1f, 0.1f, 0.1f));
-		model = glm::rotate(model, 1* toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		pacman.RenderModel();
+		////Instancia del coche 
+		//model = glm::mat4(1.0);
+		//model = glm::translate(model, glm::vec3(0.0f + mainWindow.getmuevex(), 1.0f, 0.0f + mainWindow.getmuevez()));
+		//modelaux = model;
+		//model = glm::scale(model, glm::vec3(0.1f, 0.1f, 0.1f));
+		//model = glm::rotate(model, 1* toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		//glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		//pacman.RenderModel();
 
 		if (mainWindow.getencenderPOV()) {
 			if (retardo3 <= 5.0f) {
@@ -903,7 +1023,7 @@ int main()
 
 				auxiliar = (posicionX_vista > 45.0f) ? posicionX_vista - incremento_vista : posicionX_vista + incremento_vista;
 				camera.setVistaX(auxiliar);
-				auxiliar = (posicionY_vista > -10) ? posicionY_vista - incremento_vista : posicionY_vista + incremento_vista;
+				auxiliar = (posicionY_vista > -20) ? posicionY_vista - incremento_vista : posicionY_vista + incremento_vista;
 				camera.setVistaY(auxiliar);
 				//std::cout << "Eje X: " << posicionX_vista << "\tEje Y: " << posicionY_vista << "\n";
 				retardo3 += 0.01f;
@@ -913,7 +1033,7 @@ int main()
 				camera.setPosicionX(mainWindow.getmuevex() - 10);
 				camera.setPosicionZ(mainWindow.getmuevez() - 10.0f);
 				camera.setPosicionY(10.0f);
-				camera.setVistaY(-10.0f);
+				camera.setVistaY(-20.0f);
 				//retardo3 = 0.0f;
 			}
 			
