@@ -344,12 +344,12 @@ int main()
 	Palanca.LoadModel("Models/palanca.obj");
 	canica2 = Model();
 	canica2.LoadModel("Models/canica2.obj");
-	/*flag = Model();
+	flag = Model();
 	flag.LoadModel("Models/flag.obj");
 	caliz = Model();
 	caliz.LoadModel("Models/CalizTexturizado.obj");
 	tambor = Model();
-	tambor.LoadModel("Models/tambor.obj");*/
+	tambor.LoadModel("Models/tambor.obj");
 
 	std::vector<std::string> skyboxFaces;
 	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_rt.tga");
@@ -440,7 +440,7 @@ int main()
 	KeyFrame[19].mov_z = -5.0f;
 	KeyFrame[20].mov_x = 0.0f;	//21 - Posición inicial 
 	KeyFrame[20].mov_z = 0.0f;
-	//Se agregan nuevos frames 
+
 	printf("\nTeclas para uso de Keyframes:\n1.-Presionar M para reproducir animacion por KeyFrame\n2.-Presionar N para volver a habilitar la reproduccion de la animacion por KeyFrame\n");
 
 	//---------------------------------------------------------------------------------------------
@@ -539,7 +539,7 @@ int main()
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		canica2.RenderModel();
 
-		/*//Obstaculo centro - "original"
+		//Obstaculo centro - "original"
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(-20.0f, 106.0f, 15.0));
 		modelaux = model;
@@ -575,8 +575,7 @@ int main()
 		model = glm::translate(model, glm::vec3(-1.0f, 106.0f, 26.0));
 		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		caliz.RenderModel();*/
-
+		caliz.RenderModel();
 		//-----------------------------------------------------------------------------
 
 		glDisable(GL_BLEND);
