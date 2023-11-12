@@ -44,6 +44,8 @@ const float toRadians = 3.14159265f / 180.0f;
 
 //+++++++++++++++++++++++++++++++	variables para animación	+++++++++++++++++++++++++++++++
 
+float rot1;
+float rot2;
 	
 
 //---------------------------------------------------------------------------------------------
@@ -59,14 +61,17 @@ Texture pisoTexture;
 //+++++++++++++++++++++++++++++++	variables para texturas	+++++++++++++++++++++++++++++++
 
 
-
 //---------------------------------------------------------------------------------------------
 
 //+++++++++++++++++++++++++++++++	variables para modelos	+++++++++++++++++++++++++++++++
 
-Model Pinball;
-Model Pinballmesa;
-Model Palanca;
+
+Model PacmanC;
+Model PacmanBrazoD;
+Model PacmanBrazoI;
+Model PacmanPiernaD;
+Model PacmanPiernaI;
+
 
 //---------------------------------------------------------------------------------------------
 Skybox skybox;
@@ -238,6 +243,16 @@ int main()
 	plainTexture.LoadTextureA();
 	pisoTexture = Texture("Textures/piso.tga");
 	pisoTexture.LoadTextureA();
+	PacmanC = Model();
+	PacmanC.LoadModel("Models/pacmanCuerpo.obj");
+	PacmanBrazoD = Model();
+	PacmanBrazoD.LoadModel("Models/pacmanBrazo.obj");
+	PacmanBrazoI = Model();
+	PacmanBrazoI.LoadModel("Models/pacmanBrazoI.obj");
+	PacmanPiernaD = Model();
+	PacmanPiernaD.LoadModel("Models/pacmanPiernaD.obj");
+	PacmanPiernaI = Model();
+	PacmanPiernaI.LoadModel("Models/pacmanPiernaI.obj");
 
 	std::vector<std::string> skyboxFaces;
 	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_rt.tga");
@@ -246,13 +261,6 @@ int main()
 	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_up.tga");
 	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_bk.tga");
 	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_ft.tga");
-
-	Pinball = Model();
-	Pinball.LoadModel("Models/tableroPinball.obj");
-	Pinballmesa = Model();
-	Pinballmesa.LoadModel("Models/maquinaPinball.obj");
-	Palanca = Model();
-	Palanca.LoadModel("Models/palanca.obj");
 
 	skybox = Skybox(skyboxFaces);
 
@@ -362,31 +370,39 @@ int main()
 		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		meshList[2]->RenderMesh();
 
-		//Tablero de pinball
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-10.0f, 14.0f, -9.7f));
-		model = glm::scale(model, glm::vec3(3.0f, 3.0f, 3.0f));
-		model = glm::rotate(model,4 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		Pinball.RenderModel();
-
-		//mesa de pinball
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-10.0f, 0.0f, -4.0f));
-		model = glm::scale(model, glm::vec3(3.0f, 3.0f, 3.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		Pinballmesa.RenderModel();
-
-		//Palanca
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(8.5f, 100.0f, 100.0f));
-		model = glm::scale(model, glm::vec3(3.0f, 3.0f, 3.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		Palanca.RenderModel();
-
 		//+++++++++++++++++++++++++++++++	PROYECTO	+++++++++++++++++++++++++++++++
 
+		//Cuerpo pacman
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(0.0f, 3.5f, 0.0f));
+		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+		modelaux = model;
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		PacmanC.RenderModel();
 
+		//Brazo Derecho
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(-1.5f, 0.5f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		PacmanBrazoD.RenderModel();
+
+		//Brazo Izquierdo
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(2.0f, 0.5f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		PacmanBrazoI.RenderModel();
+
+		//Pierna Izquierda
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(1.3f, -1.5f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		PacmanPiernaI.RenderModel();
+
+		//Pierna Derecha
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(-0.7f, -1.5f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		PacmanPiernaD.RenderModel();
 
 		//-----------------------------------------------------------------------------
 
