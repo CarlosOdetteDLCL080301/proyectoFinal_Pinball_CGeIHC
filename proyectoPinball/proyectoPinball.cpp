@@ -44,7 +44,6 @@ const float toRadians = 3.14159265f / 180.0f;
 
 //+++++++++++++++++++++++++++++++	variables para animación	+++++++++++++++++++++++++++++++
 
-	
 
 //---------------------------------------------------------------------------------------------
 
@@ -63,8 +62,9 @@ Texture pisoTexture;
 //---------------------------------------------------------------------------------------------
 
 //+++++++++++++++++++++++++++++++	variables para modelos	+++++++++++++++++++++++++++++++
-
-
+Model bananas;
+Model traga;
+Model bola;
 
 //---------------------------------------------------------------------------------------------
 Skybox skybox;
@@ -90,6 +90,38 @@ static const char* vShader = "shaders/shader_light.vert";
 
 // Fragment Shader
 static const char* fShader = "shaders/shader_light.frag";
+
+//+++++++++++++++++++++++++ Funciones para animacion +++++++++++++++++++++++++++
+
+//cálculo del promedio de las normales para sombreado de Phong
+void calcAverageNormals(unsigned int* indices, unsigned int indiceCount, GLfloat* vertices, unsigned int verticeCount, unsigned int vLength, unsigned int normalOffset)
+{
+	for (size_t i = 0; i < indiceCount; i += 3)
+	{
+		unsigned int in0 = indices[i] * vLength;
+		unsigned int in1 = indices[i + 1] * vLength;
+		unsigned int in2 = indices[i + 2] * vLength;
+		glm::vec3 v1(vertices[in1] - vertices[in0], vertices[in1 + 1] - vertices[in0 + 1], vertices[in1 + 2] - vertices[in0 + 2]);
+		glm::vec3 v2(vertices[in2] - vertices[in0], vertices[in2 + 1] - vertices[in0 + 1], vertices[in2 + 2] - vertices[in0 + 2]);
+		glm::vec3 normal = glm::cross(v1, v2);
+		normal = glm::normalize(normal);
+
+		in0 += normalOffset; in1 += normalOffset; in2 += normalOffset;
+		vertices[in0] += normal.x; vertices[in0 + 1] += normal.y; vertices[in0 + 2] += normal.z;
+		vertices[in1] += normal.x; vertices[in1 + 1] += normal.y; vertices[in1 + 2] += normal.z;
+		vertices[in2] += normal.x; vertices[in2 + 1] += normal.y; vertices[in2 + 2] += normal.z;
+	}
+
+	for (size_t i = 0; i < verticeCount / vLength; i++)
+	{
+		unsigned int nOffset = i * vLength + normalOffset;
+		glm::vec3 vec(vertices[nOffset], vertices[nOffset + 1], vertices[nOffset + 2]);
+		vec = glm::normalize(vec);
+		vertices[nOffset] = vec.x; vertices[nOffset + 1] = vec.y; vertices[nOffset + 2] = vec.z;
+	}
+}
+
+//------------------------------------------------------------------------------
 
 void CreateObjects()
 {
@@ -219,8 +251,7 @@ void CreateShaders()
 	shaderList.push_back(*shader1);
 }
 
-
-
+//-------------------------------------------------------------------------------------
 
 int main()
 {
@@ -236,6 +267,13 @@ int main()
 	plainTexture.LoadTextureA();
 	pisoTexture = Texture("Textures/piso.tga");
 	pisoTexture.LoadTextureA();
+
+	bananas = Model();
+	bananas.LoadModel("Models/bananaTex.obj");
+	traga = Model();
+	traga.LoadModel("Models/tragamonedas.obj");
+	bola = Model();
+	bola.LoadModel("Models/bolaPac.obj");
 
 	std::vector<std::string> skyboxFaces;
 	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_rt.tga");
@@ -288,7 +326,6 @@ int main()
 	GLuint uniformColor = 0;
 	glm::mat4 projection = glm::perspective(45.0f, (GLfloat)mainWindow.getBufferWidth() / mainWindow.getBufferHeight(), 0.1f, 1000.0f);
 	//+++++++++++++++++++++++++++++++	variables para inicializar	+++++++++++++++++++++++++++++++
-
 
 
 	//---------------------------------------------------------------------------------------------
@@ -354,9 +391,76 @@ int main()
 		meshList[2]->RenderMesh();
 
 		//+++++++++++++++++++++++++++++++	PROYECTO	+++++++++++++++++++++++++++++++
+		//Tragamonedas
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-20.0f, 106.0f, -30.0));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		traga.RenderModel();
 
+		//Bola pacman izq
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-0.5f, 106.0f, 43.0));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		bola.RenderModel();
 
+		//Bola pacman derecha
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-40.0f, 106.0f, 43.0));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		bola.RenderModel();
 
+		//Bananas como bolas de pacman
+		for (float i = -42.0f; i <= -4.0f; i += 8.0f) {
+			model = glm::mat4(1.0f); //inferior
+			model = glm::translate(model, glm::vec3(i, 106.0f, 70.0f));
+			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+			bananas.RenderModel();
+		}
+		for (float i = 70.0f; i >= 43.0f; i -= 7.5f) {
+			model = glm::mat4(1.0f); //lado izq camara
+			model = glm::translate(model, glm::vec3(-42.0f, 106.0f, i));
+			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+			bananas.RenderModel();
+		}
+		for (float i = 70.0f; i >= 26.0f; i -= 7.5f) {
+			model = glm::mat4(1.0f); //lado der camara
+			model = glm::translate(model, glm::vec3(-0.5f, 106.0f, i));
+			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+			bananas.RenderModel();
+		}
+		for (float i = -33.0f; i <= -9.0f; i += 8.0f) {
+			model = glm::mat4(1.0f); //arriba flippers
+			model = glm::translate(model, glm::vec3(i, 106.0f, 43.0f));
+			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+			bananas.RenderModel();
+		}
+		float centerX = -21.0f;  // Centro x de la elipse
+		float centerY = 106.0f;  // Centro y de la elipse
+		float centerZ = -2.0f;   // Centro z de la elipse
+		for (float angle = 0.0f; angle <= 2.0f * glm::pi<float>(); angle += glm::pi<float>() / 3.5f) {
+			//Calcula el punto en donde estara cada objeto con una distancia total de 3.5
+			model = glm::mat4(1.0f);  // Reinicializa la matriz model en cada iteración
+			float scaleX = 12.0f;   // Escala x
+			float scaleZ = 22.0f;    // Escala z
+			float x = centerX + scaleX * cos(angle);
+			float y = centerY;
+			float z = centerZ + scaleZ * sin(angle);
+			model = glm::translate(model, glm::vec3(x, y, z));
+			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+			bananas.RenderModel();
+		}
+		for (float angle = 0.0f; angle <= 2.0f * glm::pi<float>(); angle += glm::pi<float>() / 8.0f) {
+			//Calcula el punto en donde estara cada objeto con una distancia total de 8.0
+			model = glm::mat4(1.0f);  // Reinicializa la matriz model en cada iteración
+			float scaleX = 20.0f;   // Aumenta este valor para hacer el centro más ancho
+			float scaleZ = 35.0f;   // Aumenta este valor para hacer el centro más alto
+			float x = centerX + scaleX * cos(angle);
+			float y = centerY;
+			float z = centerZ + scaleZ * sin(angle);
+			model = glm::translate(model, glm::vec3(x, y, z));
+			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+			bananas.RenderModel();
+		}
 		//-----------------------------------------------------------------------------
 
 		glDisable(GL_BLEND);
@@ -368,3 +472,4 @@ int main()
 
 	return 0;
 }
+
