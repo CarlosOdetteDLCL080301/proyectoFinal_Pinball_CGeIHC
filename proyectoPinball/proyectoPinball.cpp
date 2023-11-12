@@ -301,7 +301,7 @@ float	mov_x = 0.0f, mov_z = 0.0f;
 float giroAvion = 0;
 
 #define MAX_FRAMES 100
-int i_max_steps = 90;
+int i_max_steps = 1000;
 int i_curr_steps = 21;
 typedef struct _frame {
 	float mov_x;
@@ -744,7 +744,7 @@ int main()
 
 		//Cuerpo pacman
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(0.0f + mainWindow.getmuevex(), 106.0f, 0.0f + mainWindow.getmuevez()));
+		model = glm::translate(model, glm::vec3(8.0f - mainWindow.getmuevex(), 110.0f, 85.0f - mainWindow.getmuevez()));
 		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
 
 		//Casos para girar a pacman en alguna direccion
@@ -1026,15 +1026,16 @@ int main()
 				auxiliar = (posicionY_vista > -20) ? posicionY_vista - incremento_vista : posicionY_vista + incremento_vista;
 				camera.setVistaY(auxiliar);
 				//std::cout << "Eje X: " << posicionX_vista << "\tEje Y: " << posicionY_vista << "\n";
-				retardo3 += 0.01f;
+				retardo3 += 0.001f;
 				//printf("%f\n", retardo3);
 			}else {
-				//Nos da el POV
-				camera.setPosicionX(mainWindow.getmuevex() - 10);
-				camera.setPosicionZ(mainWindow.getmuevez() - 10.0f);
-				camera.setPosicionY(10.0f);
+				//Nos da el POV	0.0f + mainWindow.getmuevex(), 106.0f, 0.0f + mainWindow.getmuevez()
+				camera.setPosicionX(8.0f - mainWindow.getmuevex());
+				camera.setPosicionZ(85.0f - mainWindow.getmuevez()+ 10.0f);
+				camera.setPosicionY(115.0f);
 				camera.setVistaY(-20.0f);
-				//retardo3 = 0.0f;
+				//retardo3 = 0.0f
+				//;, 110.0f, 
 			}
 			
 		}
