@@ -238,12 +238,12 @@ int main()
 	pisoTexture.LoadTextureA();
 
 	std::vector<std::string> skyboxFaces;
-	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_rt.tga");
-	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_lf.tga");
-	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_dn.tga");
-	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_up.tga");
-	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_bk.tga");
-	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_ft.tga");
+	skyboxFaces.push_back("Textures/Skybox/3_2.png");
+	skyboxFaces.push_back("Textures/Skybox/3_4.png");
+	skyboxFaces.push_back("Textures/Skybox/3_6.png");
+	skyboxFaces.push_back("Textures/Skybox/3_5.png");
+	skyboxFaces.push_back("Textures/Skybox/3_1.png");
+	skyboxFaces.push_back("Textures/Skybox/3_3.png");
 
 	skybox = Skybox(skyboxFaces);
 
@@ -253,7 +253,7 @@ int main()
 
 	//luz direccional, sólo 1 y siempre debe de existir
 	mainLight = DirectionalLight(1.0f, 1.0f, 1.0f,
-		0.5f, 0.5f,
+		1.0f, 1.0f,
 		0.0f, 0.0f, -1.0f);
 	//contador de luces puntuales
 	unsigned int pointLightCount = 0;
@@ -304,9 +304,12 @@ int main()
 	float posicionY_vista; // Puedes cambiar este valor a cualquier número
 	float posicionZ_vista;  // Puedes cambiar este valor a cualquier número
 
-	float incremento = 0.1f;
-	float incremento_vista = 0.1f;
+	float incremento = 0.007f;
+	float incremento_vista = 0.007f;
 	float auxiliar;
+	float retardo = 0.0;
+	bool segundoSkybox = true, tercerSkybox = false, cuartoSkybox = false, primerSkybox = false;
+	float oscurecer = 0.0f;
 	//---------------------------------------------------------------------------------------------
 	////Loop mientras no se cierra la ventana
 	while (!mainWindow.getShouldClose())
@@ -377,6 +380,90 @@ int main()
 		En esta, los tres ejes ortogonales principales forman ángulos de 120 grados, y las dimensiones paralelas a esos 
 		ejes se miden en una misma escala.
 		*/
+		if (segundoSkybox)
+		{
+			if (retardo >= 0.30f) {
+				std::vector<std::string> skyboxFaces;
+				skyboxFaces.push_back("Textures/Skybox/4_2.png");
+				skyboxFaces.push_back("Textures/Skybox/4_4.png");
+				skyboxFaces.push_back("Textures/Skybox/4_6.png");
+				skyboxFaces.push_back("Textures/Skybox/4_5.png");
+				skyboxFaces.push_back("Textures/Skybox/4_1.png");
+				skyboxFaces.push_back("Textures/Skybox/4_3.png");
+				skybox = Skybox(skyboxFaces);
+				segundoSkybox = false;
+			}
+			retardo += 0.00001f;
+			mainLight = DirectionalLight(1.0f, 1.0f, 1.0f,
+				1.0f - retardo, 1.0f - retardo,
+				0.0f, 0.0f, -1.0f);
+			tercerSkybox = true;
+		}
+		
+		if (tercerSkybox)
+		{
+			if (retardo >= 0.60f) {
+				std::vector<std::string> skyboxFaces;
+				skyboxFaces.push_back("Textures/Skybox/2_2.png");
+				skyboxFaces.push_back("Textures/Skybox/2_4.png");
+				skyboxFaces.push_back("Textures/Skybox/2_6.png");
+				skyboxFaces.push_back("Textures/Skybox/2_5.png");
+				skyboxFaces.push_back("Textures/Skybox/2_1.png");
+				skyboxFaces.push_back("Textures/Skybox/2_3.png");
+				skybox = Skybox(skyboxFaces);
+				tercerSkybox = false;
+			}
+			retardo += 0.00001f;
+			mainLight = DirectionalLight(1.0f, 1.0f, 1.0f,
+				1.0f - retardo, 1.0f - retardo,
+				0.0f, 0.0f, -1.0f);
+			cuartoSkybox = true;
+		}
+
+		if (cuartoSkybox)
+		{
+			if (retardo >= 0.90f) {
+				std::vector<std::string> skyboxFaces;
+				skyboxFaces.push_back("Textures/Skybox/1_2.png");
+				skyboxFaces.push_back("Textures/Skybox/1_4.png");
+				skyboxFaces.push_back("Textures/Skybox/1_6.png");
+				skyboxFaces.push_back("Textures/Skybox/1_5.png");
+				skyboxFaces.push_back("Textures/Skybox/1_1.png");
+				skyboxFaces.push_back("Textures/Skybox/1_3.png");
+				skybox = Skybox(skyboxFaces);
+				cuartoSkybox = false;
+				primerSkybox = true;
+				retardo = 0.0f;
+			}
+			retardo += 0.00001f;
+			mainLight = DirectionalLight(1.0f, 1.0f, 1.0f,
+				1.0f - retardo, 1.0f - retardo,
+				0.0f, 0.0f, -1.0f);
+			
+		}
+
+		if (primerSkybox)
+		{
+			if (retardo >= 0.4f) {
+				std::vector<std::string> skyboxFaces;
+				skyboxFaces.push_back("Textures/Skybox/3_2.png");
+				skyboxFaces.push_back("Textures/Skybox/3_4.png");
+				skyboxFaces.push_back("Textures/Skybox/3_6.png");
+				skyboxFaces.push_back("Textures/Skybox/3_5.png");
+				skyboxFaces.push_back("Textures/Skybox/3_1.png");
+				skyboxFaces.push_back("Textures/Skybox/3_3.png");
+				skybox = Skybox(skyboxFaces);
+				segundoSkybox = true;
+				primerSkybox = false;
+				retardo = 0.0f;
+			}
+			retardo += 0.00001f;
+			mainLight = DirectionalLight(1.0f, 1.0f, 1.0f,
+				1.0f - retardo, 1.0f - retardo,
+				0.0f, 0.0f, -1.0f);
+
+		}
+		
 		if(mainWindow.getEncenderIsometrica()){
 			//Movemos a nuestra POV hasta la posición destino (Manipulamos el manejo del tecladdo)
 			//Asignamos en variables para sustituir por las de mi formula
@@ -404,7 +491,6 @@ int main()
 			auxiliar = (posicionY_vista > destinoY_vista) ? posicionY_vista - incremento_vista : posicionY_vista + incremento_vista;
 			camera.setVistaY(auxiliar);
 			//std::cout << "Eje X: " << posicionX_vista << "\tEje Y: " << posicionY_vista << "\n";
-
 		}
 		//-----------------------------------------------------------------------------
 
