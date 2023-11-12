@@ -104,16 +104,35 @@ void Window::ManejaTeclado(GLFWwindow* window, int key, int code, int action, in
 	{
 		glfwSetWindowShouldClose(window, GL_TRUE);
 	}
-	if (key == GLFW_KEY_Y)
+	/*if (key == GLFW_KEY_Y)
 	{
 		theWindow-> muevex += 1.0;
 	}
 	if (key == GLFW_KEY_U)
 	{
 		theWindow-> muevex -= 1.0;
+	}*/
+	/////////////////////////////////////////////
+	if (key == GLFW_KEY_H)
+	{
+		theWindow->muevex += 1.0;
 	}
+	if (key == GLFW_KEY_K)
+	{
+		theWindow->muevex -= 1.0;
+	}
+	if (key == GLFW_KEY_U)
+	{
+		theWindow->muevez += 1.0;
+	}
+	if (key == GLFW_KEY_J)
+	{
+		theWindow->muevez -= 1.0;
+	}
+
 	//Te movera a al posición destino, hasta que se desea
 	theWindow->encenderIsometrica = (key == GLFW_KEY_I and action == GLFW_PRESS) ? !(theWindow->encenderIsometrica) : theWindow->encenderIsometrica;
+	theWindow->encenderPOV = (key == GLFW_KEY_0 and action == GLFW_PRESS) ? !(theWindow->encenderPOV) : theWindow->encenderPOV;
 
 
 	if (key >= 0 && key < 1024)

@@ -64,7 +64,7 @@ Texture pisoTexture;
 
 //+++++++++++++++++++++++++++++++	variables para modelos	+++++++++++++++++++++++++++++++
 
-
+Model pacman;
 
 //---------------------------------------------------------------------------------------------
 Skybox skybox;
@@ -288,6 +288,9 @@ int main()
 	GLuint uniformColor = 0;
 	glm::mat4 projection = glm::perspective(45.0f, (GLfloat)mainWindow.getBufferWidth() / mainWindow.getBufferHeight(), 0.1f, 1000.0f);
 	//+++++++++++++++++++++++++++++++	variables para inicializar	+++++++++++++++++++++++++++++++
+	pacman = Model();
+	pacman.LoadModel("Models/can.obj");
+	
 	//valores para la camara isometrica
 	float destinoX = 30.0f;
 	float destinoY = 30.0f;
@@ -304,9 +307,10 @@ int main()
 	float posicionY_vista; // Puedes cambiar este valor a cualquier número
 	float posicionZ_vista;  // Puedes cambiar este valor a cualquier número
 
-	float incremento = 0.1f;
-	float incremento_vista = 0.1f;
+	float incremento = 0.007f;
+	float incremento_vista = 0.007f;
 	float auxiliar;
+	float retardo3 = 0.0f;
 	//---------------------------------------------------------------------------------------------
 	////Loop mientras no se cierra la ventana
 	while (!mainWindow.getShouldClose())
@@ -405,6 +409,55 @@ int main()
 			camera.setVistaY(auxiliar);
 			//std::cout << "Eje X: " << posicionX_vista << "\tEje Y: " << posicionY_vista << "\n";
 
+		}
+
+		//Instancia del coche 
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(0.0f + mainWindow.getmuevex(), 1.0f, 0.0f + mainWindow.getmuevez()));
+		modelaux = model;
+		model = glm::scale(model, glm::vec3(0.1f, 0.1f, 0.1f));
+		model = glm::rotate(model, 1* toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		pacman.RenderModel();
+
+		if (mainWindow.getencenderPOV()) {
+			if (retardo3 <= 5.0f) {
+				//Movemos a nuestra POV hasta la posición destino (Manipulamos el manejo del tecladdo)
+			//Asignamos en variables para sustituir por las de mi formula
+				posicionX = camera.getPosicionX(); // Puedes cambiar este valor a cualquier número
+				posicionY = camera.getPosicionY(); // Puedes cambiar este valor a cualquier número
+				posicionZ = camera.getPosicionZ(); // Puedes cambiar este valor a cualquier número
+				/*Lo que se hace basicamente en las variables auxiliar, es obtener el incremento( o decremento, segun el caso)
+				para alcanzar los valores destinos que fueron planteados*/
+				auxiliar = (posicionX > mainWindow.getmuevex() - 10) ? posicionX - incremento : posicionX + incremento;
+				//Asignamos la nueva posición de X, obtenida por nuestro auxiliar
+				camera.setPosicionX(auxiliar);
+				auxiliar = (posicionY > 10.0f) ? posicionY - incremento : posicionY + incremento;
+				//Asignamos la nueva posición de Y, obtenida por nuestro auxiliar
+				camera.setPosicionY(auxiliar);
+				//Asignamos la nueva posición de Z, obtenida por nuestro auxiliar
+				auxiliar = (posicionZ > mainWindow.getmuevez() - 10) ? posicionZ - incremento : posicionZ + incremento;
+				camera.setPosicionZ(auxiliar);
+
+				////Movemos a nuestra POV hasta la vista destino (Manipulamos el manejo del mouse)
+				posicionX_vista = camera.getVistaX();
+				posicionY_vista = camera.getVistaY();
+
+				auxiliar = (posicionX_vista > 45.0f) ? posicionX_vista - incremento_vista : posicionX_vista + incremento_vista;
+				camera.setVistaX(auxiliar);
+				auxiliar = (posicionY_vista > -10) ? posicionY_vista - incremento_vista : posicionY_vista + incremento_vista;
+				camera.setVistaY(auxiliar);
+				//std::cout << "Eje X: " << posicionX_vista << "\tEje Y: " << posicionY_vista << "\n";
+				retardo3 += 0.0001;
+				//printf("%f\n", retardo3);
+			}else {
+				//Nos da el POV
+				camera.setPosicionX(mainWindow.getmuevex() - 10);
+				camera.setPosicionZ(mainWindow.getmuevez() - 10.0f);
+				camera.setPosicionY(10.0f);
+				camera.setVistaY(-10.0f);
+			}
+			
 		}
 		//-----------------------------------------------------------------------------
 
