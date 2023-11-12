@@ -456,6 +456,7 @@ int main()
 				camera.setPosicionZ(mainWindow.getmuevez() - 10.0f);
 				camera.setPosicionY(10.0f);
 				camera.setVistaY(-10.0f);
+				retardo3 = 0.0f;
 			}
 			
 		}
