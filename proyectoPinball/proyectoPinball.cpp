@@ -362,6 +362,9 @@ int main()
 		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		meshList[2]->RenderMesh();
 
+
+		//+++++++++++++++++++++++++++++++	PROYECTO	+++++++++++++++++++++++++++++++
+
 		//Tablero de pinball
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(-10.0f, 14.0f, -9.7f));
@@ -383,8 +386,6 @@ int main()
 		model = glm::scale(model, glm::vec3(3.0f, 3.0f, 3.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Palanca.RenderModel();
-
-		//+++++++++++++++++++++++++++++++	PROYECTO	+++++++++++++++++++++++++++++++
 
 
 
