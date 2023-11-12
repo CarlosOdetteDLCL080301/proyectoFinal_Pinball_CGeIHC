@@ -113,6 +113,54 @@ void Window::ManejaTeclado(GLFWwindow* window, int key, int code, int action, in
 		theWindow-> muevex -= 1.0;
 	}
 
+	//Sirve para saber si se estan presionando las teclas wasd
+	if (key == GLFW_KEY_U)
+	{
+		if (action == GLFW_PRESS)
+		{
+			theWindow->pressU = true;
+		}
+		else if (action == GLFW_RELEASE)
+		{
+			theWindow->pressU = false;
+		}
+	}
+
+	if (key == GLFW_KEY_H)
+	{
+		if (action == GLFW_PRESS)
+		{
+			theWindow->pressH = true;
+		}
+		else if (action == GLFW_RELEASE)
+		{
+			theWindow->pressH = false;
+		}
+	}
+
+	if (key == GLFW_KEY_J)
+	{
+		if (action == GLFW_PRESS)
+		{
+			theWindow->pressJ = true;
+		}
+		else if (action == GLFW_RELEASE)
+		{
+			theWindow->pressJ = false;
+		}
+	}
+
+	if (key == GLFW_KEY_K)
+	{
+		if (action == GLFW_PRESS)
+		{
+			theWindow->pressK = true;
+		}
+		else if (action == GLFW_RELEASE)
+		{
+			theWindow->pressK = false;
+		}
+	}
 
 
 	if (key >= 0 && key < 1024)
