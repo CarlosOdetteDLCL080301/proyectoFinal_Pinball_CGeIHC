@@ -270,7 +270,7 @@ int main()
 	
 	//Luz de avatar
 	pointLights[0] = PointLight(1.0f, 1.0f, 0.0f,
-		0.8f, 1.0f,
+		1.0f, 2.0f,
 		-30.0f, 98.0f, 40.0f,
 		0.1f, 0.2f, 0.1f);
 	pointLightCount++;
@@ -287,8 +287,8 @@ int main()
 
 
 	// Luz que ilumina todo el tablero
-	spotLights[1] = SpotLight(0.0f, 1.0f, 1.0f,
-		0.8f, 1.0f,
+	spotLights[1] = SpotLight(1.0f, 0.851f, 0.729f,
+		1.0f, 1.0f,
 		10.0f, 115.0f, -55.0f,
 		-2.5f, -1.0f, 4.0f,
 		0.8f, 0.001f, 0.00009f,
@@ -298,7 +298,7 @@ int main()
 
 	//Luz flippers
 	spotLights[2] = SpotLight(1.0f, 0.0f, 0.0f,
-		0.9f, 4.0f,
+		2.0f, 4.0f,
 		-26.0f, 100.0f, 96.0f,
 		0.0f, 0.0f, -3.0f,
 		0.8f, 0.2f, 0.0f,
@@ -389,7 +389,7 @@ int main()
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(-10.0f, 14.0f, -9.7f));
 		model = glm::scale(model, glm::vec3(3.0f, 3.0f, 3.0f));
-		model = glm::rotate(model,4 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		//model = glm::rotate(model,4 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Pinball.RenderModel();
 
