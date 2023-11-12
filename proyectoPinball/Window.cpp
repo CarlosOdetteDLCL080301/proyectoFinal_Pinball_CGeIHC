@@ -107,13 +107,11 @@ void Window::ManejaTeclado(GLFWwindow* window, int key, int code, int action, in
 	{
 		glfwSetWindowShouldClose(window, GL_TRUE);
 	}
-	if (key == GLFW_KEY_Y and action == GLFW_PRESS)
+
+	
+	if (key == GLFW_KEY_H)
 	{
-		theWindow-> muevex += 1.0;
-	}
-	if (key == GLFW_KEY_U)
-	{
-		theWindow-> muevex -= 1.0;
+		theWindow->muevex += 1.0;
 	}
 
 	// Detecatamos si se esta presionando la tecla y cambiamos el valor booleano 
@@ -154,7 +152,22 @@ void Window::ManejaTeclado(GLFWwindow* window, int key, int code, int action, in
 	//Este boton es asignado para el Flipper 3
 	if (key == GLFW_KEY_X and action == GLFW_PRESS) { theWindow->rotacionFlipper3 = true; } else { theWindow->rotacionFlipper3 = false; }
 	//Te movera a al posici�n destino, hasta que se desea
+	if (key == GLFW_KEY_K)
+	{
+		theWindow->muevex -= 1.0;
+	}
+	if (key == GLFW_KEY_U)
+	{
+		theWindow->muevez += 1.0;
+	}
+	if (key == GLFW_KEY_J)
+	{
+		theWindow->muevez -= 1.0;
+	}
+
+	//Te movera a al posici�n destino, hasta que se desea
 	theWindow->encenderIsometrica = (key == GLFW_KEY_I and action == GLFW_PRESS) ? !(theWindow->encenderIsometrica) : theWindow->encenderIsometrica;
+	theWindow->encenderPOV = (key == GLFW_KEY_0 and action == GLFW_PRESS) ? !(theWindow->encenderPOV) : theWindow->encenderPOV;
 
 
 	if (key >= 0 && key < 1024)

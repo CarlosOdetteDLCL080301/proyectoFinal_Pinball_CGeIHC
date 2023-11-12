@@ -24,7 +24,10 @@ public:
 	bool getRotacionFlipper1() { return rotacionFlipper1; }
 	bool getRotacionFlipper2() { return rotacionFlipper2; }
 	bool getRotacionFlipper3() { return rotacionFlipper3; }
+	GLfloat getmuevey() { return muevey; }
+	GLfloat getmuevez() { return muevez; }
 	bool getEncenderIsometrica() { return encenderIsometrica; };
+	bool getencenderPOV() { return encenderPOV; }
 	bool getShouldClose() {
 		return  glfwWindowShouldClose(mainWindow);}
 	bool* getsKeys() { return keys; }
@@ -42,7 +45,7 @@ private:
 	GLfloat lastY;
 	GLfloat xChange;
 	GLfloat yChange;
-	GLfloat muevex;
+	
 
 	bool luz1, luz2, luz3;
 
@@ -51,9 +54,13 @@ private:
 	bool rotacionFlipper2 = false;
 	bool rotacionFlipper3 = false;
 
+	GLfloat muevex = 0.0f;
+	GLfloat muevey = 0.0f;
+	GLfloat muevez = 0.0f;
 	bool mouseFirstMoved;
 	//Este booleano, nos ayudara para mantener la bandera activar cada que se desea
 	bool encenderIsometrica = false;
+	bool encenderPOV = false;
 	static void ManejaTeclado(GLFWwindow* window, int key, int code, int action, int mode);
 	static void ManejaMouse(GLFWwindow* window, double xPos, double yPos);
 
