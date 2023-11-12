@@ -363,12 +363,12 @@ int main()
 	tambor.LoadModel("Models/tambor.obj");
 
 	std::vector<std::string> skyboxFaces;
-	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_rt.tga");
-	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_lf.tga");
-	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_dn.tga");
-	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_up.tga");
-	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_bk.tga");
-	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_ft.tga");
+	skyboxFaces.push_back("Textures/Skybox/3_2.png");
+	skyboxFaces.push_back("Textures/Skybox/3_4.png");
+	skyboxFaces.push_back("Textures/Skybox/3_6.png");
+	skyboxFaces.push_back("Textures/Skybox/3_5.png");
+	skyboxFaces.push_back("Textures/Skybox/3_1.png");
+	skyboxFaces.push_back("Textures/Skybox/3_3.png");
 
 	Pinball = Model();
 	Pinball.LoadModel("Models/tableroPinball.obj");
@@ -385,8 +385,8 @@ int main()
 
 	//luz direccional, s�lo 1 y siempre debe de existir
 	mainLight = DirectionalLight(1.0f, 1.0f, 1.0f,
-		0.4f, 0.4f,
-		-1.0f, 0.0f, -1.0f);
+		1.0f, 1.0f,
+		0.0f, 0.0f, -1.0f);
 	//contador de luces puntuales
 	unsigned int pointLightCount = 0;
 
@@ -439,6 +439,10 @@ int main()
 	GLuint uniformColor = 0;
 	glm::mat4 projection = glm::perspective(45.0f, (GLfloat)mainWindow.getBufferWidth() / mainWindow.getBufferHeight(), 0.1f, 1000.0f);
 	//+++++++++++++++++++++++++++++++	variables para inicializar	+++++++++++++++++++++++++++++++
+	//valores para la camara isometrica
+	float destinoX = 30.0f;
+	float destinoY = 30.0f;
+	float destinoZ = 30.0f;
 
 	//---------PARA TENER KEYFRAMES GUARDADOS NO VOLATILES QUE SIEMPRE SE UTILIZARAN SE DECLARAN AQU�
 	KeyFrame[0].mov_z = -5.0f;	//1 - Movimiento por el canal principal
@@ -490,7 +494,23 @@ int main()
 	float rotacionFlipper2 = 0.0f;
 	float rotacionFlipper3 = 0.0f;
 	float velocidadRotacionFlipper = 3.0f;
+	float destinoX_vista = -135.0f;
+	float destinoY_vista = -35.0f;
 
+	float posicionX; // Puedes cambiar este valor a cualquier n�mero
+	float posicionY; // Puedes cambiar este valor a cualquier n�mero
+	float posicionZ;  // Puedes cambiar este valor a cualquier n�mero
+	
+	float posicionX_vista; // Puedes cambiar este valor a cualquier n�mero
+	float posicionY_vista; // Puedes cambiar este valor a cualquier n�mero
+	float posicionZ_vista;  // Puedes cambiar este valor a cualquier n�mero
+
+	float incremento = 0.007f;
+	float incremento_vista = 0.007f;
+	float auxiliar;
+	float retardo = 0.0;
+	bool segundoSkybox = true, tercerSkybox = false, cuartoSkybox = false, primerSkybox = false;
+	float oscurecer = 0.0f;
 	//---------------------------------------------------------------------------------------------
 	////Loop mientras no se cierra la ventana
 	while (!mainWindow.getShouldClose())
@@ -682,6 +702,125 @@ int main()
 		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		caliz.RenderModel();
+		//Vista Isometrica
+		/*
+		�Que es una vista isometrica?
+		La proyecci�n isom�trica es una forma de representaci�n visual de un objeto tridimensional en un plano bidimensional. 
+		En esta, los tres ejes ortogonales principales forman �ngulos de 120 grados, y las dimensiones paralelas a esos 
+		ejes se miden en una misma escala.
+		*/
+		if (segundoSkybox)
+		{
+			if (retardo >= 0.30f) {
+				std::vector<std::string> skyboxFaces;
+				skyboxFaces.push_back("Textures/Skybox/4_2.png");
+				skyboxFaces.push_back("Textures/Skybox/4_4.png");
+				skyboxFaces.push_back("Textures/Skybox/4_6.png");
+				skyboxFaces.push_back("Textures/Skybox/4_5.png");
+				skyboxFaces.push_back("Textures/Skybox/4_1.png");
+				skyboxFaces.push_back("Textures/Skybox/4_3.png");
+				skybox = Skybox(skyboxFaces);
+				segundoSkybox = false;
+			}
+			retardo += 0.00001f;
+			mainLight = DirectionalLight(1.0f, 1.0f, 1.0f,
+				1.0f - retardo, 1.0f - retardo,
+				0.0f, 0.0f, -1.0f);
+			tercerSkybox = true;
+		}
+		
+		if (tercerSkybox)
+		{
+			if (retardo >= 0.60f) {
+				std::vector<std::string> skyboxFaces;
+				skyboxFaces.push_back("Textures/Skybox/2_2.png");
+				skyboxFaces.push_back("Textures/Skybox/2_4.png");
+				skyboxFaces.push_back("Textures/Skybox/2_6.png");
+				skyboxFaces.push_back("Textures/Skybox/2_5.png");
+				skyboxFaces.push_back("Textures/Skybox/2_1.png");
+				skyboxFaces.push_back("Textures/Skybox/2_3.png");
+				skybox = Skybox(skyboxFaces);
+				tercerSkybox = false;
+			}
+			retardo += 0.00001f;
+			mainLight = DirectionalLight(1.0f, 1.0f, 1.0f,
+				1.0f - retardo, 1.0f - retardo,
+				0.0f, 0.0f, -1.0f);
+			cuartoSkybox = true;
+		}
+
+		if (cuartoSkybox)
+		{
+			if (retardo >= 0.90f) {
+				std::vector<std::string> skyboxFaces;
+				skyboxFaces.push_back("Textures/Skybox/1_2.png");
+				skyboxFaces.push_back("Textures/Skybox/1_4.png");
+				skyboxFaces.push_back("Textures/Skybox/1_6.png");
+				skyboxFaces.push_back("Textures/Skybox/1_5.png");
+				skyboxFaces.push_back("Textures/Skybox/1_1.png");
+				skyboxFaces.push_back("Textures/Skybox/1_3.png");
+				skybox = Skybox(skyboxFaces);
+				cuartoSkybox = false;
+				primerSkybox = true;
+				retardo = 0.0f;
+			}
+			retardo += 0.00001f;
+			mainLight = DirectionalLight(1.0f, 1.0f, 1.0f,
+				1.0f - retardo, 1.0f - retardo,
+				0.0f, 0.0f, -1.0f);
+			
+		}
+
+		if (primerSkybox)
+		{
+			if (retardo >= 0.4f) {
+				std::vector<std::string> skyboxFaces;
+				skyboxFaces.push_back("Textures/Skybox/3_2.png");
+				skyboxFaces.push_back("Textures/Skybox/3_4.png");
+				skyboxFaces.push_back("Textures/Skybox/3_6.png");
+				skyboxFaces.push_back("Textures/Skybox/3_5.png");
+				skyboxFaces.push_back("Textures/Skybox/3_1.png");
+				skyboxFaces.push_back("Textures/Skybox/3_3.png");
+				skybox = Skybox(skyboxFaces);
+				segundoSkybox = true;
+				primerSkybox = false;
+				retardo = 0.0f;
+			}
+			retardo += 0.00001f;
+			mainLight = DirectionalLight(1.0f, 1.0f, 1.0f,
+				1.0f - retardo, 1.0f - retardo,
+				0.0f, 0.0f, -1.0f);
+
+		}
+		
+		if(mainWindow.getEncenderIsometrica()){
+			//Movemos a nuestra POV hasta la posici�n destino (Manipulamos el manejo del tecladdo)
+			//Asignamos en variables para sustituir por las de mi formula
+			posicionX = camera.getPosicionX(); // Puedes cambiar este valor a cualquier n�mero
+			posicionY = camera.getPosicionY(); // Puedes cambiar este valor a cualquier n�mero
+			posicionZ = camera.getPosicionZ(); // Puedes cambiar este valor a cualquier n�mero
+			/*Lo que se hace basicamente en las variables auxiliar, es obtener el incremento( o decremento, segun el caso)
+			para alcanzar los valores destinos que fueron planteados*/
+			auxiliar = (posicionX > destinoX) ? posicionX - incremento : posicionX + incremento;
+			//Asignamos la nueva posici�n de X, obtenida por nuestro auxiliar
+			camera.setPosicionX(auxiliar);
+			auxiliar = (posicionY > destinoY) ? posicionY - incremento : posicionY + incremento;
+			//Asignamos la nueva posici�n de Y, obtenida por nuestro auxiliar
+			camera.setPosicionY(auxiliar);
+			//Asignamos la nueva posici�n de Z, obtenida por nuestro auxiliar
+			auxiliar = (posicionZ > destinoZ) ? posicionZ - incremento : posicionZ + incremento;
+			camera.setPosicionZ(auxiliar);
+
+			////Movemos a nuestra POV hasta la vista destino (Manipulamos el manejo del mouse)
+			posicionX_vista = camera.getVistaX();
+			posicionY_vista = camera.getVistaY();
+
+			auxiliar = (posicionX_vista > destinoX_vista) ? posicionX_vista - incremento_vista : posicionX_vista + incremento_vista;
+			camera.setVistaX(auxiliar);
+			auxiliar = (posicionY_vista > destinoY_vista) ? posicionY_vista - incremento_vista : posicionY_vista + incremento_vista;
+			camera.setVistaY(auxiliar);
+			//std::cout << "Eje X: " << posicionX_vista << "\tEje Y: " << posicionY_vista << "\n";
+		}
 		//-----------------------------------------------------------------------------
 
 		//Funcion para pagar las spotlight (luz de tablero y luz de flippers) de forma independente

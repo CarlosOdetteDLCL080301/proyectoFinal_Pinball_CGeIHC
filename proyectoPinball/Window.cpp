@@ -153,6 +153,8 @@ void Window::ManejaTeclado(GLFWwindow* window, int key, int code, int action, in
 	if (key == GLFW_KEY_C and action == GLFW_PRESS) { theWindow->rotacionFlipper2 = true; } else { theWindow->rotacionFlipper2 = false; }
 	//Este boton es asignado para el Flipper 3
 	if (key == GLFW_KEY_X and action == GLFW_PRESS) { theWindow->rotacionFlipper3 = true; } else { theWindow->rotacionFlipper3 = false; }
+	//Te movera a al posici�n destino, hasta que se desea
+	theWindow->encenderIsometrica = (key == GLFW_KEY_I and action == GLFW_PRESS) ? !(theWindow->encenderIsometrica) : theWindow->encenderIsometrica;
 
 
 	if (key >= 0 && key < 1024)

@@ -19,7 +19,22 @@ public:
 	glm::vec3 getCameraPosition();
 	glm::vec3 getCameraDirection();
 	glm::mat4 calculateViewMatrix();
-
+	//Getter de mi ubicación
+	float getPosicionX() { return position.x; }
+	float getPosicionY() { return position.y; }
+	float getPosicionZ() { return position.z; }
+	//Setter de mi ubicación
+	float getVistaX() { return yaw; }
+	float getVistaY() { return pitch; }
+	float getVistaZ() { /*Se debe obtener la posición de la camara en Z*/ }
+	//Setter para modificar la posición periodicamente desde Main
+	void setPosicionX(float posicionX) { position.x = posicionX; }
+	void setPosicionY(float posicionY) { position.y = posicionY; }
+	void setPosicionZ(float posicionZ) { position.z = posicionZ; }
+	//Setter para modificar la vista periodicamente desde Main
+	void setVistaX(GLfloat vistaX) { yaw = vistaX; }
+	void setVistaY(GLfloat vistaY) { pitch = vistaY; }
+	void setVistaZ() { /*Se debe asignar la posición de la camara en Z*/ }
 	~Camera();
 
 private:

@@ -9,7 +9,6 @@ Camera::Camera(glm::vec3 startPosition, glm::vec3 startUp, GLfloat startYaw, GLf
 	yaw = startYaw;
 	pitch = startPitch;
 	front = glm::vec3(0.0f, 0.0f, -1.0f);
-
 	moveSpeed = startMoveSpeed;
 	turnSpeed = startTurnSpeed;
 
