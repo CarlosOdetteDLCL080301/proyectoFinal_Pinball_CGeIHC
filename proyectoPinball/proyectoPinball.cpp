@@ -1,9 +1,9 @@
 /*
 Semestre 2024-1
-Animación:
-Sesión 1:
-Simple o básica:Por banderas y condicionales (más de 1 transformación geométrica se ve modificada
-Sesión 2
+Animaciï¿½n:
+Sesiï¿½n 1:
+Simple o bï¿½sica:Por banderas y condicionales (mï¿½s de 1 transformaciï¿½n geomï¿½trica se ve modificada
+Sesiï¿½n 2
 Compleja: Por medio de funciones y algoritmos.
 Adicional.- Textura Animada
 */
@@ -34,7 +34,7 @@ Adicional.- Textura Animada
 #include"Model.h"
 #include "Skybox.h"
 
-//para iluminación
+//para iluminaciï¿½n
 #include "CommonValues.h"
 #include "DirectionalLight.h"
 #include "PointLight.h"
@@ -42,9 +42,8 @@ Adicional.- Textura Animada
 #include "Material.h"
 const float toRadians = 3.14159265f / 180.0f;
 
-//+++++++++++++++++++++++++++++++	variables para animación	+++++++++++++++++++++++++++++++
+//+++++++++++++++++++++++++++++++	variables para animaciï¿½n	+++++++++++++++++++++++++++++++
 
-	
 
 //---------------------------------------------------------------------------------------------
 
@@ -67,6 +66,9 @@ Texture pisoTexture;
 Model Pinball;
 Model Pinballmesa;
 Model Palanca;
+Model bananas;
+Model traga;
+Model bola;
 
 //---------------------------------------------------------------------------------------------
 Skybox skybox;
@@ -93,6 +95,38 @@ static const char* vShader = "shaders/shader_light.vert";
 
 // Fragment Shader
 static const char* fShader = "shaders/shader_light.frag";
+
+//+++++++++++++++++++++++++ Funciones para animacion +++++++++++++++++++++++++++
+
+//cï¿½lculo del promedio de las normales para sombreado de Phong
+void calcAverageNormals(unsigned int* indices, unsigned int indiceCount, GLfloat* vertices, unsigned int verticeCount, unsigned int vLength, unsigned int normalOffset)
+{
+	for (size_t i = 0; i < indiceCount; i += 3)
+	{
+		unsigned int in0 = indices[i] * vLength;
+		unsigned int in1 = indices[i + 1] * vLength;
+		unsigned int in2 = indices[i + 2] * vLength;
+		glm::vec3 v1(vertices[in1] - vertices[in0], vertices[in1 + 1] - vertices[in0 + 1], vertices[in1 + 2] - vertices[in0 + 2]);
+		glm::vec3 v2(vertices[in2] - vertices[in0], vertices[in2 + 1] - vertices[in0 + 1], vertices[in2 + 2] - vertices[in0 + 2]);
+		glm::vec3 normal = glm::cross(v1, v2);
+		normal = glm::normalize(normal);
+
+		in0 += normalOffset; in1 += normalOffset; in2 += normalOffset;
+		vertices[in0] += normal.x; vertices[in0 + 1] += normal.y; vertices[in0 + 2] += normal.z;
+		vertices[in1] += normal.x; vertices[in1 + 1] += normal.y; vertices[in1 + 2] += normal.z;
+		vertices[in2] += normal.x; vertices[in2 + 1] += normal.y; vertices[in2 + 2] += normal.z;
+	}
+
+	for (size_t i = 0; i < verticeCount / vLength; i++)
+	{
+		unsigned int nOffset = i * vLength + normalOffset;
+		glm::vec3 vec(vertices[nOffset], vertices[nOffset + 1], vertices[nOffset + 2]);
+		vec = glm::normalize(vec);
+		vertices[nOffset] = vec.x; vertices[nOffset + 1] = vec.y; vertices[nOffset + 2] = vec.z;
+	}
+}
+
+//------------------------------------------------------------------------------
 
 void CreateObjects()
 {
@@ -222,8 +256,7 @@ void CreateShaders()
 	shaderList.push_back(*shader1);
 }
 
-
-
+//-------------------------------------------------------------------------------------
 
 int main()
 {
@@ -239,6 +272,13 @@ int main()
 	plainTexture.LoadTextureA();
 	pisoTexture = Texture("Textures/piso.tga");
 	pisoTexture.LoadTextureA();
+
+	bananas = Model();
+	bananas.LoadModel("Models/bananaTex.obj");
+	traga = Model();
+	traga.LoadModel("Models/tragamonedas.obj");
+	bola = Model();
+	bola.LoadModel("Models/bolaPac.obj");
 
 	std::vector<std::string> skyboxFaces;
 	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_rt.tga");
@@ -261,13 +301,13 @@ int main()
 	Material_opaco = Material(0.3f, 4);
 
 
-	//luz direccional, sólo 1 y siempre debe de existir
+	//luz direccional, sï¿½lo 1 y siempre debe de existir
 	mainLight = DirectionalLight(1.0f, 1.0f, 1.0f,
 		0.4f, 0.4f,
 		-1.0f, 0.0f, -1.0f);
 	//contador de luces puntuales
 	unsigned int pointLightCount = 0;
-	
+
 	//Luz de avatar
 	pointLights[0] = PointLight(1.0f, 1.0f, 0.0f,
 		1.0f, 2.0f,
@@ -319,7 +359,6 @@ int main()
 	//+++++++++++++++++++++++++++++++	variables para inicializar	+++++++++++++++++++++++++++++++
 
 
-
 	//---------------------------------------------------------------------------------------------
 	////Loop mientras no se cierra la ventana
 	while (!mainWindow.getShouldClose())
@@ -346,7 +385,7 @@ int main()
 		uniformColor = shaderList[0].getColorLocation();
 		uniformTextureOffset = shaderList[0].getOffsetLocation();
 
-		//información en el shader de intensidad especular y brillo
+		//informaciï¿½n en el shader de intensidad especular y brillo
 		uniformSpecularIntensity = shaderList[0].GetSpecularIntensityLocation();
 		uniformShininess = shaderList[0].GetShininessLocation();
 
@@ -354,14 +393,14 @@ int main()
 		glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(camera.calculateViewMatrix()));
 		glUniform3f(uniformEyePosition, camera.getCameraPosition().x, camera.getCameraPosition().y, camera.getCameraPosition().z);
 
-		// luz ligada a la cámara de tipo flash
+		// luz ligada a la cï¿½mara de tipo flash
 		glm::vec3 lowerLight = camera.getCameraPosition();
 		lowerLight.y -= 0.3f;
 		spotLights[0].SetFlash(lowerLight, camera.getCameraDirection());
 		spotLights2[0].SetFlash(lowerLight, camera.getCameraDirection());
 
 
-		//información al shader de fuentes de iluminación
+		//informaciï¿½n al shader de fuentes de iluminaciï¿½n
 		shaderList[0].SetDirectionalLight(&mainLight);
 
 
@@ -384,6 +423,11 @@ int main()
 
 
 		//+++++++++++++++++++++++++++++++	PROYECTO	+++++++++++++++++++++++++++++++
+		//Tragamonedas
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-20.0f, 106.0f, -30.0));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		traga.RenderModel();
 
 		//Tablero de pinball
 		model = glm::mat4(1.0);
@@ -411,7 +455,7 @@ int main()
 		if (mainWindow.getLuz2() == true)
 		{
 			//Mandamos al shader el primer arreglo completo, la luz del los flippers esta encendida		
-			
+
 			//los siguientes if nos ayudan a apagar y prender la luz del tablero cuando la luz de los flippers esta prendida
 			if (mainWindow.getLuz1() == true)
 			{
@@ -435,13 +479,13 @@ int main()
 			else
 			{
 				//Restamos el contador y asi ya no mandamos al shader la ultimas 2 luces, apagamos ambas luces
-				shaderList[0].SetSpotLights(spotLights, spotLightCount - 2);		
+				shaderList[0].SetSpotLights(spotLights, spotLightCount - 2);
 			}
 		}
-		
+
 		//Funcion para apagar la luz del avatar
 
-		if(mainWindow.getLuz3() == true)
+		if (mainWindow.getLuz3() == true)
 		{
 			shaderList[0].SetPointLights(pointLights, pointLightCount);			//Mandamos al shader toda la lista del pointlight
 		}
@@ -449,14 +493,80 @@ int main()
 		{
 			shaderList[0].SetPointLights(pointLights, pointLightCount - 1);		//Restamos el contador y asi ya no mandamos al shader la ultima luz
 		}
-		//-----------------------------------------------------------------------------
+			//Bola pacman izq
+			model = glm::mat4(1.0);
+			model = glm::translate(model, glm::vec3(-0.5f, 106.0f, 43.0));
+			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+			bola.RenderModel();
 
-		glDisable(GL_BLEND);
+			//Bola pacman derecha
+			model = glm::mat4(1.0);
+			model = glm::translate(model, glm::vec3(-40.0f, 106.0f, 43.0));
+			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+			bola.RenderModel();
 
-		glUseProgram(0);
+			//Bananas como bolas de pacman
+			for (float i = -42.0f; i <= -4.0f; i += 8.0f) {
+				model = glm::mat4(1.0f); //inferior
+				model = glm::translate(model, glm::vec3(i, 106.0f, 70.0f));
+				glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+				bananas.RenderModel();
+			}
+			for (float i = 70.0f; i >= 43.0f; i -= 7.5f) {
+				model = glm::mat4(1.0f); //lado izq camara
+				model = glm::translate(model, glm::vec3(-42.0f, 106.0f, i));
+				glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+				bananas.RenderModel();
+			}
+			for (float i = 70.0f; i >= 26.0f; i -= 7.5f) {
+				model = glm::mat4(1.0f); //lado der camara
+				model = glm::translate(model, glm::vec3(-0.5f, 106.0f, i));
+				glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+				bananas.RenderModel();
+			}
+			for (float i = -33.0f; i <= -9.0f; i += 8.0f) {
+				model = glm::mat4(1.0f); //arriba flippers
+				model = glm::translate(model, glm::vec3(i, 106.0f, 43.0f));
+				glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+				bananas.RenderModel();
+			}
+			float centerX = -21.0f;  // Centro x de la elipse
+			float centerY = 106.0f;  // Centro y de la elipse
+			float centerZ = -2.0f;   // Centro z de la elipse
+			for (float angle = 0.0f; angle <= 2.0f * glm::pi<float>(); angle += glm::pi<float>() / 3.5f) {
+				//Calcula el punto en donde estara cada objeto con una distancia total de 3.5
+				model = glm::mat4(1.0f);  // Reinicializa la matriz model en cada iteraciï¿½n
+				float scaleX = 12.0f;   // Escala x
+				float scaleZ = 22.0f;    // Escala z
+				float x = centerX + scaleX * cos(angle);
+				float y = centerY;
+				float z = centerZ + scaleZ * sin(angle);
+				model = glm::translate(model, glm::vec3(x, y, z));
+				glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+				bananas.RenderModel();
+			}
+			for (float angle = 0.0f; angle <= 2.0f * glm::pi<float>(); angle += glm::pi<float>() / 8.0f) {
+				//Calcula el punto en donde estara cada objeto con una distancia total de 8.0
+				model = glm::mat4(1.0f);  // Reinicializa la matriz model en cada iteraciï¿½n
+				float scaleX = 20.0f;   // Aumenta este valor para hacer el centro mï¿½s ancho
+				float scaleZ = 35.0f;   // Aumenta este valor para hacer el centro mï¿½s alto
+				float x = centerX + scaleX * cos(angle);
+				float y = centerY;
+				float z = centerZ + scaleZ * sin(angle);
+				model = glm::translate(model, glm::vec3(x, y, z));
+				glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+				bananas.RenderModel();
+			}
+			//-----------------------------------------------------------------------------
 
-		mainWindow.swapBuffers();
+			glDisable(GL_BLEND);
+
+			glUseProgram(0);
+
+			mainWindow.swapBuffers();
+		
+	}
+		return 0;
 	}
 
-	return 0;
-}
+
