@@ -46,6 +46,19 @@ const float toRadians = 3.14159265f / 180.0f;
 //variables para keyframes
 float reproAni, habiAni, guardoFrame, reiniFrame, ciclo, ciclo2, contador = 0;	
 GLfloat giroC;
+
+Model BeppiClown;
+Model BaseBeppi;
+Model CuerpoBeppi;
+Model IzqBeppi;
+Model DerBeppi;
+Model ManoIzqBeppi;
+Model ManoDerBeppi;
+Model CuelloBeppi;
+Model CabezaBeppi;
+Model Ojo1Beppi;
+Model Ojo2Beppi;
+
 //---------------------------------------------------------------------------------------------
 
 Window mainWindow;
@@ -516,6 +529,32 @@ int main()
 	bool segundoSkybox = true, tercerSkybox = false, cuartoSkybox = false, primerSkybox = false;
 	float oscurecer = 0.0f;
 	float retardo3 = 0.0f;
+	BeppiClown = Model();
+	BeppiClown.LoadModel("Models/BC.obj");
+	BaseBeppi = Model();
+	BaseBeppi.LoadModel("Models/BaseBappy.obj");
+	CuerpoBeppi = Model();
+	CuerpoBeppi.LoadModel("Models/CuerpoBappy.obj");
+	IzqBeppi = Model();
+	IzqBeppi.LoadModel("Models/BrazoIzqBappy.obj");
+	ManoIzqBeppi = Model();
+	ManoIzqBeppi.LoadModel("Models/ManoIzqBeppi.obj");
+	DerBeppi = Model();
+	DerBeppi.LoadModel("Models/BrazoDerBappy.obj");
+	ManoDerBeppi = Model();
+	ManoDerBeppi.LoadModel("Models/ManoDerBeppi.obj");
+	CuelloBeppi = Model();
+	CuelloBeppi.LoadModel("Models/CuelloBeppi.obj");
+	CabezaBeppi = Model();
+	CabezaBeppi.LoadModel("Models/CabezaBeppi.obj");
+	Ojo1Beppi = Model();
+	Ojo1Beppi.LoadModel("Models/OjoIzqBeppi.obj");
+	Ojo2Beppi = Model();
+	Ojo2Beppi.LoadModel("Models/OjoDerBeppi.obj");
+
+	float incrementoAngTorsoBeppi = 0.01f, incrementoAngBrazoBeppi = 0.01f, incrementoAngManosBeppi = 0.01f, incrementoAngCabezaBeppi = 0.01f, incrementoAngOjosBeppi = 0.01f;
+	float angTorsoBeppi = 0.0, angBrazoBeppi = 0.0f, angManosBeppi = 0.0f, angCabezaBeppi = 0.0f, angOjosBeppi = 0.0f, levantarse = 0.0f;
+	bool activarse = true, termino;
 	//---------------------------------------------------------------------------------------------
 	////Loop mientras no se cierra la ventana
 	while (!mainWindow.getShouldClose())
@@ -568,6 +607,9 @@ int main()
 
 		glm::mat4 model(1.0);
 		glm::mat4 modelaux(1.0);
+		glm::mat4 modelaux2(1.0);
+		glm::mat4 modelaux3(1.0);
+		glm::mat4 modelaux4(1.0);
 		glm::vec3 color = glm::vec3(1.0f, 1.0f, 1.0f);
 		glm::vec2 toffset = glm::vec2(0.0f, 0.0f);
 
@@ -876,6 +918,97 @@ int main()
 			}
 			
 		}
+		//Animaci�n de Beppi
+		// Incrementa los �ngulos de Beppi
+		angTorsoBeppi	+= incrementoAngTorsoBeppi;
+		angBrazoBeppi	+= incrementoAngBrazoBeppi;
+		angManosBeppi	+= incrementoAngManosBeppi;
+		angCabezaBeppi	+= incrementoAngCabezaBeppi;
+		angOjosBeppi	+= incrementoAngOjosBeppi;
+		
+		// Esto altera el incremento y decremento para que los angulos operen en un intervalo definido, para cada modelo.
+		incrementoAngTorsoBeppi	= (angTorsoBeppi	>= 45.0f	|| angTorsoBeppi <= -45.0f)	? -incrementoAngTorsoBeppi	: incrementoAngTorsoBeppi;
+		incrementoAngBrazoBeppi	= (angBrazoBeppi	>= 75.0f	|| angBrazoBeppi <= -45.0f)	? -incrementoAngBrazoBeppi	: incrementoAngBrazoBeppi;
+		incrementoAngCabezaBeppi= (angCabezaBeppi	>= 75.0f	|| angBrazoBeppi <= -45.0f)	? -incrementoAngCabezaBeppi : incrementoAngCabezaBeppi;
+		incrementoAngOjosBeppi	= (angOjosBeppi		>= 45.0f	|| angOjosBeppi	 <= -45.0f)	? -incrementoAngOjosBeppi	: incrementoAngOjosBeppi;
+	
+		//Instancia de la base de Beppi
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-20.0f, 106.0f, 46.0));
+		model = glm::scale(model, glm::vec3(0.1f, 0.1f, 0.1f));
+		model = glm::rotate(model, toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		modelaux = model;
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		BaseBeppi.RenderModel();
+
+		//Instancia del torso de Beppi
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(0.0f, 38.0f, 0.0f));
+		model = glm::rotate(model, angTorsoBeppi * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, 45 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		modelaux2 = model;
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		CuerpoBeppi.RenderModel();
+
+		//Instancia del brazo izquierdo de Beppi
+		model = modelaux2;
+		model = glm::translate(model, glm::vec3(-19.376f, 45.02f, -3.148f));
+		model = glm::rotate(model, angBrazoBeppi * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		modelaux3 = model;
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		IzqBeppi.RenderModel();
+
+		//Instancia de la mano izquierda de Beppi
+		model = modelaux3;
+		model = glm::translate(model, glm::vec3(-43.026f, 34.532f, 18.631f));
+		model = glm::rotate(model, toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		ManoIzqBeppi.RenderModel();
+
+		//Instancia del brazo derecha de Beppi
+		model = modelaux2;
+		model = glm::translate(model, glm::vec3(15.899f, 43.462f,-3.537f));
+		model = glm::rotate(model, -angBrazoBeppi * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		modelaux3 = model;
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		DerBeppi.RenderModel();
+
+		//Instancia de la mano derecha de Beppi
+		model = modelaux3;
+		model = glm::translate(model, glm::vec3(43.675f, 31.866f, 23.264f));
+		model = glm::rotate(model, toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		ManoDerBeppi.RenderModel();
+
+		//Instancia del cuello de Beppi
+		model = modelaux2;
+		model = glm::translate(model, glm::vec3(-0.919f, 128.161f, 3.717f));
+		model = glm::rotate(model, toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		modelaux3 = model;
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		CuelloBeppi.RenderModel();
+
+		//Instancia de la cabeza
+		model = modelaux3;
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
+		model = glm::rotate(model, angCabezaBeppi * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		modelaux4 = model;
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		CabezaBeppi.RenderModel();
+
+		//Instancia de la ojo derecho
+		model = modelaux4;
+		model = glm::translate(model, glm::vec3(-25.003f, 62.131f, 58.961f));
+		model = glm::rotate(model, (-45 + angOjosBeppi) * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Ojo1Beppi.RenderModel();
+
+		//Instancia de la ojo izquierdo
+		model = modelaux4;
+		model = glm::translate(model, glm::vec3(21.934f, 62.643f, 59.157f));
+		model = glm::rotate(model, (-45 + angOjosBeppi) * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Ojo2Beppi.RenderModel();
 		//-----------------------------------------------------------------------------
 
 		//Funcion para pagar las spotlight (luz de tablero y luz de flippers) de forma independente
