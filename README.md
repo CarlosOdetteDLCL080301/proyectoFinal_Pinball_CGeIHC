@@ -101,7 +101,7 @@ El presente manual técnico proporciona información detallada sobre el desarrol
 
 ## Instalación y Compilación
 
-1. Clone el repositorio desde https://github.com/CarlosOdetteDLCL080301/proyectoFinal_Pinball_CGeIHC
+1. Clone el [repositorio](https://github.com/CarlosOdetteDLCL080301/proyectoFinal_Pinball_CGeIHC).
 2. [Descarga](https://drive.google.com/drive/folders/1Olu0xMV7BKITV3aFpWduYPCtV6YZYoEq?usp=sharing) y descomprime la siguiente carpeta en la carpeta _proyectoFinal_Pinball_CGeIHC\proyectoPinball_, es importante ya que se necesitan descargar los modelos y las texturas, en caso que no se haga el programa no logrará compilar.
 3. Si se desea realizar cambios es importante cargar el proyecto entero con el archivo “proyectoPinball.sln”
 4. Si únicamente se quiere ejecutar el programa, solo ejecute proyectoPinball.exe
