@@ -217,7 +217,7 @@ void Window::ManejaTeclado(GLFWwindow* window, int key, int code, int action, in
 		}
 	}
 
-
+	if (key == GLFW_KEY_6 and action == GLFW_PRESS) { theWindow->animarResorte = true; } else { theWindow->animarResorte = false; }
 	if (key >= 0 && key < 1024)
 	{
 		if (action == GLFW_PRESS)

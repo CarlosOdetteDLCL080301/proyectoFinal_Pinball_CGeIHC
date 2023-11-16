@@ -103,7 +103,7 @@ Model PacmanPiernaD;
 Model PacmanPiernaI;
 
 
-
+Model resorte;
 //---------------------------------------------------------------------------------------------
 Skybox skybox;
 
@@ -362,7 +362,7 @@ int main()
 	CreateObjects();
 	CreateShaders();
 
-	camera = Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), -60.0f, 0.0f, 0.5f, 0.5f);
+	camera = Camera(glm::vec3(8.0f, 95.0f, 115.0f), glm::vec3(0.0f, 1.0f, 0.0f), -60.0f, 0.0f, 0.5f, 0.5f);
 
 	plainTexture = Texture("Textures/plain.png");
 	plainTexture.LoadTextureA();
@@ -576,7 +576,12 @@ int main()
 
 	float incrementoAngTorsoBeppi = 0.01f, incrementoAngBrazoBeppi = 0.01f, incrementoAngManosBeppi = 0.01f, incrementoAngCabezaBeppi = 0.01f, incrementoAngOjosBeppi = 0.01f;
 	float angTorsoBeppi = 0.0, angBrazoBeppi = 0.0f, angManosBeppi = 0.0f, angCabezaBeppi = 0.0f, angOjosBeppi = 0.0f, levantarse = 0.0f;
+	float animacionResorte = 0.0f, incremento_animacionResorte = 0.0f, escalarResorte =0.0f;
 	bool activarse = true, termino;
+
+	resorte = Model();
+	resorte.LoadModel("Models/resorte.obj");
+	float comprimirResorte = 0.0f, comprimir = 0.0f, velocidadComprimir = 0.03;
 	//---------------------------------------------------------------------------------------------
 	////Loop mientras no se cierra la ventana
 	while (!mainWindow.getShouldClose())
@@ -1052,7 +1057,13 @@ int main()
 		incrementoAngBrazoBeppi	= (angBrazoBeppi	>= 75.0f	|| angBrazoBeppi <= -45.0f)	? -incrementoAngBrazoBeppi	: incrementoAngBrazoBeppi;
 		incrementoAngCabezaBeppi= (angCabezaBeppi	>= 75.0f	|| angBrazoBeppi <= -45.0f)	? -incrementoAngCabezaBeppi : incrementoAngCabezaBeppi;
 		incrementoAngOjosBeppi	= (angOjosBeppi		>= 45.0f	|| angOjosBeppi	 <= -45.0f)	? -incrementoAngOjosBeppi	: incrementoAngOjosBeppi;
-	
+		//variable = (condicion) ? 1 : 0 
+		//if(condicion){
+		// variable = 1
+		// }else{
+		// variable = 0
+		// }
+		// 
 		//Instancia de la base de Beppi
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(-20.0f, 106.0f, 46.0));
@@ -1238,6 +1249,25 @@ int main()
 				glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 				bananas.RenderModel();
 			}
+
+			//Instancia del dado
+			model = glm::mat4(1.0);
+			model = glm::translate(model, glm::vec3(0.0f, 5.0f, 0.0f));
+			modelaux = model;
+			model = glm::scale(model, glm::vec3(1.0f, 1.0f, comprimir));
+			//model = glm::rotate(model, -rotacionFlipper3 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+			resorte.RenderModel();
+			
+			
+			if (mainWindow.getAnimarResorte()) {
+				comprimir += (comprimir < 1.0f) ? velocidadComprimir * deltaTime : 0.0f;
+			}
+			else {
+				comprimir -= (comprimir > 0.3f) ? velocidadComprimir * deltaTime : 0.0f;
+			}
+
+			
 			//-----------------------------------------------------------------------------
 
 			glDisable(GL_BLEND);
@@ -1263,6 +1293,10 @@ void inputKeyframes(bool* keys) {
 				reproAni++;
 				printf("\n presiona 0 para habilitar reproducir de nuevo la animaci�n'\n");
 				habiAni = 0;
+				//float animacionResorte = 0.0f, incremento_animacionResorte = 0.0f;
+				//incrementoAngOjosBeppi = (angOjosBeppi >= 45.0f || angOjosBeppi <= -45.0f) ? -incrementoAngOjosBeppi : incrementoAngOjosBeppi;
+				//incremento_animacionResorte += ;
+
 			}
 			else {
 				play = false;
