@@ -581,7 +581,7 @@ int main()
 
 	resorte = Model();
 	resorte.LoadModel("Models/resorte.obj");
-	float comprimirResorte = 0.0f, comprimir = 0.0f, velocidadComprimir = 0.03;
+	float comprimirResorte = 0.0f, comprimir = 1.0f, velocidadComprimir = 0.03;
 	//---------------------------------------------------------------------------------------------
 	////Loop mientras no se cierra la ventana
 	while (!mainWindow.getShouldClose())
@@ -749,7 +749,8 @@ int main()
 
 		//Cuerpo pacman
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(8.0f - mainWindow.getmuevex(), 110.0f, 85.0f - mainWindow.getmuevez()));
+		if(8.0f - mainWindow.getmuevex()>-47.720284 && 8.0f - mainWindow.getmuevex()< 11.034455 && 85.0f - mainWindow.getmuevez() < 87.629875 && 85.0f - mainWindow.getmuevez() > -58.037342)//(-47.720284,107.282341,88.727539) --- (11.034455,106.301315,87.629875) ---(12.556218,106.922478,-58.037342)
+			model = glm::translate(model, glm::vec3(8.0f - mainWindow.getmuevex(), 110.0f, 85.0f - mainWindow.getmuevez()));
 		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
 
 		//Casos para girar a pacman en alguna direccion
@@ -1250,9 +1251,9 @@ int main()
 				bananas.RenderModel();
 			}
 
-			//Instancia del dado
+			//Instancia del resorte
 			model = glm::mat4(1.0);
-			model = glm::translate(model, glm::vec3(0.0f, 5.0f, 0.0f));
+			model = glm::translate(model, glm::vec3(8.0f, 107.5f, 95.0f));
 			modelaux = model;
 			model = glm::scale(model, glm::vec3(1.0f, 1.0f, comprimir));
 			//model = glm::rotate(model, -rotacionFlipper3 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
@@ -1261,13 +1262,12 @@ int main()
 			
 			
 			if (mainWindow.getAnimarResorte()) {
-				comprimir += (comprimir < 1.0f) ? velocidadComprimir * deltaTime : 0.0f;
-			}
-			else {
 				comprimir -= (comprimir > 0.3f) ? velocidadComprimir * deltaTime : 0.0f;
 			}
-
-			
+			else {
+				
+				comprimir += (comprimir < 1.0f) ? velocidadComprimir * deltaTime : 0.0f;
+			}
 			//-----------------------------------------------------------------------------
 
 			glDisable(GL_BLEND);
