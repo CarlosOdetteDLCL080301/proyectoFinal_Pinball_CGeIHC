@@ -127,8 +127,6 @@ El presente manual técnico proporciona información detallada sobre el desarrol
 
 ---
 
-Este manual técnico proporciona una visión general del desarrollo de la aplicación de mesa de pinball en OpenGL. Si tienes alguna pregunta o necesitas más detalles sobre alguna parte específica, no dudes en preguntar. ¡Espero que disfrutes explorando la mesa de pinball que has creado!
-
 ## Recurso utilizados de internet
 - [Paul Briot]. (2019, 14 Febrero). Beppi The Clown. Sketch. https://skfb.ly/6UYML
 
