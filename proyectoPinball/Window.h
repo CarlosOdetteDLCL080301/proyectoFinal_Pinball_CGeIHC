@@ -71,6 +71,6 @@ private:
 	bool animarResorte = false;
 	static void ManejaTeclado(GLFWwindow* window, int key, int code, int action, int mode);
 	static void ManejaMouse(GLFWwindow* window, double xPos, double yPos);
-
+	static void ManejaClick(GLFWwindow* window, int click, int action, int mode);
 };
 

@@ -81,6 +81,7 @@ void Window::createCallbacks()
 {
 	glfwSetKeyCallback(mainWindow, ManejaTeclado);
 	glfwSetCursorPosCallback(mainWindow, ManejaMouse);
+	glfwSetMouseButtonCallback(mainWindow, ManejaClick);
 }
 GLfloat Window::getXChange()
 {
@@ -218,6 +219,7 @@ void Window::ManejaTeclado(GLFWwindow* window, int key, int code, int action, in
 	}
 
 	if (key == GLFW_KEY_M and action == GLFW_PRESS) { theWindow->animarResorte = true; } else { theWindow->animarResorte = false; }
+	//Se agrego la funcionalidad a mouse
 	if (key >= 0 && key < 1024)
 	{
 		if (action == GLFW_PRESS)
@@ -249,6 +251,21 @@ void Window::ManejaMouse(GLFWwindow* window, double xPos, double yPos)
 
 	theWindow->lastX = xPos;
 	theWindow->lastY = yPos;
+}
+
+void Window::ManejaClick(GLFWwindow* window, int click, int action, int mode)
+{
+	Window* theWindow = static_cast<Window*>(glfwGetWindowUserPointer(window));
+
+	if (click == GLFW_MOUSE_BUTTON_RIGHT and action == GLFW_PRESS)
+	{
+		theWindow->animarResorte = true;
+	}
+	else
+	{
+		theWindow->animarResorte = false;
+	}
+
 }
 
 
