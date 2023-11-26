@@ -260,6 +260,7 @@ void Window::ManejaClick(GLFWwindow* window, int click, int action, int mode)
 	if (click == GLFW_MOUSE_BUTTON_RIGHT and action == GLFW_PRESS)
 	{
 		theWindow->animarResorte = true;
+		theWindow->resorte = true;
 	}
 	else
 	{

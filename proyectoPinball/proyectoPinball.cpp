@@ -1,9 +1,9 @@
 /*
 Semestre 2024-1
-Animaci�n:
-Sesi�n 1:
-Simple o b�sica:Por banderas y condicionales (m�s de 1 transformaci�n geom�trica se ve modificada
-Sesi�n 2
+Animaci n:
+Sesi n 1:
+Simple o b sica:Por banderas y condicionales (m s de 1 transformaci n geom trica se ve modificada
+Sesi n 2
 Compleja: Por medio de funciones y algoritmos.
 Adicional.- Textura Animada
 */
@@ -34,7 +34,7 @@ Adicional.- Textura Animada
 #include"Model.h"
 #include "Skybox.h"
 
-//para iluminaci�n
+//para iluminaci n
 #include "CommonValues.h"
 #include "DirectionalLight.h"
 #include "PointLight.h"
@@ -42,7 +42,7 @@ Adicional.- Textura Animada
 #include "Material.h"
 const float toRadians = 3.14159265f / 180.0f;
 
-//+++++++++++++++++++++++++++++++	variables para animaci�n	+++++++++++++++++++++++++++++++
+//+++++++++++++++++++++++++++++++	variables para animaci n	+++++++++++++++++++++++++++++++
 //variables para keyframes
 float reproAni, habiAni, guardoFrame, reiniFrame, ciclo, ciclo2, contador = 0;	
 GLfloat giroC;
@@ -63,7 +63,13 @@ float rot2;
 float estado;
 float estado2;
 bool mov = false;
-	
+
+float movCanicaZ;
+float movCanicaX;
+float movOffCanica;
+float rotCanica;
+float rotCanicaOffset;
+bool avanzaCanica;
 
 //---------------------------------------------------------------------------------------------
 
@@ -132,10 +138,10 @@ static const char* fShader = "shaders/shader_light.frag";
 
 //+++++++++++++++++++++++++ Funciones para animacion +++++++++++++++++++++++++++
 
-//funci�n para teclado de keyframes 
+//funci n para teclado de keyframes 
 void inputKeyframes(bool* keys);
 
-//c�lculo del promedio de las normales para sombreado de Phong
+//c lculo del promedio de las normales para sombreado de Phong
 void calcAverageNormals(unsigned int* indices, unsigned int indiceCount, GLfloat* vertices, unsigned int verticeCount, unsigned int vLength, unsigned int normalOffset)
 {
 	for (size_t i = 0; i < indiceCount; i += 3)
@@ -337,7 +343,7 @@ void animate(void){
 				playIndex = 0;
 				play = false;
 			}
-			else //Interpolaci�n del pr�ximo cuadro
+			else //Interpolaci n del pr ximo cuadro
 			{
 				i_curr_steps = 0; //Resetea contador
 				interpolation();
@@ -414,7 +420,7 @@ int main()
 	Material_opaco = Material(0.3f, 4);
 
 
-	//luz direccional, s�lo 1 y siempre debe de existir
+	//luz direccional, s lo 1 y siempre debe de existir
 	mainLight = DirectionalLight(1.0f, 1.0f, 1.0f,
 		1.0f, 1.0f,
 		0.0f, 0.0f, -1.0f);
@@ -477,8 +483,14 @@ int main()
 	float destinoX = -20.0f;
 	float destinoY = 200.0f;
 	float destinoZ = 158.0f;
+	movCanicaZ = 85.0f;
+	movCanicaX = 8.0f;
+	movOffCanica = 0.3f; //velocidad
+	rotCanica = 0.0f;
+	rotCanicaOffset = 5.0f;
+	avanzaCanica = true;
 
-	//---------PARA TENER KEYFRAMES GUARDADOS NO VOLATILES QUE SIEMPRE SE UTILIZARAN SE DECLARAN AQU�
+	//---------PARA TENER KEYFRAMES GUARDADOS NO VOLATILES QUE SIEMPRE SE UTILIZARAN SE DECLARAN AQU 
 	KeyFrame[0].mov_z = -5.0f;	//1 - Movimiento por el canal principal
 	KeyFrame[1].mov_z = -20.0f;	//2
 	KeyFrame[2].mov_z = -40.0f;	//3
@@ -513,7 +525,7 @@ int main()
 	KeyFrame[18].mov_z = -16.0f;
 	KeyFrame[19].mov_x = -40.0f;//20 - Movimiento por el canal de regreso
 	KeyFrame[19].mov_z = -5.0f;
-	KeyFrame[20].mov_x = 0.0f;	//21 - Posici�n inicial 
+	KeyFrame[20].mov_x = 0.0f;	//21 - Posici n inicial 
 	KeyFrame[20].mov_z = 0.0f;
 	rot1 = 0.0f;
 	rot2 = 0.0f;
@@ -536,13 +548,13 @@ int main()
 	float destinoX_vista = -90.0f;
 	float destinoY_vista = -27.5f;
 
-	float posicionX; // Puedes cambiar este valor a cualquier n�mero
-	float posicionY; // Puedes cambiar este valor a cualquier n�mero
-	float posicionZ;  // Puedes cambiar este valor a cualquier n�mero
+	float posicionX; // Puedes cambiar este valor a cualquier n mero
+	float posicionY; // Puedes cambiar este valor a cualquier n mero
+	float posicionZ;  // Puedes cambiar este valor a cualquier n mero
 	
-	float posicionX_vista; // Puedes cambiar este valor a cualquier n�mero
-	float posicionY_vista; // Puedes cambiar este valor a cualquier n�mero
-	float posicionZ_vista;  // Puedes cambiar este valor a cualquier n�mero
+	float posicionX_vista; // Puedes cambiar este valor a cualquier n mero
+	float posicionY_vista; // Puedes cambiar este valor a cualquier n mero
+	float posicionZ_vista;  // Puedes cambiar este valor a cualquier n mero
 
 	float incremento = 0.01f;
 	float incremento_vista = 0.01f;
@@ -612,7 +624,7 @@ int main()
 		uniformColor = shaderList[0].getColorLocation();
 		uniformTextureOffset = shaderList[0].getOffsetLocation();
 
-		//informaci�n en el shader de intensidad especular y brillo
+		//informaci n en el shader de intensidad especular y brillo
 		uniformSpecularIntensity = shaderList[0].GetSpecularIntensityLocation();
 		uniformShininess = shaderList[0].GetShininessLocation();
 
@@ -620,14 +632,14 @@ int main()
 		glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(camera.calculateViewMatrix()));
 		glUniform3f(uniformEyePosition, camera.getCameraPosition().x, camera.getCameraPosition().y, camera.getCameraPosition().z);
 
-		// luz ligada a la c�mara de tipo flash
+		// luz ligada a la c mara de tipo flash
 		glm::vec3 lowerLight = camera.getCameraPosition();
 		lowerLight.y -= 0.3f;
 		spotLights[0].SetFlash(lowerLight, camera.getCameraDirection());
 		spotLights2[0].SetFlash(lowerLight, camera.getCameraDirection());
 
 
-		//informaci�n al shader de fuentes de iluminaci�n
+		//informaci n al shader de fuentes de iluminaci n
 		shaderList[0].SetDirectionalLight(&mainLight);
 
 
@@ -668,7 +680,7 @@ int main()
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Pinball.RenderModel();
 		/*Flipper 01*/
-		//Animaci�n
+		//Animaci n
 		if (mainWindow.getRotacionFlipper1()) {
 			rotacionFlipper1 += (rotacionFlipper1 < 90.0f) ? velocidadRotacionFlipper * deltaTime : 0.0f;
 		}
@@ -698,7 +710,7 @@ int main()
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Palanca.RenderModel();
 		/*Flipper 02*/
-		//Animaci�n
+		//Animaci n
 		if (mainWindow.getRotacionFlipper2()) {
 			rotacionFlipper2 += (rotacionFlipper2 < 90.0f) ? velocidadRotacionFlipper * deltaTime : 0.0f;
 		}
@@ -717,7 +729,7 @@ int main()
 		
 
 		/*Flipper 03*/
-		//Animaci�n
+		//Animaci n
 		if (mainWindow.getRotacionFlipper3()) {
 			rotacionFlipper3 += (rotacionFlipper3 < 90.0f) ? velocidadRotacionFlipper * deltaTime : 0.0f;
 		}
@@ -877,9 +889,9 @@ int main()
 		caliz.RenderModel();
 		//Vista Isometrica
 		/*
-		�Que es una vista isometrica?
-		La proyecci�n isom�trica es una forma de representaci�n visual de un objeto tridimensional en un plano bidimensional. 
-		En esta, los tres ejes ortogonales principales forman �ngulos de 120 grados, y las dimensiones paralelas a esos 
+		 Que es una vista isometrica?
+		La proyecci n isom trica es una forma de representaci n visual de un objeto tridimensional en un plano bidimensional. 
+		En esta, los tres ejes ortogonales principales forman  ngulos de 120 grados, y las dimensiones paralelas a esos 
 		ejes se miden en una misma escala.
 		*/
 		if (segundoSkybox)
@@ -967,20 +979,20 @@ int main()
 		}
 		
 		if(mainWindow.getEncenderIsometrica()){
-			//Movemos a nuestra POV hasta la posici�n destino (Manipulamos el manejo del tecladdo)
+			//Movemos a nuestra POV hasta la posici n destino (Manipulamos el manejo del tecladdo)
 			//Asignamos en variables para sustituir por las de mi formula
-			posicionX = camera.getPosicionX(); // Puedes cambiar este valor a cualquier n�mero
-			posicionY = camera.getPosicionY(); // Puedes cambiar este valor a cualquier n�mero
-			posicionZ = camera.getPosicionZ(); // Puedes cambiar este valor a cualquier n�mero
+			posicionX = camera.getPosicionX(); // Puedes cambiar este valor a cualquier n mero
+			posicionY = camera.getPosicionY(); // Puedes cambiar este valor a cualquier n mero
+			posicionZ = camera.getPosicionZ(); // Puedes cambiar este valor a cualquier n mero
 			/*Lo que se hace basicamente en las variables auxiliar, es obtener el incremento( o decremento, segun el caso)
 			para alcanzar los valores destinos que fueron planteados*/
 			auxiliar = (posicionX > destinoX) ? posicionX - incremento : posicionX + incremento;
-			//Asignamos la nueva posici�n de X, obtenida por nuestro auxiliar
+			//Asignamos la nueva posici n de X, obtenida por nuestro auxiliar
 			camera.setPosicionX(auxiliar);
 			auxiliar = (posicionY > destinoY) ? posicionY - incremento : posicionY + incremento;
-			//Asignamos la nueva posici�n de Y, obtenida por nuestro auxiliar
+			//Asignamos la nueva posici n de Y, obtenida por nuestro auxiliar
 			camera.setPosicionY(auxiliar);
-			//Asignamos la nueva posici�n de Z, obtenida por nuestro auxiliar
+			//Asignamos la nueva posici n de Z, obtenida por nuestro auxiliar
 			auxiliar = (posicionZ > destinoZ) ? posicionZ - incremento : posicionZ + incremento;
 			camera.setPosicionZ(auxiliar);
 
@@ -1006,20 +1018,20 @@ int main()
 
 		if (mainWindow.getencenderPOV()) {
 			if (retardo3 <= 5.0f) {
-				//Movemos a nuestra POV hasta la posici�n destino (Manipulamos el manejo del tecladdo)
+				//Movemos a nuestra POV hasta la posici n destino (Manipulamos el manejo del tecladdo)
 			//Asignamos en variables para sustituir por las de mi formula
-				posicionX = camera.getPosicionX(); // Puedes cambiar este valor a cualquier n�mero
-				posicionY = camera.getPosicionY(); // Puedes cambiar este valor a cualquier n�mero
-				posicionZ = camera.getPosicionZ(); // Puedes cambiar este valor a cualquier n�mero
+				posicionX = camera.getPosicionX(); // Puedes cambiar este valor a cualquier n mero
+				posicionY = camera.getPosicionY(); // Puedes cambiar este valor a cualquier n mero
+				posicionZ = camera.getPosicionZ(); // Puedes cambiar este valor a cualquier n mero
 				/*Lo que se hace basicamente en las variables auxiliar, es obtener el incremento( o decremento, segun el caso)
 				para alcanzar los valores destinos que fueron planteados*/
 				auxiliar = (posicionX > mainWindow.getmuevex() - 10) ? posicionX - incremento : posicionX + incremento;
-				//Asignamos la nueva posici�n de X, obtenida por nuestro auxiliar
+				//Asignamos la nueva posici n de X, obtenida por nuestro auxiliar
 				camera.setPosicionX(auxiliar);
 				auxiliar = (posicionY > 10.0f) ? posicionY - incremento : posicionY + incremento;
-				//Asignamos la nueva posici�n de Y, obtenida por nuestro auxiliar
+				//Asignamos la nueva posici n de Y, obtenida por nuestro auxiliar
 				camera.setPosicionY(auxiliar);
-				//Asignamos la nueva posici�n de Z, obtenida por nuestro auxiliar
+				//Asignamos la nueva posici n de Z, obtenida por nuestro auxiliar
 				auxiliar = (posicionZ > mainWindow.getmuevez() - 10) ? posicionZ - incremento : posicionZ + incremento;
 				camera.setPosicionZ(auxiliar);
 
@@ -1045,8 +1057,8 @@ int main()
 			}
 			
 		}
-		//Animaci�n de Beppi
-		// Incrementa los �ngulos de Beppi
+		//Animaci n de Beppi
+		// Incrementa los  ngulos de Beppi
 		angTorsoBeppi	+= incrementoAngTorsoBeppi;
 		angBrazoBeppi	+= incrementoAngBrazoBeppi;
 		angManosBeppi	+= incrementoAngManosBeppi;
@@ -1228,7 +1240,7 @@ int main()
 			float centerZ = -2.0f;   // Centro z de la elipse
 			for (float angle = 0.0f; angle <= 2.0f * glm::pi<float>(); angle += glm::pi<float>() / 3.5f) {
 				//Calcula el punto en donde estara cada objeto con una distancia total de 3.5
-				model = glm::mat4(1.0f);  // Reinicializa la matriz model en cada iteraci�n
+				model = glm::mat4(1.0f);  // Reinicializa la matriz model en cada iteraci n
 				float scaleX = 12.0f;   // Escala x
 				float scaleZ = 22.0f;    // Escala z
 				float x = centerX + scaleX * cos(angle);
@@ -1240,9 +1252,9 @@ int main()
 			}
 			for (float angle = 0.0f; angle <= 2.0f * glm::pi<float>(); angle += glm::pi<float>() / 8.0f) {
 				//Calcula el punto en donde estara cada objeto con una distancia total de 8.0
-				model = glm::mat4(1.0f);  // Reinicializa la matriz model en cada iteraci�n
-				float scaleX = 20.0f;   // Aumenta este valor para hacer el centro m�s ancho
-				float scaleZ = 35.0f;   // Aumenta este valor para hacer el centro m�s alto
+				model = glm::mat4(1.0f);  // Reinicializa la matriz model en cada iteraci n
+				float scaleX = 20.0f;   // Aumenta este valor para hacer el centro m s ancho
+				float scaleZ = 35.0f;   // Aumenta este valor para hacer el centro m s alto
 				float x = centerX + scaleX * cos(angle);
 				float y = centerY;
 				float z = centerZ + scaleZ * sin(angle);
@@ -1260,14 +1272,39 @@ int main()
 			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 			resorte.RenderModel();
 			
-			
+
 			if (mainWindow.getAnimarResorte()) {
 				comprimir -= (comprimir > 0.3f) ? velocidadComprimir * deltaTime : 0.0f;
 			}
 			else {
-				
 				comprimir += (comprimir < 1.0f) ? velocidadComprimir * deltaTime : 0.0f;
 			}
+
+			//Avanza canica 1
+			if (mainWindow.getresorte() && avanzaCanica) {
+				if (movCanicaZ > -12.0f)
+				{
+					movCanicaZ -= movOffCanica * deltaTime;
+					rotCanica += rotCanicaOffset * deltaTime;
+				}
+				else {
+					if (movCanicaX > -40.0f)
+					{
+						movCanicaX -= movOffCanica * deltaTime;
+						rotCanica += rotCanicaOffset * deltaTime;
+					}
+					else {
+						avanzaCanica = false;
+					}
+				}
+			}
+
+			//Canica 1
+			model = glm::mat4(1.0);
+			model = glm::translate(model, glm::vec3(movCanicaX, 108.0f, movCanicaZ));
+			model = glm::rotate(model, -90 * toRadians, glm::vec3(1.0f, 1.0f, 1.0f));
+			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+			canica2.RenderModel();
 			//-----------------------------------------------------------------------------
 
 			glDisable(GL_BLEND);
@@ -1291,7 +1328,7 @@ void inputKeyframes(bool* keys) {
 				playIndex = 0;
 				i_curr_steps = 0;
 				reproAni++;
-				printf("\n presiona 0 para habilitar reproducir de nuevo la animaci�n'\n");
+				printf("\n presiona 0 para habilitar reproducir de nuevo la animaci n'\n");
 				habiAni = 0;
 				//float animacionResorte = 0.0f, incremento_animacionResorte = 0.0f;
 				//incrementoAngOjosBeppi = (angOjosBeppi >= 45.0f || angOjosBeppi <= -45.0f) ? -incrementoAngOjosBeppi : incrementoAngOjosBeppi;
@@ -1306,7 +1343,7 @@ void inputKeyframes(bool* keys) {
 	}
 	if (keys[GLFW_KEY_N]) {
 		if (habiAni < 1 && reproAni>0) {
-			printf("Ya puedes reproducir de nuevo la animaci�n con la tecla de barra espaciadora'\n");
+			printf("Ya puedes reproducir de nuevo la animaci n con la tecla de barra espaciadora'\n");
 			reproAni = 0;
 		}
 	}

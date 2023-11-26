@@ -39,6 +39,7 @@ public:
 	void swapBuffers() { return glfwSwapBuffers(mainWindow); }
 
 	bool getAnimarResorte() { return animarResorte; }
+	bool getresorte() { return resorte; }
 	~Window();
 private: 
 	GLFWwindow *mainWindow;
@@ -69,6 +70,7 @@ private:
 	bool encenderIsometrica = false;
 	bool encenderPOV = false;
 	bool animarResorte = false;
+	bool resorte = false;
 	static void ManejaTeclado(GLFWwindow* window, int key, int code, int action, int mode);
 	static void ManejaMouse(GLFWwindow* window, double xPos, double yPos);
 	static void ManejaClick(GLFWwindow* window, int click, int action, int mode);
