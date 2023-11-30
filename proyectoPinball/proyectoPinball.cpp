@@ -385,7 +385,7 @@ int main()
 
 	plainTexture = Texture("Textures/plain.png");
 	plainTexture.LoadTextureA();
-	pisoTexture = Texture("Textures/piso.tga");
+	pisoTexture = Texture("Textures/pisoarcade.png");
 	pisoTexture.LoadTextureA();	
 	potenciadorTexture = Texture("Textures/potenciador.png");
 	potenciadorTexture.LoadTextureA();
@@ -616,11 +616,14 @@ int main()
 	ISoundEngine* ambiental = createIrrKlangDevice();
 	ISoundEngine* palanca = createIrrKlangDevice();
 	ISoundEngine* Sflipper = createIrrKlangDevice();
+	ISoundEngine* SLinterna = createIrrKlangDevice();
+
 	if (!ambiental and !palanca) {
 		return 0;
 	}
 	ambiental->play2D("audio/ambiental.mp3", true);
 	bool encenderSonidoResorte = true, encenderSonidoFlipper = true, encenderSonidoFlipper2 = true, encenderSonidoFlipper3 = true;
+	bool encenderSonidoLinterna = true, encenderSonidoLinterna2 = true, encenderSonidoLinterna3 = true;
 	//---------------------------------------------------------------------------------------------
 	////Loop mientras no se cierra la ventana
 	while (!mainWindow.getShouldClose())
@@ -1217,29 +1220,45 @@ int main()
 		if (mainWindow.getLuz2() == true)
 		{
 			//Mandamos al shader el primer arreglo completo, la luz del los flippers esta encendida		
-
+			if (encenderSonidoLinterna) {
+				SLinterna->setSoundVolume(2.0f);
+				SLinterna->play2D("audio/linterna.mp3", false);
+				encenderSonidoLinterna = false;
+			}
 			//los siguientes if nos ayudan a apagar y prender la luz del tablero cuando la luz de los flippers esta prendida
 			if (mainWindow.getLuz1() == true)
 			{
+				if (encenderSonidoLinterna2) {
+					SLinterna->setSoundVolume(2.0f);
+					SLinterna->play2D("audio/linterna.mp3", false);
+					encenderSonidoLinterna2 = false;
+				}
 				shaderList[0].SetSpotLights(spotLights2, spotLightCount2);			//Prendemos la luz del tablero
 			}
 			else
 			{
 				shaderList[0].SetSpotLights(spotLights2, spotLightCount2 - 1);		//Restamos el contador y asi no mandamos la luz del tablero
+				encenderSonidoLinterna2 = true;
 			}
 		}
 		else
 		{
 			// Si el valor de getluz2(), que es la luz de los flippers es falso, apagamos la luz
 			shaderList[0].SetSpotLights(spotLights, spotLightCount - 1);
-
+			encenderSonidoLinterna = true;
 			//Si queremos prender la luz del tablero cuando la luz de los flippers esta apagada, no hacemos nada
 			//porque el primer arreglo spotlights, solo apago la luz de los flippers, las demas si se mandaron al shader y siguen encedidadas
 			if (mainWindow.getLuz1() == true)
 			{
+				if (encenderSonidoLinterna2) {
+					SLinterna->setSoundVolume(2.0f);
+					SLinterna->play2D("audio/linterna.mp3", false);
+					encenderSonidoLinterna2 = false;
+				}
 			}
 			else
 			{
+				encenderSonidoLinterna2 = true;
 				//Restamos el contador y asi ya no mandamos al shader la ultimas 2 luces, apagamos ambas luces
 				shaderList[0].SetSpotLights(spotLights, spotLightCount - 2);
 			}
@@ -1249,11 +1268,18 @@ int main()
 
 		if (mainWindow.getLuz3() == true)
 		{
+			if (encenderSonidoLinterna3) {
+				SLinterna->setSoundVolume(2.0f);
+				SLinterna->play2D("audio/linterna.mp3", false);
+				encenderSonidoLinterna3 = false;
+			}
 			shaderList[0].SetPointLights(pointLights, pointLightCount);			//Mandamos al shader toda la lista del pointlight
 		}
 		else
 		{
+			
 			shaderList[0].SetPointLights(pointLights, pointLightCount - 1);		//Restamos el contador y asi ya no mandamos al shader la ultima luz
+			encenderSonidoLinterna3 = true;
 		}
 		//Bola pacman izq
 		model = glm::mat4(1.0);
@@ -1321,12 +1347,12 @@ int main()
 		}
 		//-----------------------------------------------------------------------------
 		//Potenciador animado
-		toffsetflechau += 0.01;
+		toffsetflechau += 0.0000000000001f * deltaTime;
 		toffsetflechav += 0.0;
 
 			//Instancia del resorte
 			model = glm::mat4(1.0);
-			model = glm::translate(model, glm::vec3(8.0f, 107.0f, 90.0f));
+			model = glm::translate(model, glm::vec3(8.0f, 107.0f, 89.0f));
 			modelaux = model;
 			model = glm::scale(model, glm::vec3(1.0f, 1.0f, comprimir));
 			model = glm::scale(model, glm::vec3(2.0f, 1.0f, 2.0f));
@@ -1429,7 +1455,7 @@ int main()
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-		toffsetminionu += 0.1;
+		toffsetminionu += 0.1 * deltaTime;
 		toffsetminionv = 0.0;
 		toffset = glm::vec2(toffsetminionu, toffsetminionv);
 		model = glm::mat4(1.0);
@@ -1457,7 +1483,7 @@ int main()
 
 
 		//Textura de fantasmas pacman
-		toffsetflechau += 0.01;
+		toffsetflechau += 0.01f * deltaTime;;
 		toffsetflechav += 0.0;
 
 		if (toffsetflechau > 1.0)
