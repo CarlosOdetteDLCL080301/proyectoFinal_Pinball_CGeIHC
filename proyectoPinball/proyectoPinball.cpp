@@ -68,8 +68,12 @@ float estado;
 float estado2;
 float toffsetflechau;
 float toffsetflechav;
+float toffsetflechauR;
+float toffsetflechavR;
 float toffsetminionu;
 float toffsetminionv;
+float toffsetcristalu;
+float toffsetcristalv;
 bool mov = false;
 
 float movCanicaZ;
@@ -79,6 +83,8 @@ float rotCanica;
 float rotCanicaOffset;
 bool avanzaCanica;
 int timeNew;
+float avanzaF;
+int estadoF;
 	
 
 //---------------------------------------------------------------------------------------------
@@ -96,6 +102,7 @@ Texture pisoTexture;
 Texture potenciadorTexture;
 Texture minion;
 Texture fantasmastexture;
+Texture Cristaltexture;
 
 //---------------------------------------------------------------------------------------------
 
@@ -120,6 +127,30 @@ Model PacmanBrazoD;
 Model PacmanBrazoI;
 Model PacmanPiernaD;
 Model PacmanPiernaI;
+
+Model FantasmitaC;
+Model FantasmitaO;
+Model FantasmitaBD;
+Model FantasmitaBI;
+Model FantasmitaGD;
+Model FantasmitaGI;
+
+Model FantasmitaC2;
+Model FantasmitaO2;
+Model FantasmitaBD2;
+Model FantasmitaBI2;
+Model FantasmitaGD2;
+Model FantasmitaGI2;
+
+Model FantasmitaC3;
+Model FantasmitaO3;
+Model FantasmitaBD3;
+Model FantasmitaBI3;
+Model FantasmitaGD3;
+Model FantasmitaGI3;
+
+Model cristal;
+
 
 
 Model resorte;
@@ -247,12 +278,12 @@ void CreateObjects()
 
 	};
 
-	unsigned int scoreIndices[] = {
+	unsigned int cristalIndices[] = {
 	   0, 1, 2,
 	   0, 2, 3,
 	};
 
-	GLfloat scoreVertices[] = {
+	GLfloat cristalVertices[] = {
 		-0.5f, 0.0f, 0.5f,		0.0f, 0.0f,		0.0f, -1.0f, 0.0f,
 		0.5f, 0.0f, 0.5f,		1.0f, 0.0f,		0.0f, -1.0f, 0.0f,
 		0.5f, 0.0f, -0.5f,		1.0f, 1.0f,		0.0f, -1.0f, 0.0f,
@@ -295,7 +326,7 @@ void CreateObjects()
 	meshList.push_back(obj5);
 
 	Mesh* obj6 = new Mesh();
-	obj6->CreateMesh(scoreVertices, scoreIndices, 32, 6);
+	obj6->CreateMesh(cristalVertices, cristalIndices, 32, 6);
 	meshList.push_back(obj6);
 
 	Mesh* obj7 = new Mesh();
@@ -393,6 +424,12 @@ int main()
 	minion.LoadTextureA();
 	fantasmastexture = Texture("Textures/fantasma.png");
 	fantasmastexture.LoadTextureA();
+	Cristaltexture = Texture("Textures/cristal.png");
+	Cristaltexture.LoadTextureA();
+
+	cristal = Model();
+	cristal.LoadModel("Models/cristal.obj");
+
 	PacmanC = Model();
 	PacmanC.LoadModel("Models/pacmanCuerpo.obj");
 	PacmanBrazoD = Model();
@@ -403,6 +440,45 @@ int main()
 	PacmanPiernaD.LoadModel("Models/pacmanPiernaD.obj");
 	PacmanPiernaI = Model();
 	PacmanPiernaI.LoadModel("Models/pacmanPiernaI.obj");
+
+	FantasmitaC = Model();
+	FantasmitaC.LoadModel("Models/fantasmitaC.obj");
+	FantasmitaO = Model();
+	FantasmitaO.LoadModel("Models/fantasmitaO.obj");
+	FantasmitaBD = Model();
+	FantasmitaBD.LoadModel("Models/fantasmitaBD.obj");
+	FantasmitaBI = Model();
+	FantasmitaBI.LoadModel("Models/fantasmitaBI.obj");
+	FantasmitaGD = Model();
+	FantasmitaGD.LoadModel("Models/fantasmitaGD.obj");
+	FantasmitaGI = Model();
+	FantasmitaGI.LoadModel("Models/fantasmitaGI.obj");
+
+	FantasmitaC2 = Model();
+	FantasmitaC2.LoadModel("Models/fantasmitaC.obj");
+	FantasmitaO2 = Model();
+	FantasmitaO2.LoadModel("Models/fantasmitaO.obj");
+	FantasmitaBD2 = Model();
+	FantasmitaBD2.LoadModel("Models/fantasmitaBD.obj");
+	FantasmitaBI2 = Model();
+	FantasmitaBI2.LoadModel("Models/fantasmitaBI.obj");
+	FantasmitaGD2 = Model();
+	FantasmitaGD2.LoadModel("Models/fantasmitaGD.obj");
+	FantasmitaGI2 = Model();
+	FantasmitaGI2.LoadModel("Models/fantasmitaGI.obj");
+
+	FantasmitaC3 = Model();
+	FantasmitaC3.LoadModel("Models/fantasmitaC.obj");
+	FantasmitaO3 = Model();
+	FantasmitaO3.LoadModel("Models/fantasmitaO.obj");
+	FantasmitaBD3 = Model();
+	FantasmitaBD3.LoadModel("Models/fantasmitaBD.obj");
+	FantasmitaBI3 = Model();
+	FantasmitaBI3.LoadModel("Models/fantasmitaBI.obj");
+	FantasmitaGD3 = Model();
+	FantasmitaGD3.LoadModel("Models/fantasmitaGD.obj");
+	FantasmitaGI3 = Model();
+	FantasmitaGI3.LoadModel("Models/fantasmitaGI.obj");
 
 	bananas = Model();
 	bananas.LoadModel("Models/bananaTex.obj");
@@ -610,6 +686,17 @@ int main()
 	float animacionResorte = 0.0f, incremento_animacionResorte = 0.0f, escalarResorte =0.0f;
 	bool activarse = true, termino;
 
+
+	//Inicializar variables de texturas animadas
+	toffsetflechauR = 1.0;
+	toffsetcristalu = 0.0;
+	toffsetcristalv = 0.0;
+
+	//inicializacion de variables de fantasma
+	avanzaF = 0.0f;
+	estado = 0;
+
+	//Resote
 	resorte = Model();
 	resorte.LoadModel("Models/resorte.obj");
 	float comprimirResorte = 0.0f, comprimir = 1.0f, velocidadComprimir = 0.03;
@@ -681,6 +768,9 @@ int main()
 		glm::mat4 modelaux3(1.0);
 		glm::mat4 modelaux4(1.0);
 		glm::mat4 modelauxtablero(1.0);
+		glm::mat4 modelauxF(1.0);
+		glm::mat4 modelauxF_(1.0);
+
 		glm::vec3 color = glm::vec3(1.0f, 1.0f, 1.0f);
 		glm::vec2 toffset = glm::vec2(0.0f, 0.0f);
 
@@ -806,6 +896,7 @@ int main()
 		model = glm::translate(model, glm::vec3(posX + mov_x, posY, posZ + mov_z));
 		model = glm::rotate(model, giroC * toRadians, glm::vec3(1.0f, 1.0f, 1.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		canica2.RenderModel();
 
 		//Obstaculo centro - "original"
@@ -844,6 +935,7 @@ int main()
 		}
 		modelauxPacman = model;
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		PacmanC.RenderModel();
 
 		//Brazo Derecho
@@ -913,6 +1005,152 @@ int main()
 			}
 		}
 
+
+		////Fantasmita
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-10.0f + avanzaF, 110.0f, 10.0f));
+		model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
+		modelauxF = model;
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		FantasmitaC.RenderModel();
+
+		//Fantasmita Brazo Derecho
+		model = modelauxF;
+		model = glm::translate(model, glm::vec3(-3.045f, 0.0f, 0.5f));
+		model = glm::rotate(model, angTorsoBeppi * 4 *  toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		FantasmitaBD.RenderModel();
+
+		//Fantasmita Brazo Izquierdo
+		model = modelauxF;
+		model = glm::translate(model, glm::vec3(3.162f, 0.0f, 0.5f));
+		model = glm::rotate(model, -angTorsoBeppi * 4 * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
+		modelauxF_ = model;
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		FantasmitaBI.RenderModel();
+
+		//Fantasmita Guante Derecho
+		model = modelauxF_;
+		model = glm::translate(model, glm::vec3(-4.314f, -4.5f, 3.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		//FantasmitaGD.RenderModel();
+
+		//Fantasmita Guante Izquierdo
+		model = modelauxF;
+		model = glm::translate(model, glm::vec3(4.751f, -4.5f, 3.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		//FantasmitaGI.RenderModel();
+
+		//Fantasmita Ojos
+		model = modelauxF;
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		FantasmitaO.RenderModel();
+		////Fantasmita
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(- 25.0f - avanzaF, 110.0f, 10.0f));
+		model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
+		modelauxF = model;
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		FantasmitaC2.RenderModel();
+
+		//Fantasmita Brazo Derecho
+		model = modelauxF;
+		model = glm::translate(model, glm::vec3(-3.045f, 0.0f, 0.5f));
+		model = glm::rotate(model, angTorsoBeppi * 4 * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		FantasmitaBD2.RenderModel();
+
+		//Fantasmita Brazo Izquierdo
+		model = modelauxF;
+		model = glm::translate(model, glm::vec3(3.162f, 0.0f, 0.5f));
+		model = glm::rotate(model, -angTorsoBeppi * 4 * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
+		modelauxF_ = model;
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		FantasmitaBI2.RenderModel();
+
+		//Fantasmita Guante Derecho
+		model = modelauxF_;
+		model = glm::translate(model, glm::vec3(-4.314f, -4.5f, 3.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		//FantasmitaGD.RenderModel();
+
+		//Fantasmita Guante Izquierdo
+		model = modelauxF;
+		model = glm::translate(model, glm::vec3(4.751f, -4.5f, 3.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		//FantasmitaGI.RenderModel();
+
+		//Fantasmita Ojos
+		model = modelauxF;
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		FantasmitaO2.RenderModel();
+		////Fantasmita
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-30.0f + avanzaF, 107.0f, 80.0f));///QUI
+		model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
+		modelauxF = model;
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		FantasmitaC3.RenderModel();
+
+		//Fantasmita Brazo Derecho
+		model = modelauxF;
+		model = glm::translate(model, glm::vec3(-3.045f, 0.0f, 0.5f));
+		model = glm::rotate(model, angTorsoBeppi * 4 * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		FantasmitaBD3.RenderModel();
+
+		//Fantasmita Brazo Izquierdo
+		model = modelauxF;
+		model = glm::translate(model, glm::vec3(3.162f, 0.0f, 0.5f));
+		model = glm::rotate(model, -angTorsoBeppi * 4 * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
+		modelauxF_ = model;
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		FantasmitaBI3.RenderModel();
+
+		//Fantasmita Guante Derecho
+		model = modelauxF_;
+		model = glm::translate(model, glm::vec3(-4.314f, -4.5f, 3.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		//FantasmitaGD.RenderModel();
+
+		//Fantasmita Guante Izquierdo
+		model = modelauxF;
+		model = glm::translate(model, glm::vec3(4.751f, -4.5f, 3.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		//FantasmitaGI.RenderModel();
+
+		//Fantasmita Ojos
+		model = modelauxF;
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		FantasmitaO3.RenderModel();
+		
+		
+
+
+		if (avanzaF < 7.0 && estadoF == 0 && deltaTime <90)
+		{
+			std::cout << "1" << std::endl;
+			avanzaF += 0.05 * deltaTime;		//Avanza en linea recta
+		}
+		else
+		{
+			std::cout << "2" << std::endl;
+			estadoF = 1;						//Pasamos al movimiento en reversa
+		}
+		if (avanzaF >= 0.0 && estadoF == 1)
+		{
+			std::cout << "3" << std::endl;
+			avanzaF -= 0.05 * deltaTime;		//Avanza de regreso
+		}
+		else
+		{
+			std::cout << "4" << std::endl;
+			estadoF = 0;						//Volvemos al primer movimiento y con esto creamos un bucle
+		}
+
 		//Obstaculo Arriba centro
 		model = modelaux;
 		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -35.0f));
@@ -943,6 +1181,7 @@ int main()
 		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		caliz.RenderModel();
+
 		//Vista Isometrica
 		/*
 		 Que es una vista isometrica?
@@ -1346,9 +1585,6 @@ int main()
 			bananas.RenderModel();
 		}
 		//-----------------------------------------------------------------------------
-		//Potenciador animado
-		toffsetflechau += 0.0000000000001f * deltaTime;
-		toffsetflechav += 0.0;
 
 			//Instancia del resorte
 			model = glm::mat4(1.0);
@@ -1432,10 +1668,15 @@ int main()
 			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 			canica2.RenderModel();
 			//-----------------------------------------------------------------------------
-		if (toffsetflechau > 1.0)
-			toffsetflechau = 0.0;
+		
+		//Potenciador animado
+		toffsetflechauR -= 0.01;
+		toffsetflechavR += 0.0;
+		
+		if (toffsetflechauR < 0.0)
+			toffsetflechauR = 1.0;
 
-		toffset = glm::vec2(toffsetflechau, toffsetflechav);
+		toffset = glm::vec2(toffsetflechauR, toffsetflechavR);
 
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -1502,6 +1743,23 @@ int main()
 		fantasmastexture.UseTexture();
 		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		meshList[4]->RenderMesh();
+		glDisable(GL_BLEND);
+
+		//Cristal 
+
+		toffset = glm::vec2(toffsetcristalu, toffsetcristalv);
+		
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-10.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(3.0f, 3.0f, 3.0f));
+		glUniform2fv(uniformTextureOffset, 1, glm::value_ptr(toffset));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		
+		//Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		cristal.RenderModel();
 		glDisable(GL_BLEND);
 
 			glUseProgram(0);
