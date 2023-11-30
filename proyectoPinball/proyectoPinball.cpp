@@ -1323,6 +1323,7 @@ int main()
 						else
 						{
 							movCanicaZ = 85.0f;
+							avanzaCanica = true;
 						}
 					}
 				}
