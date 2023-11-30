@@ -45,6 +45,7 @@ const float toRadians = 3.14159265f / 180.0f;
 //+++++++++++++++++++++++++++++++	variables para animaci n	+++++++++++++++++++++++++++++++
 //variables para keyframes
 float reproAni, habiAni, guardoFrame, reiniFrame, ciclo, ciclo2, contador = 0;	
+
 GLfloat giroC;
 
 Model BeppiClown;
@@ -62,6 +63,10 @@ float rot1;
 float rot2;
 float estado;
 float estado2;
+float toffsetflechau;
+float toffsetflechav;
+float toffsetminionu;
+float toffsetminionv;
 bool mov = false;
 
 float movCanicaZ;
@@ -70,6 +75,8 @@ float movOffCanica;
 float rotCanica;
 float rotCanicaOffset;
 bool avanzaCanica;
+int timeNew;
+	
 
 //---------------------------------------------------------------------------------------------
 
@@ -81,8 +88,11 @@ Camera camera;
 
 Texture plainTexture;
 Texture pisoTexture;
-//+++++++++++++++++++++++++++++++	variables para texturas	+++++++++++++++++++++++++++++++
 
+//+++++++++++++++++++++++++++++++	variables para texturas	+++++++++++++++++++++++++++++++
+Texture potenciadorTexture;
+Texture minion;
+Texture fantasmastexture;
 
 //---------------------------------------------------------------------------------------------
 
@@ -247,16 +257,16 @@ void CreateObjects()
 
 	};
 
-	unsigned int numeroIndices[] = {
+	unsigned int minionIndices[] = {
 	   0, 1, 2,
 	   0, 2, 3,
 	};
 
-	GLfloat numeroVertices[] = {
-		-0.5f, 0.0f, 0.5f,		0.0f, 0.67f,		0.0f, -1.0f, 0.0f,
-		0.5f, 0.0f, 0.5f,		0.25f, 0.67f,		0.0f, -1.0f, 0.0f,
-		0.5f, 0.0f, -0.5f,		0.25f, 1.0f,		0.0f, -1.0f, 0.0f,
-		-0.5f, 0.0f, -0.5f,		0.0f, 1.0f,		0.0f, -1.0f, 0.0f,
+	GLfloat minionVertices[] = {
+		-0.5f, 0.0f, 0.5f,		0.0f, 1.0f,			0.0f, -1.0f, 0.0f,
+		0.5f, 0.0f, 0.5f,		0.1f, 1.0f,		0.0f, -1.0f, 0.0f,
+		0.5f, 0.0f, -0.5f,		0.1f, 0.9f,		0.0f, -1.0f, 0.0f,
+		-0.5f, 0.0f, -0.5f,		0.0f, 0.9f,			0.0f, -1.0f, 0.0f,
 
 	};
 
@@ -286,7 +296,7 @@ void CreateObjects()
 	meshList.push_back(obj6);
 
 	Mesh* obj7 = new Mesh();
-	obj7->CreateMesh(numeroVertices, numeroIndices, 32, 6);
+	obj7->CreateMesh(minionVertices, minionIndices, 32, 6);
 	meshList.push_back(obj7);
 
 }
@@ -373,7 +383,13 @@ int main()
 	plainTexture = Texture("Textures/plain.png");
 	plainTexture.LoadTextureA();
 	pisoTexture = Texture("Textures/piso.tga");
-	pisoTexture.LoadTextureA();
+	pisoTexture.LoadTextureA();	
+	potenciadorTexture = Texture("Textures/potenciador.png");
+	potenciadorTexture.LoadTextureA();
+	minion = Texture("Textures/minion.png");
+	minion.LoadTextureA();
+	fantasmastexture = Texture("Textures/fantasma.png");
+	fantasmastexture.LoadTextureA();
 	PacmanC = Model();
 	PacmanC.LoadModel("Models/pacmanCuerpo.obj");
 	PacmanBrazoD = Model();
@@ -650,6 +666,7 @@ int main()
 		glm::mat4 modelaux2(1.0);
 		glm::mat4 modelaux3(1.0);
 		glm::mat4 modelaux4(1.0);
+		glm::mat4 modelauxtablero(1.0);
 		glm::vec3 color = glm::vec3(1.0f, 1.0f, 1.0f);
 		glm::vec2 toffset = glm::vec2(0.0f, 0.0f);
 
@@ -668,15 +685,16 @@ int main()
 		//+++++++++++++++++++++++++++++++	PROYECTO	+++++++++++++++++++++++++++++++
 		//Tragamonedas
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-20.0f, 106.0f, -30.0));
+		model = glm::translate(model, glm::vec3(-20.0f, 104.5f, -30.0));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		traga.RenderModel();
-		
+
 		//Tablero de pinball
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(-10.0f, 14.0f, -9.7f));
-		model = glm::scale(model, glm::vec3(3.0f, 3.0f, 3.0f));
 		//model = glm::rotate(model, 4 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		modelauxtablero = model;
+		model = glm::scale(model, glm::vec3(3.0f, 3.0f, 3.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Pinball.RenderModel();
 		/*Flipper 01*/
@@ -687,7 +705,7 @@ int main()
 		else {
 			rotacionFlipper1 -= (rotacionFlipper1 > 0.0f) ? velocidadRotacionFlipper * deltaTime : 0.0f;
 		}
-		//Instancia del dado
+		//Instancia del flipper
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(-10.0f, 106.0f, 20.0f));
 		modelaux = model;
@@ -726,7 +744,7 @@ int main()
 		model = glm::rotate(model, -rotacionFlipper2 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		flipper1.RenderModel();
-		
+
 
 		/*Flipper 03*/
 		//Animaci n
@@ -753,8 +771,8 @@ int main()
 		canica2.RenderModel();
 
 		//Obstaculo centro - "original"
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-20.0f, 106.0f, 15.0));
+		model = modelauxtablero;
+		model = glm::translate(model, glm::vec3(-10.0f, 90.5f, 15.0));
 		modelaux = model;
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		tambor.RenderModel();
@@ -769,7 +787,7 @@ int main()
 		if (mainWindow.getpressU() == true)
 		{
 			model = glm::rotate(model, 1 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-			
+
 		}
 
 		if (mainWindow.getpressH() == true)
@@ -793,7 +811,7 @@ int main()
 		//Brazo Derecho
 		model = modelauxPacman;
 		model = glm::translate(model, glm::vec3(-1.5f, 0.5f, 0.0f));
-		model = glm::rotate (model, rot1 * toRadians,glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::rotate(model, rot1 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		PacmanBrazoD.RenderModel();
 
@@ -821,7 +839,7 @@ int main()
 		if (mainWindow.getpressU() == true || mainWindow.getpressH() == true || mainWindow.getpressJ() == true || mainWindow.getpressK() == true)
 		{
 			// Animacion de movimiento rotativo del brazo y pierna para simular caminata
-			if (rot1 < 45.0f && estado == 0)	
+			if (rot1 < 45.0f && estado == 0)
 			{
 				rot1 += 1.2 * deltaTime;		//Rota en positivo hasta 45 grados
 			}
@@ -913,7 +931,7 @@ int main()
 				0.0f, 0.0f, -1.0f);
 			tercerSkybox = true;
 		}
-		
+
 		if (tercerSkybox)
 		{
 			if (retardo >= 0.60f) {
@@ -953,7 +971,7 @@ int main()
 			mainLight = DirectionalLight(1.0f, 1.0f, 1.0f,
 				1.0f - retardo, 1.0f - retardo,
 				0.0f, 0.0f, -1.0f);
-			
+
 		}
 
 		if (primerSkybox)
@@ -1046,16 +1064,17 @@ int main()
 				//std::cout << "Eje X: " << posicionX_vista << "\tEje Y: " << posicionY_vista << "\n";
 				retardo3 += 0.001f;
 				//printf("%f\n", retardo3);
-			}else {
+			}
+			else {
 				//Nos da el POV	0.0f + mainWindow.getmuevex(), 106.0f, 0.0f + mainWindow.getmuevez()
 				camera.setPosicionX(8.0f - mainWindow.getmuevex());
-				camera.setPosicionZ(85.0f - mainWindow.getmuevez()+ 10.0f);
+				camera.setPosicionZ(85.0f - mainWindow.getmuevez() + 10.0f);
 				camera.setPosicionY(115.0f);
 				camera.setVistaY(-20.0f);
 				//retardo3 = 0.0f
 				//;, 110.0f, 
 			}
-			
+
 		}
 		//Animaci n de Beppi
 		// Incrementa los  ngulos de Beppi
@@ -1112,7 +1131,7 @@ int main()
 
 		//Instancia del brazo derecha de Beppi
 		model = modelaux2;
-		model = glm::translate(model, glm::vec3(15.899f, 43.462f,-3.537f));
+		model = glm::translate(model, glm::vec3(15.899f, 43.462f, -3.537f));
 		model = glm::rotate(model, -angBrazoBeppi * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		modelaux3 = model;
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
@@ -1156,6 +1175,9 @@ int main()
 		Ojo2Beppi.RenderModel();
 		//-----------------------------------------------------------------------------
 
+
+
+
 		//Funcion para pagar las spotlight (luz de tablero y luz de flippers) de forma independente
 		if (mainWindow.getLuz2() == true)
 		{
@@ -1198,70 +1220,74 @@ int main()
 		{
 			shaderList[0].SetPointLights(pointLights, pointLightCount - 1);		//Restamos el contador y asi ya no mandamos al shader la ultima luz
 		}
-			//Bola pacman izq
-			model = glm::mat4(1.0);
-			model = glm::translate(model, glm::vec3(-0.5f, 106.0f, 43.0));
-			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-			bola.RenderModel();
+		//Bola pacman izq
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-0.5f, 106.0f, 43.0));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		bola.RenderModel();
 
-			//Bola pacman derecha
-			model = glm::mat4(1.0);
-			model = glm::translate(model, glm::vec3(-40.0f, 106.0f, 43.0));
-			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-			bola.RenderModel();
+		//Bola pacman derecha
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-40.0f, 106.0f, 43.0));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		bola.RenderModel();
 
-			//Bananas como bolas de pacman
-			for (float i = -42.0f; i <= -4.0f; i += 8.0f) {
-				model = glm::mat4(1.0f); //inferior
-				model = glm::translate(model, glm::vec3(i, 106.0f, 70.0f));
-				glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-				bananas.RenderModel();
-			}
-			for (float i = 70.0f; i >= 43.0f; i -= 7.5f) {
-				model = glm::mat4(1.0f); //lado izq camara
-				model = glm::translate(model, glm::vec3(-42.0f, 106.0f, i));
-				glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-				bananas.RenderModel();
-			}
-			for (float i = 70.0f; i >= 26.0f; i -= 7.5f) {
-				model = glm::mat4(1.0f); //lado der camara
-				model = glm::translate(model, glm::vec3(-0.5f, 106.0f, i));
-				glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-				bananas.RenderModel();
-			}
-			for (float i = -33.0f; i <= -9.0f; i += 8.0f) {
-				model = glm::mat4(1.0f); //arriba flippers
-				model = glm::translate(model, glm::vec3(i, 106.0f, 43.0f));
-				glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-				bananas.RenderModel();
-			}
-			float centerX = -21.0f;  // Centro x de la elipse
-			float centerY = 106.0f;  // Centro y de la elipse
-			float centerZ = -2.0f;   // Centro z de la elipse
-			for (float angle = 0.0f; angle <= 2.0f * glm::pi<float>(); angle += glm::pi<float>() / 3.5f) {
-				//Calcula el punto en donde estara cada objeto con una distancia total de 3.5
-				model = glm::mat4(1.0f);  // Reinicializa la matriz model en cada iteraci n
-				float scaleX = 12.0f;   // Escala x
-				float scaleZ = 22.0f;    // Escala z
-				float x = centerX + scaleX * cos(angle);
-				float y = centerY;
-				float z = centerZ + scaleZ * sin(angle);
-				model = glm::translate(model, glm::vec3(x, y, z));
-				glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-				bananas.RenderModel();
-			}
-			for (float angle = 0.0f; angle <= 2.0f * glm::pi<float>(); angle += glm::pi<float>() / 8.0f) {
-				//Calcula el punto en donde estara cada objeto con una distancia total de 8.0
-				model = glm::mat4(1.0f);  // Reinicializa la matriz model en cada iteraci n
-				float scaleX = 20.0f;   // Aumenta este valor para hacer el centro m s ancho
-				float scaleZ = 35.0f;   // Aumenta este valor para hacer el centro m s alto
-				float x = centerX + scaleX * cos(angle);
-				float y = centerY;
-				float z = centerZ + scaleZ * sin(angle);
-				model = glm::translate(model, glm::vec3(x, y, z));
-				glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-				bananas.RenderModel();
-			}
+		//Bananas como bolas de pacman
+		for (float i = -42.0f; i <= -4.0f; i += 8.0f) {
+			model = glm::mat4(1.0f); //inferior
+			model = glm::translate(model, glm::vec3(i, 106.0f, 70.0f));
+			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+			bananas.RenderModel();
+		}
+		for (float i = 70.0f; i >= 43.0f; i -= 7.5f) {
+			model = glm::mat4(1.0f); //lado izq camara
+			model = glm::translate(model, glm::vec3(-42.0f, 106.0f, i));
+			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+			bananas.RenderModel();
+		}
+		for (float i = 70.0f; i >= 26.0f; i -= 7.5f) {
+			model = glm::mat4(1.0f); //lado der camara
+			model = glm::translate(model, glm::vec3(-0.5f, 106.0f, i));
+			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+			bananas.RenderModel();
+		}
+		for (float i = -33.0f; i <= -9.0f; i += 8.0f) {
+			model = glm::mat4(1.0f); //arriba flippers
+			model = glm::translate(model, glm::vec3(i, 106.0f, 43.0f));
+			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+			bananas.RenderModel();
+		}
+		float centerX = -21.0f;  // Centro x de la elipse
+		float centerY = 106.0f;  // Centro y de la elipse
+		float centerZ = -2.0f;   // Centro z de la elipse
+		for (float angle = 0.0f; angle <= 2.0f * glm::pi<float>(); angle += glm::pi<float>() / 3.5f) {
+			//Calcula el punto en donde estara cada objeto con una distancia total de 3.5
+			model = glm::mat4(1.0f);  // Reinicializa la matriz model en cada iteraci�n
+			float scaleX = 12.0f;   // Escala x
+			float scaleZ = 22.0f;    // Escala z
+			float x = centerX + scaleX * cos(angle);
+			float y = centerY;
+			float z = centerZ + scaleZ * sin(angle);
+			model = glm::translate(model, glm::vec3(x, y, z));
+			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+			bananas.RenderModel();
+		}
+		for (float angle = 0.0f; angle <= 2.0f * glm::pi<float>(); angle += glm::pi<float>() / 8.0f) {
+			//Calcula el punto en donde estara cada objeto con una distancia total de 8.0
+			model = glm::mat4(1.0f);  // Reinicializa la matriz model en cada iteraci�n
+			float scaleX = 20.0f;   // Aumenta este valor para hacer el centro m�s ancho
+			float scaleZ = 35.0f;   // Aumenta este valor para hacer el centro m�s alto
+			float x = centerX + scaleX * cos(angle);
+			float y = centerY;
+			float z = centerZ + scaleZ * sin(angle);
+			model = glm::translate(model, glm::vec3(x, y, z));
+			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+			bananas.RenderModel();
+		}
+		//-----------------------------------------------------------------------------
+		//Potenciador animado
+		toffsetflechau += 0.01;
+		toffsetflechav += 0.0;
 
 			//Instancia del resorte
 			model = glm::mat4(1.0);
@@ -1336,8 +1362,77 @@ int main()
 			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 			canica2.RenderModel();
 			//-----------------------------------------------------------------------------
+		if (toffsetflechau > 1.0)
+			toffsetflechau = 0.0;
 
-			glDisable(GL_BLEND);
+		toffset = glm::vec2(toffsetflechau, toffsetflechav);
+
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(8.0f, 104.5f, -6.0f));
+		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(10.0f, 7.0f, 10.0f));
+		glUniform2fv(uniformTextureOffset, 1, glm::value_ptr(toffset));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		potenciadorTexture.UseTexture();
+		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		meshList[4]->RenderMesh();
+		glDisable(GL_BLEND);
+
+		//Minion
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		toffsetminionu += 0.1;
+		toffsetminionv = 0.0;
+		toffset = glm::vec2(toffsetminionu, toffsetminionv);
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-40.0f, 104.5f, 65.0f));
+		model = glm::scale(model, glm::vec3(7.0f, 7.0f, 7.0f));
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		glUniform2fv(uniformTextureOffset, 1, glm::value_ptr(toffset));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		minion.UseTexture();
+		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		meshList[6]->RenderMesh();
+
+		if ((timeNew <= glfwGetTime()))
+		{
+			timeNew = glfwGetTime() + 1;
+				
+				if (toffsetminionu > 1.0)
+					toffsetminionu = 0.0;
+
+
+		}
+
+		glDisable(GL_BLEND);
+
+
+		//Textura de fantasmas pacman
+		toffsetflechau += 0.01;
+		toffsetflechav += 0.0;
+
+		if (toffsetflechau > 1.0)
+			toffsetflechau = 0.0;
+
+		toffset = glm::vec2(toffsetflechau, toffsetflechav);
+
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-20.0f, 104.5f, -6.0f));
+		model = glm::scale(model, glm::vec3(14.0f, 14.0f, 14.0f));
+		glUniform2fv(uniformTextureOffset, 1, glm::value_ptr(toffset));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		fantasmastexture.UseTexture();
+		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		meshList[4]->RenderMesh();
+		glDisable(GL_BLEND);
 
 			glUseProgram(0);
 
