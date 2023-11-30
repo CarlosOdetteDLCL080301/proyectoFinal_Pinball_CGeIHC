@@ -615,11 +615,12 @@ int main()
 	float comprimirResorte = 0.0f, comprimir = 1.0f, velocidadComprimir = 0.03;
 	ISoundEngine* ambiental = createIrrKlangDevice();
 	ISoundEngine* palanca = createIrrKlangDevice();
+	ISoundEngine* Sflipper = createIrrKlangDevice();
 	if (!ambiental and !palanca) {
 		return 0;
 	}
 	ambiental->play2D("audio/ambiental.mp3", true);
-	bool encender = true;
+	bool encenderSonidoResorte = true, encenderSonidoFlipper = true, encenderSonidoFlipper2 = true, encenderSonidoFlipper3 = true;
 	//---------------------------------------------------------------------------------------------
 	////Loop mientras no se cierra la ventana
 	while (!mainWindow.getShouldClose())
@@ -710,9 +711,17 @@ int main()
 		/*Flipper 01*/
 		//Animaci n
 		if (mainWindow.getRotacionFlipper1()) {
+			if (encenderSonidoFlipper) {
+				Sflipper->setSoundVolume(0.8f);
+				Sflipper->play2D("audio/flipper1.mp3", false);
+				encenderSonidoFlipper = false;
+			}
 			rotacionFlipper1 += (rotacionFlipper1 < 90.0f) ? velocidadRotacionFlipper * deltaTime : 0.0f;
 		}
 		else {
+			if (!(rotacionFlipper1 > 0.0f)) {
+				encenderSonidoFlipper = true;
+			}
 			rotacionFlipper1 -= (rotacionFlipper1 > 0.0f) ? velocidadRotacionFlipper * deltaTime : 0.0f;
 		}
 		//Instancia del flipper
@@ -741,8 +750,16 @@ int main()
 		//Animaci n
 		if (mainWindow.getRotacionFlipper2()) {
 			rotacionFlipper2 += (rotacionFlipper2 < 90.0f) ? velocidadRotacionFlipper * deltaTime : 0.0f;
+			if (encenderSonidoFlipper2) {
+				Sflipper->setSoundVolume(0.8f);
+				Sflipper->play2D("audio/flipper1.mp3", false);
+				encenderSonidoFlipper2 = false;
+			}
 		}
 		else {
+			if (!(rotacionFlipper1 > 0.0f)) {
+				encenderSonidoFlipper2 = true;
+			}
 			rotacionFlipper2 -= (rotacionFlipper2 > 0.0f) ? velocidadRotacionFlipper * deltaTime : 0.0f;
 		}
 		//Instancia del dado
@@ -760,8 +777,16 @@ int main()
 		//Animaci n
 		if (mainWindow.getRotacionFlipper3()) {
 			rotacionFlipper3 += (rotacionFlipper3 < 90.0f) ? velocidadRotacionFlipper * deltaTime : 0.0f;
+			if (encenderSonidoFlipper3) {
+				Sflipper->setSoundVolume(0.8f);
+				Sflipper->play2D("audio/flipper1.mp3", false);
+				encenderSonidoFlipper3 = false;
+			}
 		}
 		else {
+			if (!(rotacionFlipper1 > 0.0f)) {
+				encenderSonidoFlipper3 = true;
+			}
 			rotacionFlipper3 -= (rotacionFlipper3 > 0.0f) ? velocidadRotacionFlipper * deltaTime : 0.0f;
 		}
 		//Instancia del dado
@@ -1310,16 +1335,16 @@ int main()
 			
 
 			if (mainWindow.getAnimarResorte()) {
-				if (encender) {
+				if (encenderSonidoResorte) {
 					palanca->setSoundVolume(0.8f);
 					palanca->play2D("audio/audio2.ogg", false);
-					encender = false;
+					encenderSonidoResorte = false;
 				}
 				comprimir -= (comprimir > 0.3f) ? velocidadComprimir * deltaTime : 0.0f;
 			}
 			else {
 				if (!(comprimir < 1.0f)) {
-					encender = true;
+					encenderSonidoResorte = true;
 				}
 				comprimir += (comprimir < 1.0f) ? velocidadComprimir * deltaTime : 0.0f;
 				
