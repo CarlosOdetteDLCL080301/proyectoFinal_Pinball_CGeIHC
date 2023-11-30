@@ -1282,19 +1282,48 @@ int main()
 
 			//Avanza canica 1
 			if (mainWindow.getresorte() && avanzaCanica) {
-				if (movCanicaZ > -12.0f)
-				{
+				if (movCanicaZ > -22.0f){
 					movCanicaZ -= movOffCanica * deltaTime;
 					rotCanica += rotCanicaOffset * deltaTime;
 				}
 				else {
-					if (movCanicaX > -40.0f)
-					{
-						movCanicaX -= movOffCanica * deltaTime;
+					if (movCanicaX > -18.0f){
+						movCanicaX -= movOffCanica * deltaTime * 2;
+						movCanicaZ -= movOffCanica * deltaTime;
 						rotCanica += rotCanicaOffset * deltaTime;
 					}
 					else {
-						avanzaCanica = false;
+						if (movCanicaX > -40.0f){
+							movCanicaX -= movOffCanica * deltaTime * 2;
+							movCanicaZ += movOffCanica * deltaTime;
+							rotCanica += rotCanicaOffset * deltaTime;
+						}
+						else {
+							avanzaCanica = false;
+						}
+					}
+				}
+			}
+			else {
+				if (movCanicaZ < 20.0f){
+					movCanicaZ += movOffCanica * deltaTime;
+					rotCanica -= rotCanicaOffset * deltaTime;
+				}
+				else {
+					if(movCanicaX < -20){
+						movCanicaZ += movOffCanica * deltaTime * 3;
+						movCanicaX += movOffCanica * deltaTime;
+						rotCanica -= rotCanicaOffset * deltaTime;
+					}
+					else{
+						if (movCanicaX < 8) {
+							movCanicaX += movOffCanica * deltaTime;
+							rotCanica -= rotCanicaOffset * deltaTime;
+						}
+						else
+						{
+							movCanicaZ = 85.0f;
+						}
 					}
 				}
 			}
