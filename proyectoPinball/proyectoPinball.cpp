@@ -42,6 +42,9 @@ Adicional.- Textura Animada
 #include "Material.h"
 const float toRadians = 3.14159265f / 180.0f;
 
+#include <irrKlang.h>
+using namespace irrklang;
+
 //+++++++++++++++++++++++++++++++	variables para animaci n	+++++++++++++++++++++++++++++++
 //variables para keyframes
 float reproAni, habiAni, guardoFrame, reiniFrame, ciclo, ciclo2, contador = 0;	
@@ -610,6 +613,13 @@ int main()
 	resorte = Model();
 	resorte.LoadModel("Models/resorte.obj");
 	float comprimirResorte = 0.0f, comprimir = 1.0f, velocidadComprimir = 0.03;
+	ISoundEngine* ambiental = createIrrKlangDevice();
+	ISoundEngine* palanca = createIrrKlangDevice();
+	if (!ambiental and !palanca) {
+		return 0;
+	}
+	ambiental->play2D("audio/ambiental.mp3", true);
+	bool encender = true;
 	//---------------------------------------------------------------------------------------------
 	////Loop mientras no se cierra la ventana
 	while (!mainWindow.getShouldClose())
@@ -1300,10 +1310,19 @@ int main()
 			
 
 			if (mainWindow.getAnimarResorte()) {
+				if (encender) {
+					palanca->setSoundVolume(0.8f);
+					palanca->play2D("audio/audio2.ogg", false);
+					encender = false;
+				}
 				comprimir -= (comprimir > 0.3f) ? velocidadComprimir * deltaTime : 0.0f;
 			}
 			else {
+				if (!(comprimir < 1.0f)) {
+					encender = true;
+				}
 				comprimir += (comprimir < 1.0f) ? velocidadComprimir * deltaTime : 0.0f;
+				
 			}
 
 			//Avanza canica 1
@@ -1439,6 +1458,7 @@ int main()
 			mainWindow.swapBuffers();
 		
 	}
+		ambiental->drop();
 		return 0;
 	}
 	
